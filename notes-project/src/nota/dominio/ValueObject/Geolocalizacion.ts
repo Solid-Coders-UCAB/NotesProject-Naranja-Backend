@@ -1,4 +1,4 @@
-export class geolocalizacionVO {
+export class Geolocalizacion {
     private latitud: number;
     private longitud: number;
 

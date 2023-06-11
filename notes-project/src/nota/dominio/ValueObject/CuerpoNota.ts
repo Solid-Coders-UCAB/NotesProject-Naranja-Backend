@@ -1,4 +1,4 @@
-export class cuerpoNotaVO {
+export class CuerpoNota {
     private cuerpo: string;
 
     constructor(cuerpo: string) {

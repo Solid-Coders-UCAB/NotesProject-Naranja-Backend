@@ -1,4 +1,4 @@
-export class fechaCreacionNotaVO {
+export class FechaCreacionNota {
     private fecha: Date;
 
     constructor(fecha: Date) {

@@ -1,4 +1,4 @@
-export class tituloNotaVO {
+export class TituloNota {
     private titulo: string;
 
     constructor(titulo: string) {
