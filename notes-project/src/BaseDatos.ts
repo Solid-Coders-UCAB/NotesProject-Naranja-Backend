@@ -1,20 +1,17 @@
 import { TypeOrmModuleOptions, TypeOrmModuleAsyncOptions } from '@nestjs/typeorm';
 
-export const TypeOrmModuleAsyncConfig: TypeOrmModuleAsyncOptions = {
+require('dotenv').config();
 
+export const typeOrmConfig: TypeOrmModuleOptions = {
 
-    useFactory: async () :Promise<TypeOrmModuleOptions> => {
-        return {
             type: 'postgres',
-            host: process.env.DB_host,
-            port: parseInt(process.env.DB_port,10),
-            database: process.env.DB_database,
+            host: "localhost",
+            port: 5432,
+            database: "NoteProject",
             username:"postgres",
             password:"omar25",
-            entities: ["src/nota/infraestructura/Entity/*.ts"],
             synchronize: true,
             logging: true
-        }
-    }
+       
 
 }
