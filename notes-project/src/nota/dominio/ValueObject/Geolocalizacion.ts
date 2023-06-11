@@ -6,4 +6,12 @@ export class Geolocalizacion {
         this.latitud = latitud;
         this.longitud = longitud;
     }
+
+    getLatitud(): number{
+        return this.latitud;
+    }
+
+    getLongitud(): number{
+        return this.longitud;
+    }
 }

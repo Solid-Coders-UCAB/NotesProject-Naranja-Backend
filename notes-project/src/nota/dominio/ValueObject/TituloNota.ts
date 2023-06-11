@@ -4,4 +4,9 @@ export class TituloNota {
     constructor(titulo: string) {
         this.titulo = titulo;
     }
+
+    getTituloNota(): string{
+        return this.titulo;
+        ;
+    }
 }

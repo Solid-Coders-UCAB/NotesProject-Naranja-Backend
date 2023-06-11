@@ -5,4 +5,8 @@ export class FechaCreacionNota {
         this.fecha = fecha;
     }
 
+    getFechaCreacion(): Date{
+        return this.fecha;
+    }
+
 }

@@ -4,4 +4,9 @@ export class CuerpoNota {
     constructor(cuerpo: string) {
         this.cuerpo = cuerpo;
     }
+    
+    getCuerpoNota(): string{
+        return this.cuerpo;
+    }
+
 }

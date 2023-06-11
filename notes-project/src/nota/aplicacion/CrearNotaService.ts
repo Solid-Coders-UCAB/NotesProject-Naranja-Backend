@@ -24,7 +24,7 @@ export class CrearNotaService implements IApplicationService<CrearNotaDto,string
             new TituloNota(service.titulo),
             new CuerpoNota(service.cuerpo)); 
         
-        return await this.notaRepositorio.save(nota);
+        return await this.notaRepositorio.saveNota(nota);
 
     }
 }
