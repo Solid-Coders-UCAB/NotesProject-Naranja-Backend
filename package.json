@@ -1,5 +1,7 @@
 {
   "dependencies": {
+    "@jasonsoft/nestjs-common": "^1.1.29",
+    "common": "^0.2.5",
     "uuid": "^9.0.0"
   }
 }
