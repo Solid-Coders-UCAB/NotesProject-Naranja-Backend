@@ -9,12 +9,14 @@ export class NotaRepositorioAdaptador extends Repository<NotaEntity> implements 
     async saveNota(nota: Nota): Promise<Either<string, Error>> {
 
         const note: NotaEntity = NotaEntity[
-            nota.getId().getIDNota(),
-            nota.getTitulo().getTituloNota(),
-            nota.getCuerpo().getCuerpoNota(),
-            nota.getFechaCreacion().getFechaCreacion(),
-            nota.getFechaModificacion().getFechaModificacionNota(),
-            nota.getEstado()
+            nota.getId(),
+            nota.getTitulo(),
+            nota.getCuerpo(),
+            nota.getFechaCreacion(),
+            nota.getFechaModificacion(),
+            nota.getEstado(),
+            nota.getLatitud(),
+            nota.getLongitud()
         ];
         try{
             const resultado = await this.save(note);
