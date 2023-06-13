@@ -25,6 +25,6 @@ export class NotaEntity {
     @Column()
     longitud: number
     
-    @Column({type: 'enum',enum: EstadoNota})
+    @Column()
     estado: string
 }

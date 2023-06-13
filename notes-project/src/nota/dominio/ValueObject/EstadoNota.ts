@@ -1,5 +1,5 @@
 export enum EstadoNota{
-    Pendiente = "Pendiente por guardar",
+    Pendiente = "PendientePorGuardar",
     Guardada = "Guardada",
     Eliminada = "Eliminada"
 }

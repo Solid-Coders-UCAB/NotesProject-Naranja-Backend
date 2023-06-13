@@ -3,27 +3,38 @@ import { NotaRepositorio } from "src/nota/dominio/NotaRepositorio";
 import { Either } from "src/utilidad/Either";
 import { Repository } from "typeorm";
 import { NotaEntity } from "src/nota/infraestructura/Entity/NotaEntity";
+import { Injectable } from "@nestjs/common";
+import { InjectRepository } from '@nestjs/typeorm';
 
-export class NotaRepositorioAdaptador extends Repository<NotaEntity> implements NotaRepositorio{
+@Injectable()
+export class NotaRepositorioAdaptador implements NotaRepositorio{
 
-    async saveNota(nota: Nota): Promise<Either<string, Error>> {
+    constructor(
+        @InjectRepository(NotaEntity)
+        private readonly repositorio: Repository<NotaEntity>,
+    ){}
 
-        const note: NotaEntity = NotaEntity[
-            nota.getId(),
-            nota.getTitulo(),
-            nota.getCuerpo(),
-            nota.getFechaCreacion(),
-            nota.getFechaModificacion(),
-            nota.getEstado(),
-            nota.getLatitud(),
-            nota.getLongitud()
-        ];
-        try{
-            const resultado = await this.save(note);
-            return Either.makeLeft<string,Error>(resultado.titulo);
-        }catch(error){
-            return Either.makeRight<string,Error>(error.message);
+    async crearNota(nota: Nota): Promise<Either<Error,Nota>> {
+
+        const note : NotaEntity = {
+            id: nota.getId(),
+            titulo: nota.getTitulo(),
+            cuerpo: nota.getCuerpo(),
+            fechaCreacion: nota.getFechaCreacion(),
+            fechaModificacion: nota.getFechaModificacion(),
+            latitud: nota.getLatitud(),
+            longitud: nota.getLongitud(),
+            estado: nota.getEstado()
+        };
+
+        const result = await this.repositorio.save(note);
+        if(result){
+            return Either.makeRight<Error,Nota>(nota);
         }
+        else{
+            return Either.makeLeft<Error,Nota>(new Error('Error de la base de datos'));
+        }
+        
     }
 
 }

@@ -5,6 +5,7 @@ import { FechaCreacionNota } from "./ValueObject/FechaCreacionNota";
 import { FechaModificacionNota } from "./ValueObject/FechaModificacionNota";
 import { EstadoNota } from "./ValueObject/EstadoNota";
 import { Geolocalizacion } from "./ValueObject/Geolocalizacion";
+import { Either } from "src/utilidad/Either";
 
 export class Nota{
 
@@ -16,7 +17,7 @@ export class Nota{
     private estado: EstadoNota;
     private geolacalizacion: Geolocalizacion;
 
-    constructor(id: IdNota, fechaCreacion: FechaCreacionNota, fechaModificacion: FechaModificacionNota, estado: EstadoNota, titulo: TituloNota, cuerpo: CuerpoNota,geoloalizacion:Geolocalizacion){
+    private constructor(id: IdNota, fechaCreacion: FechaCreacionNota, fechaModificacion: FechaModificacionNota, estado: EstadoNota, titulo: TituloNota, cuerpo: CuerpoNota,geoloalizacion:Geolocalizacion){
         this.id = id;
         this.titulo = titulo;
         this.cuerpo = cuerpo;
@@ -46,8 +47,8 @@ export class Nota{
         return this.fechaModificacion.getFechaModificacionNota();
     }
 
-    public getEstado(): EstadoNota{
-        return this.estado;
+    public getEstado(): string{
+        return this.estado.toString();
     }
 
     public getLatitud(): number{
@@ -59,8 +60,45 @@ export class Nota{
         return this.geolacalizacion.getLongitud();
     }
 
-    static create(id: IdNota, fechaCreacion: FechaCreacionNota, fechaModificacion: FechaModificacionNota, estado: EstadoNota, titulo: TituloNota, cuerpo: CuerpoNota,geolacalizacion:Geolocalizacion): Nota{
-        return new Nota(id, fechaCreacion, fechaModificacion, estado, titulo, cuerpo,geolacalizacion);
+    static create(fechaCreacion: Date, fechaModificacion: Date, estado: string, titulo: string, cuerpo: string,longitud: number, latitud: number): Either<Error,Nota>{
+        
+        let auxiliarEstado: EstadoNota;
+
+        switch(estado.trim().toLowerCase()){
+            case "pendienteporguardar":
+            auxiliarEstado = EstadoNota.Pendiente;
+            break;
+            case "guardada":
+            auxiliarEstado = EstadoNota.Guardada;
+            break;
+            case "eliminada":
+            auxiliarEstado = EstadoNota.Eliminada;
+            break;
+            default:
+            auxiliarEstado = EstadoNota.Pendiente;
+            break;
+
+        }
+
+        let auxiliarFechaCreacion = FechaCreacionNota.create(fechaCreacion);
+        let auxiliarFechaModificacion = FechaModificacionNota.create(fechaModificacion);
+        let auxiliarTitulo = TituloNota.create(titulo);
+        let auxiliarCuerpo = CuerpoNota.create(cuerpo);
+        let auxiliarGeolocalizacion = Geolocalizacion.create(longitud,latitud);
+
+        if(auxiliarFechaCreacion.isRight() && auxiliarFechaModificacion.isRight() && auxiliarTitulo.isRight() && auxiliarCuerpo.isRight() && auxiliarGeolocalizacion.isRight()){
+            return Either.makeRight<Error,Nota>(new Nota(IdNota.create(), 
+                                                auxiliarFechaCreacion.getRight(), 
+                                                auxiliarFechaModificacion.getRight(),
+                                                auxiliarEstado,  
+                                                auxiliarTitulo.getRight(), 
+                                                auxiliarCuerpo.getRight(),
+                                                auxiliarGeolocalizacion.getRight()));
+        }
+        else{
+            return Either.makeLeft<Error,Nota>(new Error('Error al crear la nota'));
+        }
+        
     }
 
 }

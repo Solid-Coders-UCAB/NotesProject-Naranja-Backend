@@ -5,7 +5,9 @@ export class CrearNotaDto{
     fechaModificacion: Date;
     fechaCreacion: Date;
     estado: EstadoNota;
-    cuerpo?: string;
-    titulo?: string;
+    titulo: string;
+    cuerpo: string;
+    longitud: number;
+    latitud: number;
     
 }

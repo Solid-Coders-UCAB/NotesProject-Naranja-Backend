@@ -3,6 +3,6 @@ import { Either} from "src/utilidad/Either"
 
 export interface NotaRepositorio{
 
-    saveNota(nota: Nota): Promise<Either<string,Error>>;
+    crearNota(nota: Nota): Promise<Either<Error,Nota>>;
 
 }

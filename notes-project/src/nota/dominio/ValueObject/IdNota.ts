@@ -6,11 +6,12 @@ export class IdNota {
     }
     private UUID: string;
 
-    constructor() {
+    private constructor() {
         this.UUID = uuidv4();
     }
 
-    getUUID(): string{
-        return this.UUID;
+    static create(): IdNota {
+        return new IdNota();
     }
+
 }
