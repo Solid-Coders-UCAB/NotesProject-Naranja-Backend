@@ -37,4 +37,29 @@ export class NotaRepositorioAdaptador implements NotaRepositorio{
         
     }
 
+
+    async modificarNota(nota: Nota,id:string): Promise<Either<Error, Nota>> {
+
+        let notaId : NotaEntity;
+        notaId = await this.repositorio.findOneBy({id:id});
+      
+
+        const note : NotaEntity = {
+            id: notaId.id = id,
+            titulo: notaId.titulo= nota.getTitulo(),
+            cuerpo: notaId.cuerpo = nota.getCuerpo(),
+            fechaCreacion: notaId.fechaCreacion = nota.getFechaCreacion(),
+            fechaModificacion: notaId.fechaModificacion = nota.getFechaModificacion(),
+            latitud: notaId.latitud = nota.getLatitud(),
+            longitud: notaId.longitud = nota.getLongitud(),
+            estado: notaId.estado =nota.getEstado()
+        };  
+        const result = await this.repositorio.update(id,note);
+        if(result){
+            return Either.makeRight<Error,Nota>(nota);
+        }
+        else{
+            return Either.makeLeft<Error,Nota>(new Error('Error de la base de datos'));
+        }
+    }
 }
