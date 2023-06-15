@@ -5,7 +5,7 @@ import { ModificarNotaService } from 'src/nota/aplicacion/ModificarNotaService';
 import { NotaEntity } from 'src/nota/infraestructura/Entity/NotaEntity';
 import { NotaController } from 'src/nota/infraestructura/NotaController/NotaController';
 import { NotaRepositorioAdaptador } from 'src/nota/infraestructura/Repositorio/NotaRepositorioAdaptador';
-import { Repository } from 'typeorm';
+
 
 @Module({
   imports: [TypeOrmModule.forFeature([NotaEntity])],

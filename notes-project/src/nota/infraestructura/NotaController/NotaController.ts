@@ -12,7 +12,7 @@ export class NotaController {
     constructor(private readonly crearNotaService: CrearNotaService,private readonly modificarNota: ModificarNotaService) {}
 
     @Put('/modificate/:id')
-    async update(@Body() body: ModificarNotaDto,@Param('id') id: string): Promise<string>{
+    async update(@Body() body: ModificarNotaDto): Promise<string>{
         const result = await this.modificarNota.execute(body);
         if(result.isRight()){
             return 'Modificado exitoso';

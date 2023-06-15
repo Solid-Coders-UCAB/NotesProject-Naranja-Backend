@@ -1,4 +1,3 @@
-import { EstadoNota } from "src/nota/dominio/ValueObject/EstadoNota"
 import { Column, Entity, PrimaryColumn} from "typeorm"
 
 @Entity()
