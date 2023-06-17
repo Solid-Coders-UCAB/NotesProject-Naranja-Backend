@@ -62,4 +62,20 @@ export class NotaRepositorioAdaptador implements NotaRepositorio{
             return Either.makeLeft<Error,Nota>(new Error('Error de la base de datos'));
         }
     }
+
+    async eliminarNota(id:string): Promise<Either<Error,string>> {
+
+        const result = await this.repositorio.delete(id);
+        if(result){
+            return Either.makeRight<Error,string>(id);
+        }
+        else{
+            return Either.makeLeft<Error,string>(new Error('Error de la base de datos'));
+        }
+
+    
+
+
+    }
+
 }
