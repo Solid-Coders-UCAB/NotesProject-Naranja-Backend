@@ -9,7 +9,6 @@ export class TituloNota {
 
     getTituloNota(): string{
         return this.titulo;
-        ;
     }
 
     static create(titulo: string): Either<Error,TituloNota> {

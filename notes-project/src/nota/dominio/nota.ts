@@ -60,6 +60,39 @@ export class Nota{
         return this.geolacalizacion.getLongitud();
     }
 
+    public setTitulo(titulo: string): void{
+        this.titulo = TituloNota.create(titulo).getRight();
+    }
+
+    public setCuerpo(cuerpo: string): void{
+        this.cuerpo = CuerpoNota.create(cuerpo).getRight();
+    }
+
+    public setFechaModificacion(fechaModificacion: Date): void{
+        this.fechaModificacion = FechaModificacionNota.create(fechaModificacion).getRight();
+    }
+
+    public setEstado(estado: string): void{
+        switch(estado.trim().toLowerCase()){
+            case "pendienteporguardar":
+            this.estado = EstadoNota.Pendiente;
+            break;
+            case "guardada":
+            this.estado = EstadoNota.Guardada;
+            break;
+            case "eliminada":
+            this.estado = EstadoNota.Eliminada;
+            break;
+            default:
+            this.estado = EstadoNota.Pendiente;
+            break;
+        }
+    }
+
+    public setGeolocalizacion(longitud: number, latitud: number): void{
+        this.geolacalizacion = Geolocalizacion.create(longitud,latitud).getRight();
+    }
+
     static create(fechaCreacion: Date, fechaModificacion: Date, estado: string, titulo: string, cuerpo: string,longitud: number, latitud: number): Either<Error,Nota>{
         
         let auxiliarEstado: EstadoNota;

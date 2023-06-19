@@ -37,6 +37,25 @@ export class NotaRepositorioAdaptador implements NotaRepositorio{
         
     }
 
+    async buscarNotas(): Promise<Either<Error,any>> {          
+        const result = await this.repositorio.find();
+        if(result){
+            return Either.makeRight<Error,any>(result);
+        }
+        else{
+            return Either.makeLeft<Error,any>(new Error('Error de la base de datos'));
+        }
+    }
+
+    async buscarNota(id:string): Promise<Either<Error,any>> {
+        const result = await this.repositorio.findOneBy({id:id});
+        if(result){
+            return Either.makeRight<Error,any>(result);
+        }
+        else{
+            return Either.makeLeft<Error,any>(new Error('Error de la base de datos'));
+        }
+    }
 
     async modificarNota(nota: Nota,id:string): Promise<Either<Error, Nota>> {
 

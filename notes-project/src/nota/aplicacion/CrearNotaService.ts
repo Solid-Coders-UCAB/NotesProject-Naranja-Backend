@@ -1,17 +1,15 @@
 import { IApplicationService } from "src/interfaces/aplicacion/IApplicationService";
 import { NotaRepositorio } from "src/nota/dominio/NotaRepositorio";
-import { CrearNotaDto } from "src/nota/infraestructura/DataTransferObjects/CrearNotaDto";
+import { CrearNotaDto } from "src/nota/aplicacion/DataTransferObjects/CrearNotaDto";
 import { Either } from "src/utilidad/Either";
 import { Nota } from "src/nota/dominio/Nota";
-import { Injectable,Inject } from "@nestjs/common";
-import { NotaRepositorioAdaptador } from "src/nota/infraestructura/Repositorio/NotaRepositorioAdaptador";
+import { Inject } from "@nestjs/common";
 
-@Injectable()
 export class CrearNotaService implements IApplicationService<CrearNotaDto,Nota>{
 
     private readonly notaRepositorio: NotaRepositorio
 
-    constructor(@Inject(NotaRepositorioAdaptador) notaRepo: NotaRepositorio) {
+    constructor(@Inject('NotaRepositorio') notaRepo: NotaRepositorio) {
         this.notaRepositorio = notaRepo;
     }
 
