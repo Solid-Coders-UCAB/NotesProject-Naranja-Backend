@@ -37,34 +37,42 @@ export class NotaRepositorioAdaptador implements NotaRepositorio{
         
     }
 
-    async buscarNotas(): Promise<Either<Error,any>> {          
-        const result = await this.repositorio.find();
+    async buscarNotas(): Promise<Either<Error,Nota[]>> {          
+        const result: NotaEntity[] = await this.repositorio.find();
         if(result){
-            return Either.makeRight<Error,any>(result);
+            const notas: Nota[] = result.map((nota) =>
+                Nota.create(nota.fechaCreacion, 
+                    nota.fechaModificacion, 
+                    nota.estado, 
+                    nota.titulo, 
+                    nota.cuerpo, 
+                    nota.longitud, 
+                    nota.latitud, 
+                    nota.id).getRight());
+            return Either.makeRight<Error,Nota[]>(notas);
         }
         else{
-            return Either.makeLeft<Error,any>(new Error('Error de la base de datos'));
+            return Either.makeLeft<Error,Nota[]>(new Error('Error de la base de datos'));
         }
     }
 
-    async buscarNota(id:string): Promise<Either<Error,any>> {
+    async buscarNota(id:string): Promise<Either<Error,Nota>> {
         const result = await this.repositorio.findOneBy({id:id});
         if(result){
-            return Either.makeRight<Error,any>(result);
+            let nota = Nota.create(result.fechaCreacion, result.fechaModificacion, result.estado, result.titulo, result.cuerpo, result.longitud, result.latitud, result.id);
+            return Either.makeRight<Error,Nota>(nota.getRight());
         }
         else{
-            return Either.makeLeft<Error,any>(new Error('Error de la base de datos'));
+            return Either.makeLeft<Error,Nota>(new Error('Error de la base de datos'));
         }
     }
 
-    async modificarNota(nota: Nota,id:string): Promise<Either<Error, Nota>> {
+    async modificarNota(nota: Nota): Promise<Either<Error, Nota>> {
 
-        let notaId : NotaEntity;
-        notaId = await this.repositorio.findOneBy({id:id});
-      
+        let notaId = await this.repositorio.findOneBy({id:nota.getId()});
 
         const note : NotaEntity = {
-            id: notaId.id = id,
+            id: notaId.id = nota.getId(),
             titulo: notaId.titulo= nota.getTitulo(),
             cuerpo: notaId.cuerpo = nota.getCuerpo(),
             fechaCreacion: notaId.fechaCreacion = nota.getFechaCreacion(),
@@ -73,7 +81,7 @@ export class NotaRepositorioAdaptador implements NotaRepositorio{
             longitud: notaId.longitud = nota.getLongitud(),
             estado: notaId.estado =nota.getEstado()
         };  
-        const result = await this.repositorio.update(id,note);
+        const result = await this.repositorio.update(nota.getId(),note);
         if(result){
             return Either.makeRight<Error,Nota>(nota);
         }

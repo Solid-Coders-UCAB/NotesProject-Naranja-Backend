@@ -14,12 +14,11 @@ export class ModificarNotaService implements IApplicationService<ModificarNotaDt
     }
 
     async execute(service: ModificarNotaDto): Promise<Either<Error,Nota>>{
-        const id : string = service.idNota;
-        let nota = Nota.create(service.fechaCreacion, service.fechaModificacion, service.estado, service.titulo, service.cuerpo, service.longitud, service.latitud);
+        let nota = Nota.create(service.fechaCreacion, service.fechaModificacion, service.estado, service.titulo, service.cuerpo, service.longitud, service.latitud, service.idNota);
         
         if(nota.isRight()){
 
-            return await this.notaRepositorio.modificarNota(nota.getRight(),id);
+            return await this.notaRepositorio.modificarNota(nota.getRight());
         }
         else{
             return Either.makeLeft<Error,Nota>(nota.getLeft());

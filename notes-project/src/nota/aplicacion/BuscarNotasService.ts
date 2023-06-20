@@ -2,8 +2,9 @@ import { IApplicationService } from "src/interfaces/aplicacion/IApplicationServi
 import { NotaRepositorio } from "../dominio/NotaRepositorio";
 import { Inject } from "@nestjs/common";
 import { Either } from "src/utilidad/Either";
+import { Nota } from "../dominio/Nota";
 
-export class BuscarNotasService implements IApplicationService<string,any>{
+export class BuscarNotasService implements IApplicationService<string,Nota[]>{
 
     private readonly notaRepositorio: NotaRepositorio
 
@@ -11,8 +12,8 @@ export class BuscarNotasService implements IApplicationService<string,any>{
         this.notaRepositorio = notaRepo;
     }
 
-    async execute(service: string): Promise<Either<Error,any>>{
-        
+    async execute(service: string): Promise<Either<Error,Nota[]>>{
+
         console.log(service);
         return await this.notaRepositorio.buscarNotas();
 

@@ -15,16 +15,16 @@ export class Nota{
     private fechaCreacion: FechaCreacionNota;
     private fechaModificacion: FechaModificacionNota;
     private estado: EstadoNota;
-    private geolacalizacion: Geolocalizacion;
+    private geolocalizacion: Geolocalizacion;
 
-    private constructor(id: IdNota, fechaCreacion: FechaCreacionNota, fechaModificacion: FechaModificacionNota, estado: EstadoNota, titulo: TituloNota, cuerpo: CuerpoNota,geoloalizacion:Geolocalizacion){
+    private constructor(fechaCreacion: FechaCreacionNota, fechaModificacion: FechaModificacionNota, estado: EstadoNota, titulo: TituloNota, cuerpo: CuerpoNota,geolocalizacion:Geolocalizacion, id?: IdNota){
         this.id = id;
         this.titulo = titulo;
         this.cuerpo = cuerpo;
         this.fechaCreacion = fechaCreacion;
         this.fechaModificacion = fechaModificacion;
         this.estado = estado;
-        this.geolacalizacion = geoloalizacion;
+        this.geolocalizacion = geolocalizacion;
     }
 
     public getId(): string{
@@ -52,12 +52,12 @@ export class Nota{
     }
 
     public getLatitud(): number{
-        return this.geolacalizacion.getLatitud();
+        return this.geolocalizacion.getLatitud();
     }
 
     
     public getLongitud(): number{
-        return this.geolacalizacion.getLongitud();
+        return this.geolocalizacion.getLongitud();
     }
 
     public setTitulo(titulo: string): void{
@@ -90,10 +90,10 @@ export class Nota{
     }
 
     public setGeolocalizacion(longitud: number, latitud: number): void{
-        this.geolacalizacion = Geolocalizacion.create(longitud,latitud).getRight();
+        this.geolocalizacion = Geolocalizacion.create(longitud,latitud).getRight();
     }
 
-    static create(fechaCreacion: Date, fechaModificacion: Date, estado: string, titulo: string, cuerpo: string,longitud: number, latitud: number): Either<Error,Nota>{
+    static create(fechaCreacion: Date, fechaModificacion: Date, estado: string, titulo: string, cuerpo: string,longitud: number, latitud: number, id?: string): Either<Error,Nota>{
         
         let auxiliarEstado: EstadoNota;
 
@@ -120,13 +120,14 @@ export class Nota{
         let auxiliarGeolocalizacion = Geolocalizacion.create(longitud,latitud);
 
         if(auxiliarFechaCreacion.isRight() && auxiliarFechaModificacion.isRight() && auxiliarTitulo.isRight() && auxiliarCuerpo.isRight() && auxiliarGeolocalizacion.isRight()){
-            return Either.makeRight<Error,Nota>(new Nota(IdNota.create(), 
+            return Either.makeRight<Error,Nota>(new Nota( 
                                                 auxiliarFechaCreacion.getRight(), 
                                                 auxiliarFechaModificacion.getRight(),
                                                 auxiliarEstado,  
                                                 auxiliarTitulo.getRight(), 
                                                 auxiliarCuerpo.getRight(),
-                                                auxiliarGeolocalizacion.getRight()));
+                                                auxiliarGeolocalizacion.getRight(),
+                                                IdNota.create(id)));
         }
         else{
             return Either.makeLeft<Error,Nota>(new Error('Error al crear la nota'));
