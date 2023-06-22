@@ -6,6 +6,7 @@ import { FechaModificacionNota } from "./ValueObject/FechaModificacionNota";
 import { EstadoNota } from "./ValueObject/EstadoNota";
 import { Geolocalizacion } from "./ValueObject/Geolocalizacion";
 import { Either } from "src/utilidad/Either";
+import { IdCarpeta } from "src/carpeta/dominio/ValueObject/IdCarpeta";
 
 export class Nota{
 
@@ -16,8 +17,9 @@ export class Nota{
     private fechaModificacion: FechaModificacionNota;
     private estado: EstadoNota;
     private geolocalizacion: Geolocalizacion;
+    private idCarpeta: IdCarpeta;
 
-    private constructor(fechaCreacion: FechaCreacionNota, fechaModificacion: FechaModificacionNota, estado: EstadoNota, titulo: TituloNota, cuerpo: CuerpoNota,geolocalizacion:Geolocalizacion, id?: IdNota){
+    private constructor(fechaCreacion: FechaCreacionNota, fechaModificacion: FechaModificacionNota, estado: EstadoNota, titulo: TituloNota, cuerpo: CuerpoNota,geolocalizacion:Geolocalizacion, idCarpeta: IdCarpeta, id?: IdNota){
         this.id = id;
         this.titulo = titulo;
         this.cuerpo = cuerpo;
@@ -25,10 +27,15 @@ export class Nota{
         this.fechaModificacion = fechaModificacion;
         this.estado = estado;
         this.geolocalizacion = geolocalizacion;
+        this.idCarpeta = idCarpeta;
     }
 
     public getId(): string{
         return this.id.getIDNota();
+    }
+
+    public getIdCarpeta(): string{
+        return this.idCarpeta.getIDCarpeta();
     }
 
     public getTitulo(): string{
@@ -93,7 +100,7 @@ export class Nota{
         this.geolocalizacion = Geolocalizacion.create(longitud,latitud).getRight();
     }
 
-    static create(fechaCreacion: Date, fechaModificacion: Date, estado: string, titulo: string, cuerpo: string,longitud: number, latitud: number, id?: string): Either<Error,Nota>{
+    static create(fechaCreacion: Date, fechaModificacion: Date, estado: string, titulo: string, cuerpo: string, longitud: number, latitud: number, idCarpeta: string, id?: string ): Either<Error,Nota>{
         
         let auxiliarEstado: EstadoNota;
 
@@ -127,6 +134,7 @@ export class Nota{
                                                 auxiliarTitulo.getRight(), 
                                                 auxiliarCuerpo.getRight(),
                                                 auxiliarGeolocalizacion.getRight(),
+                                                IdCarpeta.create(idCarpeta),
                                                 IdNota.create(id)));
         }
         else{

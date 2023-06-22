@@ -10,5 +10,6 @@ export class ModificarNotaDto {
     cuerpo: string;
     longitud: number;
     latitud: number;
+    idCarpeta: string;
 
 }

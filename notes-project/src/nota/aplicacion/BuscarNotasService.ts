@@ -19,5 +19,4 @@ export class BuscarNotasService implements IApplicationService<string,Nota[]>{
 
     }
 
-    
 }

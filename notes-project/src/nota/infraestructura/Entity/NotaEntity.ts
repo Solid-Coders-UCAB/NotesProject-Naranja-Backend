@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryColumn} from "typeorm"
+import { CarpetaEntity } from "src/carpeta/infraestructura/Entity/CarpetaEntity"
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn} from "typeorm"
 
 @Entity()
 export class NotaEntity {
@@ -26,4 +27,9 @@ export class NotaEntity {
     
     @Column()
     estado: string
+
+    @ManyToOne(() => CarpetaEntity)
+    @JoinColumn({ name: 'carpeta' })
+    carpeta: string;
+
 }

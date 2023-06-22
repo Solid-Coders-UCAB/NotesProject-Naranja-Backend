@@ -7,7 +7,8 @@ export class CrearNotaDto{
     estado: EstadoNota;
     titulo: string;
     cuerpo: string;
-    longitud: number;
-    latitud: number;
+    longitud?: number;
+    latitud?: number;
+    idCarpeta: string;
     
 }

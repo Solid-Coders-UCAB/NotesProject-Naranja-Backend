@@ -7,6 +7,7 @@ import { EliminarNotaService } from "src/nota/aplicacion/EliminarNotaService";
 import { BorraNotaDto } from "../../aplicacion/DataTransferObjects/BorrarNotaDto";
 import { BuscarNotasService } from "src/nota/aplicacion/BuscarNotasService";
 import { BuscarNotaPorIdService } from "src/nota/aplicacion/BuscarNotaPorIdService";
+import { BuscarNotaIdDto } from "src/nota/aplicacion/DataTransferObjects/BuscarNotaIdDto";
 
 @Controller('nota')
 export class NotaController {
@@ -29,7 +30,7 @@ export class NotaController {
     }
 
     @Get('/findById')
-    async findById(@Res() response, @Body() body: BorraNotaDto){
+    async findById(@Res() response, @Body() body: BuscarNotaIdDto){
         let result = await this.buscarNotaId.execute(body);
         if(result.isRight()){
             return response.status(HttpStatus.OK).json(result.getRight());

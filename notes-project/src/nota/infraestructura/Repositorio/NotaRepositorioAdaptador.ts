@@ -24,7 +24,8 @@ export class NotaRepositorioAdaptador implements NotaRepositorio{
             fechaModificacion: nota.getFechaModificacion(),
             latitud: nota.getLatitud(),
             longitud: nota.getLongitud(),
-            estado: nota.getEstado()
+            estado: nota.getEstado(),
+            carpeta: nota.getIdCarpeta()
         };
 
         const result = await this.repositorio.save(note);
@@ -47,7 +48,8 @@ export class NotaRepositorioAdaptador implements NotaRepositorio{
                     nota.titulo, 
                     nota.cuerpo, 
                     nota.longitud, 
-                    nota.latitud, 
+                    nota.latitud,
+                    nota.carpeta, 
                     nota.id).getRight());
             return Either.makeRight<Error,Nota[]>(notas);
         }
@@ -59,7 +61,7 @@ export class NotaRepositorioAdaptador implements NotaRepositorio{
     async buscarNota(id:string): Promise<Either<Error,Nota>> {
         const result = await this.repositorio.findOneBy({id:id});
         if(result){
-            let nota = Nota.create(result.fechaCreacion, result.fechaModificacion, result.estado, result.titulo, result.cuerpo, result.longitud, result.latitud, result.id);
+            let nota = Nota.create(result.fechaCreacion, result.fechaModificacion, result.estado, result.titulo, result.cuerpo, result.longitud, result.latitud, result.carpeta,result.id);
             return Either.makeRight<Error,Nota>(nota.getRight());
         }
         else{
@@ -79,7 +81,8 @@ export class NotaRepositorioAdaptador implements NotaRepositorio{
             fechaModificacion: notaId.fechaModificacion = nota.getFechaModificacion(),
             latitud: notaId.latitud = nota.getLatitud(),
             longitud: notaId.longitud = nota.getLongitud(),
-            estado: notaId.estado =nota.getEstado()
+            estado: notaId.estado =nota.getEstado(),
+            carpeta: notaId.carpeta = nota.getIdCarpeta()
         };  
         const result = await this.repositorio.update(nota.getId(),note);
         if(result){

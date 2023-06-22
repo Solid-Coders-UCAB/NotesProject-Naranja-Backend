@@ -14,7 +14,7 @@ export class ModificarNotaService implements IApplicationService<ModificarNotaDt
     }
 
     async execute(service: ModificarNotaDto): Promise<Either<Error,Nota>>{
-        let nota = Nota.create(service.fechaCreacion, service.fechaModificacion, service.estado, service.titulo, service.cuerpo, service.longitud, service.latitud, service.idNota);
+        let nota = Nota.create(service.fechaCreacion, service.fechaModificacion, service.estado, service.titulo, service.cuerpo, service.longitud, service.latitud, service.idCarpeta,service.idNota);
         
         if(nota.isRight()){
 
