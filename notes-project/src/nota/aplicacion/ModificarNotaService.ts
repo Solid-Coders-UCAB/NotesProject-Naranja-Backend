@@ -27,8 +27,12 @@ export class ModificarNotaService implements IApplicationService<ModificarNotaDt
                                    imag,service.idNota);
         
         if(nota.isRight()){
-
-            return await this.notaRepositorio.modificarNota(nota.getRight());
+            await this.notaRepositorio.eliminarImagen(nota.getRight().getId());
+            const notaC = await this.notaRepositorio.modificarNota(nota.getRight());
+            
+            await this.notaRepositorio.guardarImagen(nota.getRight().getId(),imag);
+            return notaC;
+            
         }
         else{
             return Either.makeLeft<Error,Nota>(nota.getLeft());

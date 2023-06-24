@@ -10,5 +10,6 @@ export interface NotaRepositorio{
     eliminarNota(id:string): Promise<Either<Error,string>>;
     buscarNota(id:string): Promise<Either<Error,Nota>>;
     guardarImagen(id:string,imagen:Buffer[]): Promise<Either<Error,string>>;
+    eliminarImagen(id:string): Promise<Either<Error,string>>;
 
 }

@@ -20,13 +20,6 @@ export class NotaRepositorioAdaptador implements NotaRepositorio{
 
     async crearNota(nota: Nota): Promise<Either<Error,Nota>> {
         
-
-        let imag = null;
-
-        if(nota.getImagen() != null){
-            imag = nota.getImagen();
-        }
-        
         const note : NotaEntity = {
             id: nota.getId(),
             titulo: nota.getTitulo(),
@@ -46,8 +39,7 @@ export class NotaRepositorioAdaptador implements NotaRepositorio{
         }
         else{
             return Either.makeLeft<Error,Nota>(new Error('Error de la base de datos'));
-        }
-        
+        }       
     }
 
     async buscarNotas(): Promise<Either<Error,Nota[]>> {          
@@ -105,7 +97,7 @@ export class NotaRepositorioAdaptador implements NotaRepositorio{
             imagen: [],
             carpeta: notaId.carpeta = nota.getIdCarpeta()
         };  
-        const result = await this.repositorio.update(nota.getId(),note);
+        const result = await this.repositorio.save(note);
         if(result){
             return Either.makeRight<Error,Nota>(nota);
         }
@@ -123,10 +115,6 @@ export class NotaRepositorioAdaptador implements NotaRepositorio{
         else{
             return Either.makeLeft<Error,string>(new Error('Error de la base de datos'));
         }
-
-    
-
-
     }
 
     async guardarImagen(id:string,imagen:Buffer[]): Promise<Either<Error,string>> {
@@ -149,4 +137,15 @@ export class NotaRepositorioAdaptador implements NotaRepositorio{
         }
     }
 
+
+    async eliminarImagen(id:string): Promise<Either<Error,string>> {
+        
+        const result = await this.repositorioImagen.delete({ nota: { id: id} });
+        if(result){
+            return Either.makeRight<Error,string>(id);
+        }
+        else{
+            return Either.makeLeft<Error,string>(new Error('Error de la base de datos'));
+        }
+    }
 }

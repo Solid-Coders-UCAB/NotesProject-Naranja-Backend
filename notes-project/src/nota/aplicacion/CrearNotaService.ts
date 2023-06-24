@@ -4,7 +4,6 @@ import { CrearNotaDto } from "src/nota/aplicacion/DataTransferObjects/CrearNotaD
 import { Either } from "src/utilidad/Either";
 import { Nota } from "src/nota/dominio/Nota";
 import { Inject } from "@nestjs/common";
-import { CuerpoNota } from "../dominio/ValueObject/CuerpoNota";
 
 export class CrearNotaService implements IApplicationService<CrearNotaDto,Nota>{
 

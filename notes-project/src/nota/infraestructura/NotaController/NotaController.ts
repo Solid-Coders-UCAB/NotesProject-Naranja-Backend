@@ -8,7 +8,7 @@ import { BorraNotaDto } from "../../aplicacion/DataTransferObjects/BorrarNotaDto
 import { BuscarNotasService } from "src/nota/aplicacion/BuscarNotasService";
 import { BuscarNotaPorIdService } from "src/nota/aplicacion/BuscarNotaPorIdService";
 import { BuscarNotaIdDto } from "src/nota/aplicacion/DataTransferObjects/BuscarNotaIdDto";
-import { FileInterceptor, FilesInterceptor } from "@nestjs/platform-express";
+import { FilesInterceptor } from "@nestjs/platform-express";
 
 @Controller('nota')
 export class NotaController {
@@ -42,8 +42,17 @@ export class NotaController {
     }
     
     @Put('/modificate')
-    async update(@Res() response, @Body() body: ModificarNotaDto){
+    @UseInterceptors(FilesInterceptor('imagen'))
+    async update(@UploadedFiles() file: Express.Multer.File[],@Res() response, @Body() body: ModificarNotaDto){
+        
+    const imagenes = file.map((imagen) => {
+            return {buffer : imagen.buffer}
+        })  
+
+        body.imagen = imagenes;
+
         const result = await this.modificarNota.execute(body);
+
         if(result.isRight()){
             return response.status(HttpStatus.OK).json(result.getRight());
         }
