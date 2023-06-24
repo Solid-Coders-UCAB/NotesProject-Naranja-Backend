@@ -1,5 +1,6 @@
 import { CarpetaEntity } from "src/carpeta/infraestructura/Entity/CarpetaEntity"
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn} from "typeorm"
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryColumn} from "typeorm"
+import { ImagenEntity } from "./ImagenEntity"
 
 @Entity()
 export class NotaEntity {
@@ -27,6 +28,9 @@ export class NotaEntity {
     
     @Column()
     estado: string
+
+    @OneToMany(() => ImagenEntity, (imagen) => imagen.nota,{cascade:['remove'],eager:true,nullable:true})
+    imagen: ImagenEntity[];
 
     @ManyToOne(() => CarpetaEntity)
     @JoinColumn({ name: 'carpeta' })

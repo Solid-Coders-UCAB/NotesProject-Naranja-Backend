@@ -4,6 +4,7 @@ import { CrearNotaDto } from "src/nota/aplicacion/DataTransferObjects/CrearNotaD
 import { Either } from "src/utilidad/Either";
 import { Nota } from "src/nota/dominio/Nota";
 import { Inject } from "@nestjs/common";
+import { CuerpoNota } from "../dominio/ValueObject/CuerpoNota";
 
 export class CrearNotaService implements IApplicationService<CrearNotaDto,Nota>{
 
@@ -15,11 +16,20 @@ export class CrearNotaService implements IApplicationService<CrearNotaDto,Nota>{
 
     async execute(service: CrearNotaDto): Promise<Either<Error,Nota>>{
 
-        let nota = Nota.create(service.fechaCreacion, service.fechaModificacion, service.estado, service.titulo, service.cuerpo, service.longitud, service.latitud,service.idCarpeta);
+        const imag = service.imagen.map((i) => {
+            return  i.buffer
+            });
+
+
+        let nota = Nota.create(service.fechaCreacion, service.fechaModificacion, service.estado, 
+            service.titulo, service.cuerpo, service.longitud, service.latitud,service.idCarpeta,imag);
         
         if(nota.isRight()){
 
-            return await this.notaRepositorio.crearNota(nota.getRight());
+            const notaC = await this.notaRepositorio.crearNota(nota.getRight());
+            await this.notaRepositorio.guardarImagen(nota.getRight().getId(),imag);
+            return notaC;
+
         }
         else{
             return Either.makeLeft<Error,Nota>(nota.getLeft());

@@ -5,6 +5,7 @@ import { Repository } from "typeorm";
 import { NotaEntity } from "src/nota/infraestructura/Entity/NotaEntity";
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from '@nestjs/typeorm';
+import { ImagenEntity } from "../Entity/ImagenEntity";
 
 @Injectable()
 export class NotaRepositorioAdaptador implements NotaRepositorio{
@@ -12,10 +13,20 @@ export class NotaRepositorioAdaptador implements NotaRepositorio{
     constructor(
         @InjectRepository(NotaEntity)
         private readonly repositorio: Repository<NotaEntity>,
+        @InjectRepository(ImagenEntity)
+        private readonly repositorioImagen: Repository<ImagenEntity>
+        
     ){}
 
     async crearNota(nota: Nota): Promise<Either<Error,Nota>> {
+        
 
+        let imag = null;
+
+        if(nota.getImagen() != null){
+            imag = nota.getImagen();
+        }
+        
         const note : NotaEntity = {
             id: nota.getId(),
             titulo: nota.getTitulo(),
@@ -25,6 +36,7 @@ export class NotaRepositorioAdaptador implements NotaRepositorio{
             latitud: nota.getLatitud(),
             longitud: nota.getLongitud(),
             estado: nota.getEstado(),
+            imagen:[],
             carpeta: nota.getIdCarpeta()
         };
 
@@ -50,6 +62,9 @@ export class NotaRepositorioAdaptador implements NotaRepositorio{
                     nota.longitud, 
                     nota.latitud,
                     nota.carpeta, 
+                    nota.imagen.map(ima=>{
+                        return ima.imagen
+                    }),
                     nota.id).getRight());
             return Either.makeRight<Error,Nota[]>(notas);
         }
@@ -60,8 +75,13 @@ export class NotaRepositorioAdaptador implements NotaRepositorio{
 
     async buscarNota(id:string): Promise<Either<Error,Nota>> {
         const result = await this.repositorio.findOneBy({id:id});
+        const ima = result.imagen.map(ima=>{
+            return ima.imagen
+        })
+        console.log("aqui",ima);
         if(result){
-            let nota = Nota.create(result.fechaCreacion, result.fechaModificacion, result.estado, result.titulo, result.cuerpo, result.longitud, result.latitud, result.carpeta,result.id);
+            let nota = Nota.create(result.fechaCreacion, result.fechaModificacion, result.estado, result.titulo, 
+                result.cuerpo, result.longitud, result.latitud, result.carpeta,ima,result.id);
             return Either.makeRight<Error,Nota>(nota.getRight());
         }
         else{
@@ -82,6 +102,7 @@ export class NotaRepositorioAdaptador implements NotaRepositorio{
             latitud: notaId.latitud = nota.getLatitud(),
             longitud: notaId.longitud = nota.getLongitud(),
             estado: notaId.estado =nota.getEstado(),
+            imagen: [],
             carpeta: notaId.carpeta = nota.getIdCarpeta()
         };  
         const result = await this.repositorio.update(nota.getId(),note);
@@ -106,6 +127,26 @@ export class NotaRepositorioAdaptador implements NotaRepositorio{
     
 
 
+    }
+
+    async guardarImagen(id:string,imagen:Buffer[]): Promise<Either<Error,string>> {
+        
+        const nota =  await this.repositorio.findOneBy({id : id});
+
+        const im = imagen.map((img) => {
+            return {
+                imagen: img,
+                nota: nota
+            }
+        });
+            
+        const result = await this.repositorioImagen.save(im);
+        if(result){
+            return Either.makeRight<Error,string>("Todo bien");
+        }
+        else{
+            return Either.makeLeft<Error,string>(new Error('Error de la base de datos'));
+        }
     }
 
 }

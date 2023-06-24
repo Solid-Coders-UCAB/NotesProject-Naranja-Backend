@@ -7,6 +7,7 @@ import { EstadoNota } from "./ValueObject/EstadoNota";
 import { Geolocalizacion } from "./ValueObject/Geolocalizacion";
 import { Either } from "src/utilidad/Either";
 import { IdCarpeta } from "src/carpeta/dominio/ValueObject/IdCarpeta";
+import { ImagenEntity } from "../infraestructura/Entity/ImagenEntity";
 
 export class Nota{
 
@@ -33,6 +34,11 @@ export class Nota{
     public getId(): string{
         return this.id.getIDNota();
     }
+
+    public getImagen(): Buffer[]{
+        return this.cuerpo.getImagenNota();
+    }
+
 
     public getIdCarpeta(): string{
         return this.idCarpeta.getIDCarpeta();
@@ -71,8 +77,8 @@ export class Nota{
         this.titulo = TituloNota.create(titulo).getRight();
     }
 
-    public setCuerpo(cuerpo: string): void{
-        this.cuerpo = CuerpoNota.create(cuerpo).getRight();
+    public setCuerpo(cuerpo: string,imagen?:Buffer[]): void{
+        this.cuerpo = CuerpoNota.create(cuerpo,imagen).getRight();
     }
 
     public setFechaModificacion(fechaModificacion: Date): void{
@@ -100,7 +106,7 @@ export class Nota{
         this.geolocalizacion = Geolocalizacion.create(longitud,latitud).getRight();
     }
 
-    static create(fechaCreacion: Date, fechaModificacion: Date, estado: string, titulo: string, cuerpo: string, longitud: number, latitud: number, idCarpeta: string, id?: string ): Either<Error,Nota>{
+    static create(fechaCreacion: Date, fechaModificacion: Date, estado: string, titulo: string, cuerpo: string, longitud: number, latitud: number, idCarpeta: string,imagen?:Buffer[], id?: string ): Either<Error,Nota>{
         
         let auxiliarEstado: EstadoNota;
 
@@ -123,7 +129,7 @@ export class Nota{
         let auxiliarFechaCreacion = FechaCreacionNota.create(fechaCreacion);
         let auxiliarFechaModificacion = FechaModificacionNota.create(fechaModificacion);
         let auxiliarTitulo = TituloNota.create(titulo);
-        let auxiliarCuerpo = CuerpoNota.create(cuerpo);
+        let auxiliarCuerpo = CuerpoNota.create(cuerpo,imagen);
         let auxiliarGeolocalizacion = Geolocalizacion.create(longitud,latitud);
 
         if(auxiliarFechaCreacion.isRight() && auxiliarFechaModificacion.isRight() && auxiliarTitulo.isRight() && auxiliarCuerpo.isRight() && auxiliarGeolocalizacion.isRight()){

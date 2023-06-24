@@ -9,6 +9,6 @@ export class CrearNotaDto{
     cuerpo: string;
     longitud?: number;
     latitud?: number;
-    idCarpeta: string;
-    
+    imagen?: {buffer: Buffer}[];
+    idCarpeta: string;  
 }

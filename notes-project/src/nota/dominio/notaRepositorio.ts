@@ -1,5 +1,6 @@
 import { Nota } from "./Nota";
 import { Either} from "src/utilidad/Either"
+import { CuerpoNota } from "./ValueObject/CuerpoNota";
 
 export interface NotaRepositorio{
 
@@ -8,5 +9,6 @@ export interface NotaRepositorio{
     modificarNota(nota: Nota): Promise<Either<Error,Nota>>;
     eliminarNota(id:string): Promise<Either<Error,string>>;
     buscarNota(id:string): Promise<Either<Error,Nota>>;
+    guardarImagen(id:string,imagen:Buffer[]): Promise<Either<Error,string>>;
 
 }

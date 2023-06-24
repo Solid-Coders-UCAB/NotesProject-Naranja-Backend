@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpStatus, Post, Put, Res} from "@nestjs/common";
+import { Body, Controller, Delete, Get, HttpStatus, Post, Put, Res, UploadedFile, UploadedFiles, UseInterceptors} from "@nestjs/common";
 import { CrearNotaService } from "src/nota/aplicacion/CrearNotaService";
 import { CrearNotaDto } from "../../aplicacion/DataTransferObjects/CrearNotaDto";
 import { ModificarNotaDto } from "../../aplicacion/DataTransferObjects/ModificarNotaDto";
@@ -8,6 +8,7 @@ import { BorraNotaDto } from "../../aplicacion/DataTransferObjects/BorrarNotaDto
 import { BuscarNotasService } from "src/nota/aplicacion/BuscarNotasService";
 import { BuscarNotaPorIdService } from "src/nota/aplicacion/BuscarNotaPorIdService";
 import { BuscarNotaIdDto } from "src/nota/aplicacion/DataTransferObjects/BuscarNotaIdDto";
+import { FileInterceptor, FilesInterceptor } from "@nestjs/platform-express";
 
 @Controller('nota')
 export class NotaController {
@@ -52,16 +53,24 @@ export class NotaController {
     }
 
     @Post('/create')
-    async create(@Res() response, @Body() body: CrearNotaDto){
-        const result = await this.crearNotaService.execute(body);
+    @UseInterceptors(FilesInterceptor('imagen'))
+ async create(@UploadedFiles() file: Express.Multer.File[],@Res() response, @Body() body: CrearNotaDto){
+
+
+        const imagenes = file.map((imagen) => {
+            return {buffer : imagen.buffer}
+        })  
+
+        body.imagen = imagenes;
+    
+  const result = await this.crearNotaService.execute(body);
         if(result.isRight()){
             return response.status(HttpStatus.OK).json(result.getRight());
         }
         else{
             return response.status(HttpStatus.NOT_FOUND).json(result.getLeft().message);
         }
-    }
-
+}   
 
     @Delete('/delete')
     async delete (@Res() response, @Body() body: BorraNotaDto){
