@@ -8,8 +8,9 @@ export class ModificarNotaDto {
     estado: EstadoNota;
     titulo: string;
     cuerpo: string;
-    longitud: number;
-    latitud: number;
+    longitud?: number;
+    latitud?: number;
+    direccion?: string;
     imagen?: {buffer: Buffer}[];
     idCarpeta: string;
 

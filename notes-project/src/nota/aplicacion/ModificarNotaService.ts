@@ -22,8 +22,8 @@ export class ModificarNotaService implements IApplicationService<ModificarNotaDt
         let nota = Nota.create(service.fechaCreacion,
                                  service.fechaModificacion, 
                                  service.estado, service.titulo,
-                                  service.cuerpo, service.longitud,
-                                   service.latitud, service.idCarpeta,
+                                  service.cuerpo,  service.idCarpeta, service.longitud,
+                                  service.latitud, service.direccion,
                                    imag,service.idNota);
         
         if(nota.isRight()){

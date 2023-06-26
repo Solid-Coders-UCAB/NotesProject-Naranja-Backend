@@ -1,5 +1,4 @@
-import { CarpetaEntity } from "src/carpeta/infraestructura/Entity/CarpetaEntity"
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryColumn, PrimaryGeneratedColumn} from "typeorm"
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn} from "typeorm"
 import { NotaEntity } from "./NotaEntity";
 
 @Entity()
