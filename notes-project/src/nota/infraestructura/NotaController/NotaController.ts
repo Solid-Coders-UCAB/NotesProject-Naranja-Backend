@@ -71,6 +71,8 @@ export class NotaController {
         })  
 
         body.imagen = imagenes;
+
+        console.log(body);
     
   const result = await this.crearNotaService.execute(body);
         if(result.isRight()){

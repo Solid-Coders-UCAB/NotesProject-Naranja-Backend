@@ -28,6 +28,7 @@ export class NotaRepositorioAdaptador implements NotaRepositorio{
             fechaModificacion: nota.getFechaModificacion(),
             latitud: nota.getLatitud(),
             longitud: nota.getLongitud(),
+            direccion: nota.getDireccion(),
             estado: nota.getEstado(),
             imagen:[],
             carpeta: nota.getIdCarpeta()
@@ -51,9 +52,10 @@ export class NotaRepositorioAdaptador implements NotaRepositorio{
                     nota.estado, 
                     nota.titulo, 
                     nota.cuerpo, 
+                    nota.carpeta,
                     nota.longitud, 
                     nota.latitud,
-                    nota.carpeta, 
+                    nota.direccion, 
                     nota.imagen.map(ima=>{
                         return ima.imagen
                     }),
@@ -73,7 +75,7 @@ export class NotaRepositorioAdaptador implements NotaRepositorio{
         console.log("aqui",ima);
         if(result){
             let nota = Nota.create(result.fechaCreacion, result.fechaModificacion, result.estado, result.titulo, 
-                result.cuerpo, result.longitud, result.latitud, result.carpeta,ima,result.id);
+                result.cuerpo,  result.carpeta,result.longitud, result.latitud,result.direccion,ima,result.id);
             return Either.makeRight<Error,Nota>(nota.getRight());
         }
         else{
@@ -93,6 +95,7 @@ export class NotaRepositorioAdaptador implements NotaRepositorio{
             fechaModificacion: notaId.fechaModificacion = nota.getFechaModificacion(),
             latitud: notaId.latitud = nota.getLatitud(),
             longitud: notaId.longitud = nota.getLongitud(),
+            direccion: notaId.direccion = nota.getDireccion(),
             estado: notaId.estado =nota.getEstado(),
             imagen: [],
             carpeta: notaId.carpeta = nota.getIdCarpeta()

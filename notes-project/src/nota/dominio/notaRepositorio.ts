@@ -1,6 +1,5 @@
 import { Nota } from "./Nota";
 import { Either} from "src/utilidad/Either"
-import { CuerpoNota } from "./ValueObject/CuerpoNota";
 
 export interface NotaRepositorio{
 

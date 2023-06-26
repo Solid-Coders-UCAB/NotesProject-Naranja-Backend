@@ -7,7 +7,7 @@ import { EstadoNota } from "./ValueObject/EstadoNota";
 import { Geolocalizacion } from "./ValueObject/Geolocalizacion";
 import { Either } from "src/utilidad/Either";
 import { IdCarpeta } from "src/carpeta/dominio/ValueObject/IdCarpeta";
-import { ImagenEntity } from "../infraestructura/Entity/ImagenEntity";
+import { Optional } from "src/utilidad/Optional";
 
 export class Nota{
 
@@ -17,10 +17,10 @@ export class Nota{
     private fechaCreacion: FechaCreacionNota;
     private fechaModificacion: FechaModificacionNota;
     private estado: EstadoNota;
-    private geolocalizacion: Geolocalizacion;
+    private geolocalizacion: Optional<Geolocalizacion>;
     private idCarpeta: IdCarpeta;
 
-    private constructor(fechaCreacion: FechaCreacionNota, fechaModificacion: FechaModificacionNota, estado: EstadoNota, titulo: TituloNota, cuerpo: CuerpoNota,geolocalizacion:Geolocalizacion, idCarpeta: IdCarpeta, id?: IdNota){
+    private constructor(fechaCreacion: FechaCreacionNota, fechaModificacion: FechaModificacionNota, estado: EstadoNota, titulo: TituloNota, cuerpo: CuerpoNota,geolocalizacion: Optional<Geolocalizacion>, idCarpeta: IdCarpeta, id?: IdNota){
         this.id = id;
         this.titulo = titulo;
         this.cuerpo = cuerpo;
@@ -64,49 +64,35 @@ export class Nota{
         return this.estado.toString();
     }
 
-    public getLatitud(): number{
-        return this.geolocalizacion.getLatitud();
-    }
-
-    
-    public getLongitud(): number{
-        return this.geolocalizacion.getLongitud();
-    }
-
-    public setTitulo(titulo: string): void{
-        this.titulo = TituloNota.create(titulo).getRight();
-    }
-
-    public setCuerpo(cuerpo: string,imagen?:Buffer[]): void{
-        this.cuerpo = CuerpoNota.create(cuerpo,imagen).getRight();
-    }
-
-    public setFechaModificacion(fechaModificacion: Date): void{
-        this.fechaModificacion = FechaModificacionNota.create(fechaModificacion).getRight();
-    }
-
-    public setEstado(estado: string): void{
-        switch(estado.trim().toLowerCase()){
-            case "pendienteporguardar":
-            this.estado = EstadoNota.Pendiente;
-            break;
-            case "guardada":
-            this.estado = EstadoNota.Guardada;
-            break;
-            case "eliminada":
-            this.estado = EstadoNota.Eliminada;
-            break;
-            default:
-            this.estado = EstadoNota.Pendiente;
-            break;
+    public getLatitud(){
+        if(this.geolocalizacion.hasvalue()){
+            return this.geolocalizacion.getValue().getLatitud();
+        }
+        else{
+            return undefined;
         }
     }
 
-    public setGeolocalizacion(longitud: number, latitud: number): void{
-        this.geolocalizacion = Geolocalizacion.create(longitud,latitud).getRight();
+    
+    public getLongitud(){
+        if(this.geolocalizacion.hasvalue()){
+            return this.geolocalizacion.getValue().getLongitud();
+        }
+        else{
+            return undefined;
+        }
     }
 
-    static create(fechaCreacion: Date, fechaModificacion: Date, estado: string, titulo: string, cuerpo: string, longitud: number, latitud: number, idCarpeta: string,imagen?:Buffer[], id?: string ): Either<Error,Nota>{
+    public getDireccion(){
+        if(this.geolocalizacion.hasvalue()){
+            return this.geolocalizacion.getValue().getDireccion();
+        }
+        else{
+            return undefined;
+        }
+    }
+
+    static create(fechaCreacion: Date, fechaModificacion: Date, estado: string, titulo: string, cuerpo: string, idCarpeta: string, longitud?: number, latitud?: number, direccion?: string, imagen?:Buffer[], id?: string ): Either<Error,Nota>{
         
         let auxiliarEstado: EstadoNota;
 
@@ -127,25 +113,47 @@ export class Nota{
         }
 
         let auxiliarFechaCreacion = FechaCreacionNota.create(fechaCreacion);
-        let auxiliarFechaModificacion = FechaModificacionNota.create(fechaModificacion);
-        let auxiliarTitulo = TituloNota.create(titulo);
-        let auxiliarCuerpo = CuerpoNota.create(cuerpo,imagen);
-        let auxiliarGeolocalizacion = Geolocalizacion.create(longitud,latitud);
-
-        if(auxiliarFechaCreacion.isRight() && auxiliarFechaModificacion.isRight() && auxiliarTitulo.isRight() && auxiliarCuerpo.isRight() && auxiliarGeolocalizacion.isRight()){
-            return Either.makeRight<Error,Nota>(new Nota( 
-                                                auxiliarFechaCreacion.getRight(), 
-                                                auxiliarFechaModificacion.getRight(),
-                                                auxiliarEstado,  
-                                                auxiliarTitulo.getRight(), 
-                                                auxiliarCuerpo.getRight(),
-                                                auxiliarGeolocalizacion.getRight(),
-                                                IdCarpeta.create(idCarpeta),
-                                                IdNota.create(id)));
+        if(auxiliarFechaCreacion.isLeft()){
+            return Either.makeLeft<Error,Nota>(auxiliarFechaCreacion.getLeft());
         }
         else{
-            return Either.makeLeft<Error,Nota>(new Error('Error al crear la nota'));
+            let auxiliarFechaModificacion = FechaModificacionNota.create(fechaModificacion);
+            if(auxiliarFechaModificacion.isLeft()){
+                return Either.makeLeft<Error,Nota>(auxiliarFechaModificacion.getLeft());
+            }
+            else{
+                let auxiliarTitulo = TituloNota.create(titulo);
+                if(auxiliarTitulo.isLeft()){
+                    return Either.makeLeft<Error,Nota>(auxiliarTitulo.getLeft());
+                }
+                else{
+                    let auxiliarCuerpo = CuerpoNota.create(cuerpo,imagen);
+                    if(auxiliarCuerpo.isLeft()){
+                        return Either.makeLeft<Error,Nota>(auxiliarCuerpo.getLeft());
+                    }
+                    else{
+                        let auxiliarGeolocalizacion: Optional<Geolocalizacion>;
+                        if(latitud && longitud && direccion){
+                            let auxiliarGeolocalizacion2 = Geolocalizacion.create(longitud,latitud,direccion);
+                            if(auxiliarGeolocalizacion2.isLeft()){
+                                return Either.makeLeft<Error,Nota>(auxiliarGeolocalizacion2.getLeft());
+                            }
+                            else{
+                                auxiliarGeolocalizacion = new Optional<Geolocalizacion>(auxiliarGeolocalizacion2.getRight());
+                            }
+                        }
+                        else{
+                            auxiliarGeolocalizacion = new Optional<Geolocalizacion>();
+                        }
+                        return Either.makeRight<Error,Nota>(new Nota(auxiliarFechaCreacion.getRight(),auxiliarFechaModificacion.getRight(),auxiliarEstado,auxiliarTitulo.getRight(),auxiliarCuerpo.getRight(),auxiliarGeolocalizacion,IdCarpeta.create(idCarpeta),IdNota.create(id)));
+                    }
+                }
+            }
         }
+        
+        
+
+        
         
     }
 
