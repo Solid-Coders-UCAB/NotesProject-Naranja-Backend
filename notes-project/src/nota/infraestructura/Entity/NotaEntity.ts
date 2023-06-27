@@ -35,8 +35,7 @@ export class NotaEntity {
     @OneToMany(() => ImagenEntity, (imagen) => imagen.nota,{cascade:['remove'],eager:true,nullable:true})
     imagen: ImagenEntity[];
 
-    @ManyToOne(() => CarpetaEntity)
-    @JoinColumn({ name: 'carpeta' })
+    @Column()
     carpeta: string;
 
 }

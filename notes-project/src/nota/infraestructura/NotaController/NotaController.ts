@@ -9,6 +9,8 @@ import { BuscarNotasService } from "src/nota/aplicacion/BuscarNotasService";
 import { BuscarNotaPorIdService } from "src/nota/aplicacion/BuscarNotaPorIdService";
 import { BuscarNotaIdDto } from "src/nota/aplicacion/DataTransferObjects/BuscarNotaIdDto";
 import { FilesInterceptor } from "@nestjs/platform-express";
+import { BuscarNotasCarpetaDto } from "src/nota/aplicacion/DataTransferObjects/BuscarNotasCarpetaDto";
+import { BuscarNotasCarpetaService } from "src/nota/aplicacion/BuscarNotasCarpetaService";
 
 @Controller('nota')
 export class NotaController {
@@ -17,7 +19,8 @@ export class NotaController {
         private readonly modificarNota: ModificarNotaService,
         private readonly eliminarNota: EliminarNotaService,
         private readonly buscarNotas: BuscarNotasService,
-        private readonly buscarNotaId: BuscarNotaPorIdService) {}
+        private readonly buscarNotaId: BuscarNotaPorIdService,
+        private readonly buscarNotasCarpeta: BuscarNotasCarpetaService) {}
 
     @Get('/findAll')
     async findAll(@Res() response){
@@ -33,6 +36,17 @@ export class NotaController {
     @Get('/findById')
     async findById(@Res() response, @Body() body: BuscarNotaIdDto){
         let result = await this.buscarNotaId.execute(body);
+        if(result.isRight()){
+            return response.status(HttpStatus.OK).json(result.getRight());
+        }
+        else{
+            return response.status(HttpStatus.NOT_FOUND).json(result.getLeft().message);
+        }
+    }
+
+    @Get('/findByFolder')
+    async findByFolder(@Res() response, @Body() body: BuscarNotasCarpetaDto){
+        let result = await this.buscarNotasCarpeta.execute(body);
         if(result.isRight()){
             return response.status(HttpStatus.OK).json(result.getRight());
         }
