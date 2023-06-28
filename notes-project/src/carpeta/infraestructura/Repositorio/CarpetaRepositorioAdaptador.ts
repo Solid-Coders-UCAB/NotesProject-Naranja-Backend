@@ -67,7 +67,7 @@ export class CarpetaRepositorioAdaptador implements CarpetaRepositorio{
 
     async eliminarCarpeta(id: string): Promise<Either<Error, string>> {
         const result = await this.repositorio.delete(id);
-        if(result){
+        if(result.affected != 0){
             return Either.makeRight<Error,string>(id);
         }
         else{

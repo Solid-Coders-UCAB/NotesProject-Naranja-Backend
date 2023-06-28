@@ -83,16 +83,8 @@ export class Nota{
         }
     }
 
-    public getDireccion(){
-        if(this.geolocalizacion.hasvalue()){
-            return this.geolocalizacion.getValue().getDireccion();
-        }
-        else{
-            return undefined;
-        }
-    }
 
-    static create(fechaCreacion: Date, fechaModificacion: Date, estado: string, titulo: string, cuerpo: string, idCarpeta: string, longitud?: number, latitud?: number, direccion?: string, imagen?:Buffer[], id?: string ): Either<Error,Nota>{
+    static create(fechaCreacion: Date, fechaModificacion: Date, estado: string, titulo: string, cuerpo: string, idCarpeta: string, longitud?: number, latitud?: number, imagen?:Buffer[], id?: string ): Either<Error,Nota>{
         
         let auxiliarEstado: EstadoNota;
 
@@ -133,8 +125,8 @@ export class Nota{
                     }
                     else{
                         let auxiliarGeolocalizacion: Optional<Geolocalizacion>;
-                        if(latitud && longitud && direccion){
-                            let auxiliarGeolocalizacion2 = Geolocalizacion.create(longitud,latitud,direccion);
+                        if(latitud && longitud){
+                            let auxiliarGeolocalizacion2 = Geolocalizacion.create(longitud,latitud);
                             if(auxiliarGeolocalizacion2.isLeft()){
                                 return Either.makeLeft<Error,Nota>(auxiliarGeolocalizacion2.getLeft());
                             }

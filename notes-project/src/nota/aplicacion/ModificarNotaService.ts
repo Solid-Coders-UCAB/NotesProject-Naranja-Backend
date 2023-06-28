@@ -23,7 +23,7 @@ export class ModificarNotaService implements IApplicationService<ModificarNotaDt
                                  service.fechaModificacion, 
                                  service.estado, service.titulo,
                                   service.cuerpo,  service.idCarpeta, service.longitud,
-                                  service.latitud, service.direccion,
+                                  service.latitud,
                                    imag,service.idNota);
         
         if(nota.isRight()){

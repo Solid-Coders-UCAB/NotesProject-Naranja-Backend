@@ -28,7 +28,6 @@ export class NotaRepositorioAdaptador implements NotaRepositorio{
             fechaModificacion: nota.getFechaModificacion(),
             latitud: nota.getLatitud(),
             longitud: nota.getLongitud(),
-            direccion: nota.getDireccion(),
             estado: nota.getEstado(),
             imagen:[],
             carpeta: nota.getIdCarpeta()
@@ -55,7 +54,6 @@ export class NotaRepositorioAdaptador implements NotaRepositorio{
                     nota.carpeta,
                     nota.longitud, 
                     nota.latitud,
-                    nota.direccion, 
                     nota.imagen.map(ima=>{
                         return ima.imagen
                     }),
@@ -69,13 +67,14 @@ export class NotaRepositorioAdaptador implements NotaRepositorio{
 
     async buscarNota(id:string): Promise<Either<Error,Nota>> {
         const result = await this.repositorio.findOneBy({id:id});
-        const ima = result.imagen.map(ima=>{
-            return ima.imagen
-        })
-        console.log("aqui",ima);
+        
         if(result){
+            const ima = result.imagen.map(ima=>{
+                return ima.imagen
+            })
+            console.log("aqui",ima);
             let nota = Nota.create(result.fechaCreacion, result.fechaModificacion, result.estado, result.titulo, 
-                result.cuerpo,  result.carpeta,result.longitud, result.latitud,result.direccion,ima,result.id);
+                result.cuerpo,  result.carpeta,result.longitud, result.latitud,ima,result.id);
             return Either.makeRight<Error,Nota>(nota.getRight());
         }
         else{
@@ -96,8 +95,7 @@ export class NotaRepositorioAdaptador implements NotaRepositorio{
                     nota.cuerpo, 
                     nota.carpeta,
                     nota.longitud, 
-                    nota.latitud,
-                    nota.direccion, 
+                    nota.latitud, 
                     nota.imagen.map(ima=>{
                         return ima.imagen
                     }),
@@ -121,7 +119,6 @@ export class NotaRepositorioAdaptador implements NotaRepositorio{
             fechaModificacion: notaId.fechaModificacion = nota.getFechaModificacion(),
             latitud: notaId.latitud = nota.getLatitud(),
             longitud: notaId.longitud = nota.getLongitud(),
-            direccion: notaId.direccion = nota.getDireccion(),
             estado: notaId.estado =nota.getEstado(),
             imagen: [],
             carpeta: notaId.carpeta = nota.getIdCarpeta()
@@ -138,7 +135,7 @@ export class NotaRepositorioAdaptador implements NotaRepositorio{
     async eliminarNota(id:string): Promise<Either<Error,string>> {
 
         const result = await this.repositorio.delete(id);
-        if(result){
+        if(result.affected != 0){
             return Either.makeRight<Error,string>(id);
         }
         else{

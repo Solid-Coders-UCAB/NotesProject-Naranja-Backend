@@ -25,9 +25,6 @@ export class NotaEntity {
     
     @Column({nullable:true})
     longitud?: number
-
-    @Column({nullable:true})
-    direccion?: string
     
     @Column()
     estado: string

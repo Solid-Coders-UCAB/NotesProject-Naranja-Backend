@@ -10,7 +10,6 @@ export class ModificarNotaDto {
     cuerpo: string;
     longitud?: number;
     latitud?: number;
-    direccion?: string;
     imagen?: {buffer: Buffer}[];
     idCarpeta: string;
 
