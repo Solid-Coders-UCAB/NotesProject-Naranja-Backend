@@ -1,7 +1,7 @@
 import { Nota } from "src/nota/dominio/Nota";
 import { NotaRepositorio } from "src/nota/dominio/NotaRepositorio";
 import { Either } from "src/utilidad/Either";
-import { Repository } from "typeorm";
+import { Not, Repository } from "typeorm";
 import { NotaEntity } from "src/nota/infraestructura/Entity/NotaEntity";
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from '@nestjs/typeorm';
@@ -42,9 +42,9 @@ export class NotaRepositorioAdaptador implements NotaRepositorio{
         }       
     }
 
-    async buscarNotas(): Promise<Either<Error,Nota[]>> {          
+    async buscarNotas(): Promise<Either<Error,Iterable<Nota>>> {          
         const result: NotaEntity[] = await this.repositorio.find();
-        if(result){
+        if(result.length!=0){
             const notas: Nota[] = result.map((nota) =>
                 Nota.create(nota.fechaCreacion, 
                     nota.fechaModificacion, 
@@ -82,11 +82,11 @@ export class NotaRepositorioAdaptador implements NotaRepositorio{
         }
     }
 
-    async buscarNotasPorCarpeta(idCarpeta: string): Promise<Either<Error, Nota[]>> {
+    async buscarNotasPorCarpeta(idCarpeta: string): Promise<Either<Error,Iterable<Nota>>> {
         console.log(idCarpeta);
-        const result: NotaEntity[] = await this.repositorio.find({where:{carpeta:idCarpeta}});
+        const result: NotaEntity[] = await this.repositorio.find({where:{carpeta:idCarpeta,estado:Not('Eliminada')}});
         console.log(idCarpeta);
-        if(result){
+        if(result.length != 0){
             const notas: Nota[] = result.map((nota) =>
                 Nota.create(nota.fechaCreacion, 
                     nota.fechaModificacion, 

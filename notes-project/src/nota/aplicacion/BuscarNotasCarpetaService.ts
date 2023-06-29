@@ -5,7 +5,7 @@ import { Either } from "src/utilidad/Either";
 import { Nota } from "../dominio/Nota";
 import { BuscarNotasCarpetaDto } from "./DataTransferObjects/BuscarNotasCarpetaDto";
 
-export class BuscarNotasCarpetaService implements IApplicationService<BuscarNotasCarpetaDto,Nota[]>{
+export class BuscarNotasCarpetaService implements IApplicationService<BuscarNotasCarpetaDto,Iterable<Nota>>{
 
     private readonly notaRepositorio: NotaRepositorio
 
@@ -13,7 +13,7 @@ export class BuscarNotasCarpetaService implements IApplicationService<BuscarNota
         this.notaRepositorio = notaRepo;
     }
 
-    async execute(service: BuscarNotasCarpetaDto): Promise<Either<Error,Nota[]>>{
+    async execute(service: BuscarNotasCarpetaDto): Promise<Either<Error,Iterable<Nota>>>{
         console.log(service.idCarpeta)
         return await this.notaRepositorio.buscarNotasPorCarpeta(service.idCarpeta);
 

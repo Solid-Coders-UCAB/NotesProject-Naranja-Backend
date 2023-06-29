@@ -28,9 +28,9 @@ export class CarpetaRepositorioAdaptador implements CarpetaRepositorio{
         }
     }
 
-    async buscarCarpetas(): Promise<Either<Error, Carpeta[]>> {
+    async buscarCarpetas(): Promise<Either<Error, Iterable<Carpeta>>> {
         const result: CarpetaEntity[] = await this.repositorio.find();
-        if(result){
+        if(result.length!=0){
             const carpetas: Carpeta[] = result.map((carpeta) =>
                 Carpeta.create(carpeta.nombre, carpeta.id).getRight());
             return Either.makeRight<Error,Carpeta[]>(carpetas);

@@ -4,7 +4,7 @@ import { CarpetaRepositorio } from "../dominio/CarpetaRepositorio";
 import { Inject } from "@nestjs/common";
 import { Either } from "src/utilidad/Either";
 
-export class BuscarCarpetasService implements IApplicationService<string,Carpeta[]>{
+export class BuscarCarpetasService implements IApplicationService<string,Iterable<Carpeta>>{
 
     private readonly carpetaRepositorio: CarpetaRepositorio;
 
@@ -12,7 +12,7 @@ export class BuscarCarpetasService implements IApplicationService<string,Carpeta
         this.carpetaRepositorio = carpetaRepo;
     }
 
-    async execute(service: string): Promise<Either<Error,Carpeta[]>>{
+    async execute(service: string): Promise<Either<Error,Iterable<Carpeta>>>{
             
         console.log(service);
         return await this.carpetaRepositorio.buscarCarpetas();
