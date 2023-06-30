@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryColumn} from "typeorm"
+import { NotaEntity } from "src/nota/infraestructura/Entity/NotaEntity"
+import { Column, Entity, OneToMany, PrimaryColumn} from "typeorm"
 
 @Entity()
 export class CarpetaEntity {
@@ -8,5 +9,8 @@ export class CarpetaEntity {
 
     @Column()
     nombre: string
+
+    @OneToMany(() => NotaEntity, (nota) => nota.carpeta,{cascade:['remove'],eager:true,nullable:true})
+    nota: NotaEntity[];
 
 }

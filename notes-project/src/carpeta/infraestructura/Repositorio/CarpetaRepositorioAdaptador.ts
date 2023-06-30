@@ -17,7 +17,8 @@ export class CarpetaRepositorioAdaptador implements CarpetaRepositorio{
     async crearCarpeta(carpeta: Carpeta): Promise<Either<Error, Carpeta>> {
         const carpetaEnt : CarpetaEntity = {
             id: carpeta.getId(),
-            nombre: carpeta.getNombre() 
+            nombre: carpeta.getNombre(),
+            nota: [] 
         };
         const result = await this.repositorio.save(carpetaEnt);
         if(result){
@@ -54,7 +55,8 @@ export class CarpetaRepositorioAdaptador implements CarpetaRepositorio{
     async modificarCarpeta(carpeta: Carpeta): Promise<Either<Error, Carpeta>> {
         const carpetaEnt : CarpetaEntity = {
             id: carpeta.getId(),
-            nombre: carpeta.getNombre()
+            nombre: carpeta.getNombre(),
+            nota: []
         };
         const result = await this.repositorio.update(carpeta.getId(), carpetaEnt);
         if(result){
