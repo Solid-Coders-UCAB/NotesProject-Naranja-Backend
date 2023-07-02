@@ -30,7 +30,7 @@ export class ModificarNotaService implements IApplicationService<ModificarNotaDt
             await this.notaRepositorio.eliminarImagen(nota.getRight().getId());
             const notaC = await this.notaRepositorio.modificarNota(nota.getRight());
             
-            await this.notaRepositorio.guardarImagen(nota.getRight().getId(),imag);
+            //await this.notaRepositorio.guardarImagen(nota.getRight().getId(),imag);
             return notaC;
             
         }

@@ -26,7 +26,7 @@ export class CrearNotaService implements IApplicationService<CrearNotaDto,Nota>{
         if(nota.isRight()){
 
             const notaC = await this.notaRepositorio.crearNota(nota.getRight());
-            await this.notaRepositorio.guardarImagen(nota.getRight().getId(),imag);
+            //await this.notaRepositorio.guardarImagen(nota.getRight().getId(),imag);
             return notaC;
 
         }

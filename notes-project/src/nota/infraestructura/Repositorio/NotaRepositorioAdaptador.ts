@@ -24,6 +24,13 @@ export class NotaRepositorioAdaptador implements NotaRepositorio{
     async crearNota(nota: Nota): Promise<Either<Error,Nota>> {
 
         const carp = await this.repositorioCarpeta.findOneBy({id:nota.getIdCarpeta()});
+    
+        let imagenes : ImagenEntity[];
+               imagenes = nota.getImagen().map(ima => {
+                   const im = new ImagenEntity();
+                   im.imagen = ima;
+                   return im;
+               })
         
         const note : NotaEntity = {
             id: nota.getId(),
@@ -34,7 +41,7 @@ export class NotaRepositorioAdaptador implements NotaRepositorio{
             latitud: nota.getLatitud(),
             longitud: nota.getLongitud(),
             estado: nota.getEstado(),
-            imagen:[],
+            imagen:imagenes,
             carpeta: carp
         };
 
@@ -121,6 +128,13 @@ export class NotaRepositorioAdaptador implements NotaRepositorio{
         let notaId = await this.repositorio.findOneBy({id:nota.getId()});
         const carp = await this.repositorioCarpeta.findOneBy({id:nota.getIdCarpeta()});
 
+        let imagenes : ImagenEntity[];
+               imagenes = nota.getImagen().map(ima => {
+                   const im = new ImagenEntity();
+                   im.imagen = ima;
+                   return im;
+               })
+
         const note : NotaEntity = {
             id: notaId.id = nota.getId(),
             titulo: notaId.titulo= nota.getTitulo(),
@@ -130,7 +144,7 @@ export class NotaRepositorioAdaptador implements NotaRepositorio{
             latitud: notaId.latitud = nota.getLatitud(),
             longitud: notaId.longitud = nota.getLongitud(),
             estado: notaId.estado =nota.getEstado(),
-            imagen: [],
+            imagen: imagenes,
             carpeta: carp
         };  
         const result = await this.repositorio.save(note);

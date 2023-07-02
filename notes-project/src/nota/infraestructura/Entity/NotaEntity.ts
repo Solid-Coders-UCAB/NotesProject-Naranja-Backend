@@ -29,7 +29,7 @@ export class NotaEntity {
     @Column()
     estado: string
 
-    @OneToMany(() => ImagenEntity, (imagen) => imagen.nota,{cascade:['remove'],eager:true,nullable:true})
+    @OneToMany(() => ImagenEntity, (imagen) => imagen.nota,{cascade:['remove','insert','update'],eager:true,nullable:true})
     imagen: ImagenEntity[];
 
     @ManyToOne(() => CarpetaEntity,(carpeta) => carpeta.nota, { onDelete: 'CASCADE', nullable: true, onUpdate:'CASCADE' }	)
