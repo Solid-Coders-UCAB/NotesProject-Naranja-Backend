@@ -16,9 +16,7 @@ export class ModificarNotaService implements IApplicationService<ModificarNotaDt
 
     async execute(service: ModificarNotaDto): Promise<Either<Error,Nota>>{
         
-        const imag = service.imagen.map((i) => {
-            return  i.buffer
-            });
+        const imag = [];
         
                
         let nota = Nota.create(service.fechaCreacion,

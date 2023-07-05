@@ -11,8 +11,8 @@ export class NombreCarpeta{
         return this.nombre;
     }
 
-    isValid(): boolean{
-        return this.nombre.length > 0;
+    private isValid(): boolean{
+        return this.nombre.length > 0 && this.nombre.length <= 40;
     }
 
     static create(nombre: string): Either<Error,NombreCarpeta>{
@@ -21,7 +21,7 @@ export class NombreCarpeta{
             return Either.makeRight<Error,NombreCarpeta>(nombreCarpeta);
         }
         else{
-            return Either.makeLeft<Error,NombreCarpeta>(new Error('El nombre de la carpeta no puede estar vacio'));
+            return Either.makeLeft<Error,NombreCarpeta>(new Error('El nombre de la carpeta no es valido'));
         }
     }
 

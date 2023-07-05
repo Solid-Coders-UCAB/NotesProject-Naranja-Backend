@@ -14,7 +14,7 @@ export class ModificarCarpetaService implements IApplicationService<ModificarCar
     }
 
     async execute(service: ModificarCarpetaDto): Promise<Either<Error,Carpeta>>{   
-        let carpeta = Carpeta.create(service.nombre,service.idCarpeta);
+        let carpeta = Carpeta.create(service.nombre,service.predeterminada,service.idUsuario,service.idCarpeta);
 
         if(carpeta.isRight()){
             return await this.carpetaRepositorio.modificarCarpeta(carpeta.getRight());

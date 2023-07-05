@@ -1,9 +1,11 @@
 import { Body, Controller, Delete, Get, HttpStatus, Post, Put, Res } from "@nestjs/common";
 import { BuscarCarpetaPorIdService } from "src/carpeta/aplicacion/BuscarCarpetaPorIdService";
+import { BuscarCarpetasPorUsuarioService } from "src/carpeta/aplicacion/BuscarCarpetasPorUsuarioService";
 import { BuscarCarpetasService } from "src/carpeta/aplicacion/BuscarCarpetasService";
 import { CrearCarpetaService } from "src/carpeta/aplicacion/CrearCarpetaService";
 import { BorrarCarpetaDto } from "src/carpeta/aplicacion/DataTransferObjects/BorrarCarpetaDto";
 import { BuscarCarpetaIdDto } from "src/carpeta/aplicacion/DataTransferObjects/BuscarCarpetaIdDto";
+import { BuscarCarpetasUsuarioDto } from "src/carpeta/aplicacion/DataTransferObjects/BuscarCarpetasUsuarioDto";
 import { CrearCarpetaDto } from "src/carpeta/aplicacion/DataTransferObjects/CrearCarpetaDto";
 import { ModificarCarpetaDto } from "src/carpeta/aplicacion/DataTransferObjects/ModificarCarpetaDto";
 import { EliminarCarpetaService } from "src/carpeta/aplicacion/EliminarCarpetaService";
@@ -16,7 +18,8 @@ export class CarpetaController {
                 private readonly buscarCarpetas: BuscarCarpetasService,
                 private readonly buscarCarpeta: BuscarCarpetaPorIdService,
                 private readonly modificarCarpeta: ModificarCarpetaService,
-                private readonly eliminarCarpeta: EliminarCarpetaService){}
+                private readonly eliminarCarpeta: EliminarCarpetaService,
+                private readonly buscarCarpetasUsuario: BuscarCarpetasPorUsuarioService){}
 
     @Post('/create')
     async create(@Res() response, @Body() body: CrearCarpetaDto){
@@ -43,6 +46,17 @@ export class CarpetaController {
     @Get('/findById')
     async findById(@Res() response, @Body() body: BuscarCarpetaIdDto){
         let result = await this.buscarCarpeta.execute(body);
+        if(result.isRight()){
+            return response.status(HttpStatus.OK).json(result.getRight());
+        }
+        else{
+            return response.status(HttpStatus.NOT_FOUND).json(result.getLeft().message);
+        }
+    }
+
+    @Get('/findByUser')
+    async findByUser(@Res() response, @Body() body: BuscarCarpetasUsuarioDto){
+        let result = await this.buscarCarpetasUsuario.execute(body);
         if(result.isRight()){
             return response.status(HttpStatus.OK).json(result.getRight());
         }

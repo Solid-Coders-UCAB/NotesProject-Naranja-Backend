@@ -11,7 +11,17 @@ export class TituloNota {
         return this.titulo;
     }
 
+    private isValid(): boolean {
+        return this.titulo.length > 0 && this.titulo.length <= 40;
+    }
+
     static create(titulo: string): Either<Error,TituloNota> {
-        return Either.makeRight<Error,TituloNota>(new TituloNota(titulo));
+        const tituloNota = new TituloNota(titulo);
+        if(tituloNota.isValid()){
+            return Either.makeRight<Error,TituloNota>(tituloNota);
+        }
+        else{
+            return Either.makeLeft<Error,TituloNota>(new Error('El titulo de la nota no es valido'));
+        }
     }
 }

@@ -1,5 +1,6 @@
 import { NotaEntity } from "src/nota/infraestructura/Entity/NotaEntity"
-import { Column, Entity, OneToMany, PrimaryColumn} from "typeorm"
+import { UsuarioEntity } from "src/usuario/infraestructura/Entity/UsuarioEntity"
+import { Column, Entity, ManyToOne, OneToMany, PrimaryColumn} from "typeorm"
 
 @Entity()
 export class CarpetaEntity {
@@ -7,10 +8,16 @@ export class CarpetaEntity {
     @PrimaryColumn()
     id: string
 
-    @Column()
+    @Column({unique:true})
     nombre: string
 
-    @OneToMany(() => NotaEntity, (nota) => nota.carpeta,{cascade:['remove'],eager:true,nullable:true})
+    @Column()
+    predeterminada: boolean
+
+    @OneToMany(() => NotaEntity, (nota) => nota.carpeta,{cascade:['remove','insert','update'],eager:true,nullable:true})
     nota: NotaEntity[];
+
+    @ManyToOne(() => UsuarioEntity,(usuario) => usuario.carpeta, { onDelete: 'CASCADE', nullable: true, onUpdate:'CASCADE' }	)
+    usuario: UsuarioEntity;
 
 }

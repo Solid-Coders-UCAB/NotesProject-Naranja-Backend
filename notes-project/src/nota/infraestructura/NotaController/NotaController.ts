@@ -56,14 +56,8 @@ export class NotaController {
     }
     
     @Put('/modificate')
-    @UseInterceptors(FilesInterceptor('imagen'))
-    async update(@UploadedFiles() file: Express.Multer.File[],@Res() response, @Body() body: ModificarNotaDto){
+    async update(@Res() response, @Body() body: ModificarNotaDto){
         
-    const imagenes = file.map((imagen) => {
-            return {buffer : imagen.buffer}
-        })  
-
-        body.imagen = imagenes;
 
         if(!body.etiquetas)
             body.etiquetas=[]
@@ -79,15 +73,9 @@ export class NotaController {
     }
 
     @Post('/create')
-    @UseInterceptors(FilesInterceptor('imagen'))
- async create(@UploadedFiles() file: Express.Multer.File[],@Res() response, @Body() body: CrearNotaDto){
+ async create(@Res() response, @Body() body: CrearNotaDto){
 
 
-        const imagenes = file.map((imagen) => {
-            return {buffer : imagen.buffer}
-        })  
-
-        body.imagen = imagenes;
 
         if(!body.etiquetas)
             body.etiquetas=[]

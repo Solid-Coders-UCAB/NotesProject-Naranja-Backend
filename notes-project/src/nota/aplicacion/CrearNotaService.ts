@@ -14,11 +14,7 @@ export class CrearNotaService implements IApplicationService<CrearNotaDto,Nota>{
     }
 
     async execute(service: CrearNotaDto): Promise<Either<Error,Nota>>{
-
-        const imag = service.imagen.map((i) => {
-            return  i.buffer
-            });
-
+       const  imag = [];
 
         let nota = Nota.create(service.fechaCreacion, service.fechaModificacion, service.estado, 
             service.titulo, service.cuerpo, service.idCarpeta,service.longitud, service.latitud,imag,service.etiquetas);

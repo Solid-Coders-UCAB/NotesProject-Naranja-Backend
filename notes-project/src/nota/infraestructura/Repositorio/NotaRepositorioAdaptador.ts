@@ -222,4 +222,5 @@ export class NotaRepositorioAdaptador implements NotaRepositorio{
             return Either.makeLeft<Error,string>(new Error('Error de la base de datos'));
         }
     }
+
 }

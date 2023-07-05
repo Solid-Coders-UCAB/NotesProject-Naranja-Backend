@@ -1,15 +1,20 @@
 import { Either } from "src/utilidad/Either";
 import { IdCarpeta } from "./ValueObject/IdCarpeta";
 import { NombreCarpeta } from "./ValueObject/NombreCarpeta";
+import { IdUsuario } from "src/usuario/dominio/ValueObject/IdUsuario";
 
 export class Carpeta{
     
     private id: IdCarpeta;
     private nombre: NombreCarpeta;
+    private predeterminada: boolean;
+    private idUsuario: IdUsuario;
 
-    private constructor(nombre: NombreCarpeta, id?: IdCarpeta){
+    private constructor(nombre: NombreCarpeta, predeterminada: boolean,idUsuario: IdUsuario,id?: IdCarpeta){
         this.id = id;
         this.nombre = nombre;
+        this.predeterminada = predeterminada;
+        this.idUsuario = idUsuario;
     }
 
     public getId(): string{
@@ -20,10 +25,18 @@ export class Carpeta{
         return this.nombre.getNombreCarpeta();
     }
 
-    static create(nombre: string, id?: string): Either<Error,Carpeta>{
+    public getPredeterminada(): boolean{
+        return this.predeterminada;
+    }
+
+    public getIdUsuario(): string{
+        return this.idUsuario.getIDUsuario();
+    }
+
+    static create(nombre: string, predeterminada: boolean,idUsuario: string,id?: string): Either<Error,Carpeta>{
         const nombreCarpeta = NombreCarpeta.create(nombre);
         if(nombreCarpeta.isRight()){
-            return Either.makeRight<Error,Carpeta>(new Carpeta(nombreCarpeta.getRight(),IdCarpeta.create(id)));
+            return Either.makeRight<Error,Carpeta>(new Carpeta(nombreCarpeta.getRight(),predeterminada,IdUsuario.create(idUsuario),IdCarpeta.create(id)));
         }
         else{
             return Either.makeLeft<Error,Carpeta>(nombreCarpeta.getLeft());

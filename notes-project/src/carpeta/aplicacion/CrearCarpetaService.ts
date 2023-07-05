@@ -14,9 +14,10 @@ export class CrearCarpetaService implements IApplicationService<CrearCarpetaDto,
     }
 
     async execute(service: CrearCarpetaDto): Promise<Either<Error,Carpeta>>{   
-        let carpeta = Carpeta.create(service.nombre);
+        let carpeta = Carpeta.create(service.nombre,service.predeterminada,service.idUsuario);
 
         if(carpeta.isRight()){
+            console.log("entro");
             return await this.carpetaRepositorio.crearCarpeta(carpeta.getRight());
         }
         else{
