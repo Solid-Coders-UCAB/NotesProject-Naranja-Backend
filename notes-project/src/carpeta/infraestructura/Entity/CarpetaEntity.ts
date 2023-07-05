@@ -8,7 +8,7 @@ export class CarpetaEntity {
     @PrimaryColumn()
     id: string
 
-    @Column({unique:true})
+    @Column()
     nombre: string
 
     @Column()
