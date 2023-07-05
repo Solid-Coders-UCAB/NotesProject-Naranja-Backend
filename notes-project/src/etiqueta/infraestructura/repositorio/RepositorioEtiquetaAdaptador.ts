@@ -18,7 +18,8 @@ export class RepositorioEtiquetaAdaptador implements EtiquetaRepositorio {
     async guardarEriqueta(etiqueta: Etiqueta): Promise<Either<Error, Etiqueta>> {
         const etiquetaEnt : EtiquetaEntity = {
             id: etiqueta.getID(),
-            nombre: etiqueta.getNombre()
+            nombre: etiqueta.getNombre(),
+            nota:[]
         };
         const result = await this.repositorio.save(etiquetaEnt);
         if(result){
@@ -33,7 +34,8 @@ export class RepositorioEtiquetaAdaptador implements EtiquetaRepositorio {
         
         const etiquetaEnt : EtiquetaEntity = {
             id: etiqueta.getID(),
-            nombre: etiqueta.getNombre()
+            nombre: etiqueta.getNombre(),
+            nota:[]
         };
         const result = await this.repositorio.update(etiqueta.getID(),etiquetaEnt);
         if(result){

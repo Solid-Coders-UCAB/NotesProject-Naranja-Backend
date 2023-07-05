@@ -1,5 +1,5 @@
 import { NotaEntity } from "src/nota/infraestructura/Entity/NotaEntity";
-import { Column, Entity, ManyToOne, PrimaryColumn} from "typeorm"
+import { Column, Entity, JoinTable, ManyToMany, ManyToOne, PrimaryColumn} from "typeorm"
 
 @Entity()
 export class EtiquetaEntity {
@@ -9,5 +9,14 @@ export class EtiquetaEntity {
 
     @Column()
     nombre: string
+
+    @ManyToMany(() => NotaEntity, (nota) => nota.etiqueta,{nullable:true})
+    // @JoinTable({
+    //     name: 'nota_etiqueta', // Nombre de la tabla de unión
+    //     joinColumn: { name: 'etiqueta_id', referencedColumnName: 'id' }, // Columna de clave foránea para la tabla de origen
+    //     inverseJoinColumn: { name: 'nota_id', referencedColumnName: 'id' }, // Columna de clave foránea para la tabla de destino
+    //   })
+    @JoinTable()
+    nota: NotaEntity[];
 
 }

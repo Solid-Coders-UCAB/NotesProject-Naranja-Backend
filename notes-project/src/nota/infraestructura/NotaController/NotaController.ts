@@ -65,6 +65,9 @@ export class NotaController {
 
         body.imagen = imagenes;
 
+        if(!body.etiquetas)
+            body.etiquetas=[]
+
         const result = await this.modificarNota.execute(body);
 
         if(result.isRight()){
@@ -85,6 +88,9 @@ export class NotaController {
         })  
 
         body.imagen = imagenes;
+
+        if(!body.etiquetas)
+            body.etiquetas=[]
 
         console.log(body);
     

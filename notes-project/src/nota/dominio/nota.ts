@@ -8,6 +8,7 @@ import { Geolocalizacion } from "./ValueObject/Geolocalizacion";
 import { Either } from "src/utilidad/Either";
 import { IdCarpeta } from "src/carpeta/dominio/ValueObject/IdCarpeta";
 import { Optional } from "src/utilidad/Optional";
+import { idEtiqueta } from "src/etiqueta/dominio/ValueObject/idEtiqueta";
 
 export class Nota{
 
@@ -19,8 +20,9 @@ export class Nota{
     private estado: EstadoNota;
     private geolocalizacion: Optional<Geolocalizacion>;
     private idCarpeta: IdCarpeta;
+    private etiquetas :idEtiqueta[]
 
-    private constructor(fechaCreacion: FechaCreacionNota, fechaModificacion: FechaModificacionNota, estado: EstadoNota, titulo: TituloNota, cuerpo: CuerpoNota,geolocalizacion: Optional<Geolocalizacion>, idCarpeta: IdCarpeta, id?: IdNota){
+    private constructor(fechaCreacion: FechaCreacionNota, fechaModificacion: FechaModificacionNota, estado: EstadoNota, titulo: TituloNota, cuerpo: CuerpoNota,geolocalizacion: Optional<Geolocalizacion>, idCarpeta: IdCarpeta, etiquetas?:idEtiqueta[],id?: IdNota){
         this.id = id;
         this.titulo = titulo;
         this.cuerpo = cuerpo;
@@ -29,6 +31,8 @@ export class Nota{
         this.estado = estado;
         this.geolocalizacion = geolocalizacion;
         this.idCarpeta = idCarpeta;
+        this.etiquetas=etiquetas
+        
     }
 
     public getId(): string{
@@ -83,8 +87,12 @@ export class Nota{
         }
     }
 
+    public getEtiquetas(): string[]{
+        return this.etiquetas.map((etiqueta) => etiqueta.getIDEtiqueta())
+    }
 
-    static create(fechaCreacion: Date, fechaModificacion: Date, estado: string, titulo: string, cuerpo: string, idCarpeta: string, longitud?: number, latitud?: number, imagen?:Buffer[], id?: string ): Either<Error,Nota>{
+
+    static create(fechaCreacion: Date, fechaModificacion: Date, estado: string, titulo: string, cuerpo: string, idCarpeta: string, longitud?: number, latitud?: number, imagen?:Buffer[], etiqueta?:string[],id?: string ): Either<Error,Nota>{
         
         let auxiliarEstado: EstadoNota;
 
@@ -103,6 +111,21 @@ export class Nota{
             break;
 
         }
+
+        let etiquetass: idEtiqueta[]=[];
+        console.log("dom",Array.isArray(etiqueta))
+            if (Array.isArray(etiqueta)) {
+                etiquetass = etiqueta.map((etiq) => idEtiqueta.create(etiq));
+                console.log("aqui1",etiquetass)
+            } else {
+                console.log("aqui2")
+                etiquetass = [idEtiqueta.create(etiqueta)];
+                console.log("aqui2",etiquetass)
+            } 
+
+            console.log("final ",Array(etiqueta).length)
+            
+
 
         let auxiliarFechaCreacion = FechaCreacionNota.create(fechaCreacion);
         if(auxiliarFechaCreacion.isLeft()){
@@ -137,7 +160,7 @@ export class Nota{
                         else{
                             auxiliarGeolocalizacion = new Optional<Geolocalizacion>();
                         }
-                        return Either.makeRight<Error,Nota>(new Nota(auxiliarFechaCreacion.getRight(),auxiliarFechaModificacion.getRight(),auxiliarEstado,auxiliarTitulo.getRight(),auxiliarCuerpo.getRight(),auxiliarGeolocalizacion,IdCarpeta.create(idCarpeta),IdNota.create(id)));
+                        return Either.makeRight<Error,Nota>(new Nota(auxiliarFechaCreacion.getRight(),auxiliarFechaModificacion.getRight(),auxiliarEstado,auxiliarTitulo.getRight(),auxiliarCuerpo.getRight(),auxiliarGeolocalizacion,IdCarpeta.create(idCarpeta),etiquetass,IdNota.create(id)));
                     }
                 }
             }

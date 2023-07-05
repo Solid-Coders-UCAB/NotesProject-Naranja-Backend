@@ -12,5 +12,6 @@ export class ModificarNotaDto {
     latitud?: number;
     imagen?: {buffer: Buffer}[];
     idCarpeta: string;
+    etiquetas?:string[];
 
 }

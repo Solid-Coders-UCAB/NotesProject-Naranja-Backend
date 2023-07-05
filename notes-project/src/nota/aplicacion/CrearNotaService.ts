@@ -21,7 +21,7 @@ export class CrearNotaService implements IApplicationService<CrearNotaDto,Nota>{
 
 
         let nota = Nota.create(service.fechaCreacion, service.fechaModificacion, service.estado, 
-            service.titulo, service.cuerpo, service.idCarpeta,service.longitud, service.latitud,imag);
+            service.titulo, service.cuerpo, service.idCarpeta,service.longitud, service.latitud,imag,service.etiquetas);
         
         if(nota.isRight()){
 

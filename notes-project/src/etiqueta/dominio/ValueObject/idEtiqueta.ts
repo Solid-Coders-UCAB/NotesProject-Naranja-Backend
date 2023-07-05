@@ -13,7 +13,7 @@ export class idEtiqueta{
         }
     }
 
-    getIDCarpeta(){
+    getIDEtiqueta(){
         return this.UUID;
     }
 
