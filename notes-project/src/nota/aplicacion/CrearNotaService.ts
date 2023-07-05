@@ -14,15 +14,17 @@ export class CrearNotaService implements IApplicationService<CrearNotaDto,Nota>{
     }
 
     async execute(service: CrearNotaDto): Promise<Either<Error,Nota>>{
-       const  imag = [];
 
+
+        console.log("app",service)
         let nota = Nota.create(service.fechaCreacion, service.fechaModificacion, service.estado, 
-            service.titulo, service.cuerpo, service.idCarpeta,service.longitud, service.latitud,imag,service.etiquetas);
+            service.titulo, service.cuerpo, service.idCarpeta,service.longitud, service.latitud,service.etiquetas);
         
         if(nota.isRight()){
 
             const notaC = await this.notaRepositorio.crearNota(nota.getRight());
             //await this.notaRepositorio.guardarImagen(nota.getRight().getId(),imag);
+            console.log("app nota c",notaC)
             return notaC;
 
         }

@@ -61,6 +61,12 @@ export class NotaController {
 
         if(!body.etiquetas)
             body.etiquetas=[]
+        
+            let etiq = body.etiquetas.map(ima => {
+                return ima;
+            })   
+            
+            console.log("controller etiq",etiq)
 
         const result = await this.modificarNota.execute(body);
 
@@ -76,9 +82,15 @@ export class NotaController {
  async create(@Res() response, @Body() body: CrearNotaDto){
 
 
-
         if(!body.etiquetas)
             body.etiquetas=[]
+
+            // let etiq = body.etiquetas.map(ima => {
+            //     return ima;
+            // }) 
+            // body.etiquetas=etiq;
+
+            //console.log("controller etiq",etiq)
 
         console.log(body);
     

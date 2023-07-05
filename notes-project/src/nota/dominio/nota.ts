@@ -39,10 +39,6 @@ export class Nota{
         return this.id.getIDNota();
     }
 
-    public getImagen(): Buffer[]{
-        return this.cuerpo.getImagenNota();
-    }
-
 
     public getIdCarpeta(): string{
         return this.idCarpeta.getIDCarpeta();
@@ -92,7 +88,7 @@ export class Nota{
     }
 
 
-    static create(fechaCreacion: Date, fechaModificacion: Date, estado: string, titulo: string, cuerpo: string, idCarpeta: string, longitud?: number, latitud?: number, imagen?:Buffer[], etiqueta?:string[],id?: string ): Either<Error,Nota>{
+    static create(fechaCreacion: Date, fechaModificacion: Date, estado: string, titulo: string, cuerpo: string, idCarpeta: string, longitud?: number, latitud?: number, etiqueta?:string[],id?: string ): Either<Error,Nota>{
         
         let auxiliarEstado: EstadoNota;
 
@@ -112,6 +108,7 @@ export class Nota{
 
         }
 
+        console.log("dominio etiquetas",etiqueta)
         let etiquetass: idEtiqueta[]=[];
         console.log("dom",Array.isArray(etiqueta))
             if (Array.isArray(etiqueta)) {
@@ -123,7 +120,6 @@ export class Nota{
                 console.log("aqui2",etiquetass)
             } 
 
-            console.log("final ",Array(etiqueta).length)
             
 
 
@@ -142,7 +138,7 @@ export class Nota{
                     return Either.makeLeft<Error,Nota>(auxiliarTitulo.getLeft());
                 }
                 else{
-                    let auxiliarCuerpo = CuerpoNota.create(cuerpo,imagen);
+                    let auxiliarCuerpo = CuerpoNota.create(cuerpo);
                     if(auxiliarCuerpo.isLeft()){
                         return Either.makeLeft<Error,Nota>(auxiliarCuerpo.getLeft());
                     }
@@ -160,16 +156,14 @@ export class Nota{
                         else{
                             auxiliarGeolocalizacion = new Optional<Geolocalizacion>();
                         }
+                        
                         return Either.makeRight<Error,Nota>(new Nota(auxiliarFechaCreacion.getRight(),auxiliarFechaModificacion.getRight(),auxiliarEstado,auxiliarTitulo.getRight(),auxiliarCuerpo.getRight(),auxiliarGeolocalizacion,IdCarpeta.create(idCarpeta),etiquetass,IdNota.create(id)));
+                        
                     }
                 }
             }
         }
-        
-        
-
-        
-        
+            
     }
 
 }

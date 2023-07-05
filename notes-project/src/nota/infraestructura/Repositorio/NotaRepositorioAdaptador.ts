@@ -5,7 +5,6 @@ import { Not, Repository } from "typeorm";
 import { NotaEntity } from "src/nota/infraestructura/Entity/NotaEntity";
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from '@nestjs/typeorm';
-import { ImagenEntity } from "../Entity/ImagenEntity";
 import { CarpetaEntity } from "src/carpeta/infraestructura/Entity/CarpetaEntity";
 import { EtiquetaEntity } from "src/etiqueta/infraestructura/Entity/EtiquetaEntity";
 
@@ -15,8 +14,6 @@ export class NotaRepositorioAdaptador implements NotaRepositorio{
     constructor(
         @InjectRepository(NotaEntity)
         private readonly repositorio: Repository<NotaEntity>,
-        @InjectRepository(ImagenEntity)
-        private readonly repositorioImagen: Repository<ImagenEntity>,
         @InjectRepository(CarpetaEntity)
         private readonly repositorioCarpeta: Repository<CarpetaEntity>,
         
@@ -26,12 +23,6 @@ export class NotaRepositorioAdaptador implements NotaRepositorio{
 
         const carp = await this.repositorioCarpeta.findOneBy({id:nota.getIdCarpeta()});
 
-        let imagenes : ImagenEntity[];
-               imagenes = nota.getImagen().map(ima => {
-                   const im = new ImagenEntity();
-                   im.imagen = ima;
-                   return im;
-               })
 
                let etiq = nota.getEtiquetas().map(ima => {
                 const im = new EtiquetaEntity();
@@ -48,7 +39,6 @@ export class NotaRepositorioAdaptador implements NotaRepositorio{
             latitud: nota.getLatitud(),
             longitud: nota.getLongitud(),
             estado: nota.getEstado(),
-            imagen:imagenes,
             carpeta: carp,
             etiqueta:etiq
         };
@@ -74,10 +64,6 @@ export class NotaRepositorioAdaptador implements NotaRepositorio{
                     nota.carpeta.id,
                     nota.longitud, 
                     nota.latitud,
-                    nota.imagen.map(ima=>{
-                        return ima.imagen
-                    }),
-
                     nota.etiqueta.map(ima => {
                         return ima.id
                     }),
@@ -93,12 +79,8 @@ export class NotaRepositorioAdaptador implements NotaRepositorio{
         const result = (await this.repositorio.find({where: {id: id},relations: ['carpeta']})).at(0);
         
         if(result){
-            const ima = result.imagen.map(ima=>{
-                return ima.imagen
-            })
-            console.log("aqui",ima);
             let nota = Nota.create(result.fechaCreacion, result.fechaModificacion, result.estado, result.titulo, 
-                result.cuerpo,  result.carpeta.id,result.longitud, result.latitud,ima,result.etiqueta.map(ima => {
+                result.cuerpo,  result.carpeta.id,result.longitud, result.latitud,result.etiqueta.map(ima => {
                     return ima.id
                 }),result.id);
             return Either.makeRight<Error,Nota>(nota.getRight());
@@ -126,9 +108,6 @@ export class NotaRepositorioAdaptador implements NotaRepositorio{
                     nota.carpeta.id,
                     nota.longitud, 
                     nota.latitud, 
-                    nota.imagen.map(ima=>{
-                        return ima.imagen
-                    }),
                     nota.etiqueta.map(ima => {
                         return ima.id
                     }),
@@ -145,18 +124,14 @@ export class NotaRepositorioAdaptador implements NotaRepositorio{
         let notaId = await this.repositorio.findOneBy({id:nota.getId()});
         const carp = await this.repositorioCarpeta.findOneBy({id:nota.getIdCarpeta()});
 
-        let imagenes : ImagenEntity[];
-               imagenes = nota.getImagen().map(ima => {
-                   const im = new ImagenEntity();
-                   im.imagen = ima;
-                   return im;
-               })
 
                let etiq = nota.getEtiquetas().map(ima => {
                 const im = new EtiquetaEntity();
                 im.id = ima;
                 return im;
             })    
+
+            console.log("repo",etiq)
 
         const note : NotaEntity = {
             id: notaId.id = nota.getId(),
@@ -167,10 +142,11 @@ export class NotaRepositorioAdaptador implements NotaRepositorio{
             latitud: notaId.latitud = nota.getLatitud(),
             longitud: notaId.longitud = nota.getLongitud(),
             estado: notaId.estado =nota.getEstado(),
-            imagen: imagenes,
             carpeta: carp,
             etiqueta:etiq
-        };  
+        }; 
+        
+        console.log("repo1",note)
         const result = await this.repositorio.save(note);
         if(result){
             return Either.makeRight<Error,Nota>(nota);
@@ -184,38 +160,6 @@ export class NotaRepositorioAdaptador implements NotaRepositorio{
 
         const result = await this.repositorio.delete(id);
         if(result.affected != 0){
-            return Either.makeRight<Error,string>(id);
-        }
-        else{
-            return Either.makeLeft<Error,string>(new Error('Error de la base de datos'));
-        }
-    }
-
-    async guardarImagen(id:string,imagen:Buffer[]): Promise<Either<Error,string>> {
-        
-        const nota =  await this.repositorio.findOneBy({id : id});
-
-        const im = imagen.map((img) => {
-            return {
-                imagen: img,
-                nota: nota
-            }
-        });
-            
-        const result = await this.repositorioImagen.save(im);
-        if(result){
-            return Either.makeRight<Error,string>("Todo bien");
-        }
-        else{
-            return Either.makeLeft<Error,string>(new Error('Error de la base de datos'));
-        }
-    }
-
-
-    async eliminarImagen(id:string): Promise<Either<Error,string>> {
-        
-        const result = await this.repositorioImagen.delete({ nota: { id: id} });
-        if(result){
             return Either.makeRight<Error,string>(id);
         }
         else{

@@ -37,7 +37,7 @@ export class RepositorioEtiquetaAdaptador implements EtiquetaRepositorio {
             nombre: etiqueta.getNombre(),
             nota:[]
         };
-        const result = await this.repositorio.update(etiqueta.getID(),etiquetaEnt);
+        const result = await this.repositorio.save(etiquetaEnt);
         if(result){
             return Either.makeRight<Error,Etiqueta>(etiqueta);
         }
