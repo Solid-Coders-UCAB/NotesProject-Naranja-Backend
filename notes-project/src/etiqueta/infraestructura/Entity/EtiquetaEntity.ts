@@ -1,4 +1,5 @@
 import { NotaEntity } from "src/nota/infraestructura/Entity/NotaEntity";
+import { UsuarioEntity } from "src/usuario/infraestructura/Entity/UsuarioEntity";
 import { Column, Entity, JoinTable, ManyToMany, ManyToOne, PrimaryColumn} from "typeorm"
 
 @Entity()
@@ -18,5 +19,8 @@ export class EtiquetaEntity {
     //   })
     @JoinTable()
     nota: NotaEntity[];
+
+    @ManyToOne(() => UsuarioEntity,(usuario) => usuario.etiqueta, { onDelete: 'CASCADE', nullable: true, onUpdate:'CASCADE' }	)
+    usuario: UsuarioEntity;
 
 }

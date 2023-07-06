@@ -2,6 +2,7 @@ import { NombreCarpeta } from "src/carpeta/dominio/ValueObject/NombreCarpeta";
 import { idEtiqueta } from "./ValueObject/idEtiqueta";
 import { Either } from "src/utilidad/Either";
 import { NombreEtiqueta } from "./ValueObject/nombreEtiqueta";
+import { IdUsuario } from "src/usuario/dominio/ValueObject/IdUsuario";
 
 
 
@@ -9,10 +10,12 @@ export class Etiqueta {
 
     private id: idEtiqueta;
     private nombre: NombreEtiqueta;
+    private usuario:IdUsuario;
 
-    private constructor( nombre: NombreEtiqueta,id?: idEtiqueta){
+    private constructor( nombre: NombreEtiqueta,usuario:IdUsuario,id?: idEtiqueta){
         this.id = id;
         this.nombre = nombre;
+        this.usuario = usuario;
     }
 
     getID(): string{
@@ -23,11 +26,15 @@ export class Etiqueta {
         return this.nombre.getNombre();
     }
 
-    static create(nombre: string, id?: string): Either<Error,Etiqueta>{
+    getUsuario(): string{
+        return this.usuario.getIDUsuario();
+    }
+
+    static create(nombre: string, usuario:string ,id?: string): Either<Error,Etiqueta>{
 
         const nombreEtiqueta = NombreEtiqueta.create(nombre);
         if(nombreEtiqueta.isRight()){
-            return Either.makeRight<Error,Etiqueta>(new Etiqueta(nombreEtiqueta.getRight(),idEtiqueta.create(id)));
+            return Either.makeRight<Error,Etiqueta>(new Etiqueta(nombreEtiqueta.getRight(),IdUsuario.create(usuario),idEtiqueta.create(id)));
         }
         else{
             return Either.makeLeft<Error,Etiqueta>(nombreEtiqueta.getLeft());

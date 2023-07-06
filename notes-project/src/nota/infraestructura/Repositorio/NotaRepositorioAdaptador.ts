@@ -7,6 +7,7 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from '@nestjs/typeorm';
 import { CarpetaEntity } from "src/carpeta/infraestructura/Entity/CarpetaEntity";
 import { EtiquetaEntity } from "src/etiqueta/infraestructura/Entity/EtiquetaEntity";
+import { Etiqueta } from "src/etiqueta/dominio/etiqueta";
 
 @Injectable()
 export class NotaRepositorioAdaptador implements NotaRepositorio{
@@ -15,7 +16,7 @@ export class NotaRepositorioAdaptador implements NotaRepositorio{
         @InjectRepository(NotaEntity)
         private readonly repositorio: Repository<NotaEntity>,
         @InjectRepository(CarpetaEntity)
-        private readonly repositorioCarpeta: Repository<CarpetaEntity>,
+        private readonly repositorioCarpeta: Repository<CarpetaEntity>
         
     ){}
 
@@ -166,5 +167,7 @@ export class NotaRepositorioAdaptador implements NotaRepositorio{
             return Either.makeLeft<Error,string>(new Error('Error de la base de datos'));
         }
     }
+
+
 
 }

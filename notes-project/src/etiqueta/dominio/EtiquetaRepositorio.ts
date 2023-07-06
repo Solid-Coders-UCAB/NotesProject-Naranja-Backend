@@ -8,4 +8,5 @@ export interface EtiquetaRepositorio {
     buscarEtiqueta(id: string): Promise<Either<Error,Etiqueta>>
     buscarEtiquetas(): Promise<Either<Error,Etiqueta[]>>
     eliminarEtiqueta(id: string): Promise<Either<Error,string>>
+    buscarEtiquetasPorUsuario(idUsuario: string): Promise<Either<Error, Iterable<Etiqueta>>>;
 }

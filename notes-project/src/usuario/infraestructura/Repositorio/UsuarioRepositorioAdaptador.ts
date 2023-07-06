@@ -6,6 +6,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Usuario } from "src/usuario/dominio/Usuario";
 import { Either } from "src/utilidad/Either";
 import { CarpetaEntity } from "src/carpeta/infraestructura/Entity/CarpetaEntity";
+import { EtiquetaEntity } from "src/etiqueta/infraestructura/Entity/EtiquetaEntity";
 
 @Injectable()
 export class UsuarioRepositorioAdaptador implements UsuarioRepositorio{
@@ -14,7 +15,9 @@ export class UsuarioRepositorioAdaptador implements UsuarioRepositorio{
         @InjectRepository(UsuarioEntity)
         private readonly repositorio: Repository<UsuarioEntity>,
         @InjectRepository(CarpetaEntity)
-        private readonly repositorioCarpeta: Repository<CarpetaEntity>
+        private readonly repositorioCarpeta: Repository<CarpetaEntity>,
+        @InjectRepository(EtiquetaEntity)
+        private readonly repositorioEtiqueta: Repository<EtiquetaEntity>
     ){}
 
     async registrarUsuario(usuario: Usuario): Promise<Either<Error, Usuario>> {
@@ -25,7 +28,8 @@ export class UsuarioRepositorioAdaptador implements UsuarioRepositorio{
             correo: usuario.getCorreo(),
             clave: usuario.getClave(),
             fechaNacimiento: usuario.getFechaNacimiento(),
-            carpeta: []
+            carpeta: [],
+            etiqueta:[]
         };
 
         const result = await this.repositorio.save(usuarioEnt);
@@ -77,6 +81,7 @@ export class UsuarioRepositorioAdaptador implements UsuarioRepositorio{
     async modificarUsuario(usuario: Usuario): Promise<Either<Error, Usuario>> {
 
         const carpetas = await this.repositorioCarpeta.find({where: {usuario: {id: usuario.getId()}}});
+        const etiquetas = await this.repositorioEtiqueta.find({where: {usuario: {id: usuario.getId()}}});
 
             const usuarioEnt : UsuarioEntity = {
                 id: usuario.getId(),
@@ -84,7 +89,8 @@ export class UsuarioRepositorioAdaptador implements UsuarioRepositorio{
                 correo: usuario.getCorreo(),
                 clave: usuario.getClave(),
                 fechaNacimiento: usuario.getFechaNacimiento(),
-                carpeta: carpetas
+                carpeta: carpetas,
+                etiqueta:etiquetas
             };
     
             const result = await this.repositorio.save(usuarioEnt);

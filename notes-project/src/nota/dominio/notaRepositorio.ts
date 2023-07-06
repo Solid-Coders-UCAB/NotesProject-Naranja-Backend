@@ -1,3 +1,4 @@
+import { Etiqueta } from "src/etiqueta/dominio/etiqueta";
 import { Nota } from "./Nota";
 import { Either} from "src/utilidad/Either"
 

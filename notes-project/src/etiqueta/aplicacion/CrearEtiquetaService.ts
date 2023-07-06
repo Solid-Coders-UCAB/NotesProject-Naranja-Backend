@@ -14,7 +14,7 @@ export class CrearEtiquetaService implements IApplicationService<CrearEtiquetaDt
     }
 
     async execute(service: CrearEtiquetaDto): Promise<Either<Error,Etiqueta>>{   
-        let carpeta = Etiqueta.create(service.nombreEtiqueta);
+        let carpeta = Etiqueta.create(service.nombreEtiqueta,service.idUsuario);
 
         if(carpeta.isRight()){
             return await this.etiquetaRepositorio.guardarEriqueta(carpeta.getRight());

@@ -14,7 +14,7 @@ export class ModificarEtiquetaService implements IApplicationService<ModificarEt
     }
 
     async execute(service: ModificarEtiquetaDto): Promise<Either<Error,Etiqueta>>{   
-        let etiqueta = Etiqueta.create(service.nombreEtiqueta,service.idEtiqueta);
+        let etiqueta = Etiqueta.create(service.nombreEtiqueta,service.idUsuario,service.idEtiqueta);
 
         if(etiqueta.isRight()){
             return await this.etiquetaRepositorio.modificarEtiqueta(etiqueta.getRight());

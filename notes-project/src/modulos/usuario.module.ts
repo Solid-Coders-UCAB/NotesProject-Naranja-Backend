@@ -3,6 +3,8 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { CrearCarpetaService } from "src/carpeta/aplicacion/CrearCarpetaService";
 import { CarpetaEntity } from "src/carpeta/infraestructura/Entity/CarpetaEntity";
 import { CarpetaRepositorioAdaptador } from "src/carpeta/infraestructura/Repositorio/CarpetaRepositorioAdaptador";
+import { EtiquetaEntity } from "src/etiqueta/infraestructura/Entity/EtiquetaEntity";
+import { RepositorioEtiquetaAdaptador } from "src/etiqueta/infraestructura/repositorio/RepositorioEtiquetaAdaptador";
 import { NotaEntity } from "src/nota/infraestructura/Entity/NotaEntity";
 import { BuscarUsuarioCorreoClaveService } from "src/usuario/aplicacion/BuscarUsuarioCorreoClaveService";
 import { BuscarUsuarioPorIdService } from "src/usuario/aplicacion/BuscarUsuarioPorIdService";
@@ -14,7 +16,7 @@ import { UsuarioEntity } from "src/usuario/infraestructura/Entity/UsuarioEntity"
 import { UsuarioRepositorioAdaptador } from "src/usuario/infraestructura/Repositorio/UsuarioRepositorioAdaptador";
 
 @Module({
-    imports: [TypeOrmModule.forFeature([UsuarioEntity,CarpetaEntity,NotaEntity])],
+    imports: [TypeOrmModule.forFeature([UsuarioEntity,CarpetaEntity,NotaEntity,EtiquetaEntity])],
     providers: [RegistrarUsuarioService,CrearCarpetaService,ModificarUsuarioService,BuscarUsuariosService,BuscarUsuarioPorIdService,BuscarUsuarioCorreoClaveService,
     {
       provide: 'UsuarioRepositorio',
@@ -23,6 +25,10 @@ import { UsuarioRepositorioAdaptador } from "src/usuario/infraestructura/Reposit
     {
       provide: 'CarpetaRepositorio',
       useClass: CarpetaRepositorioAdaptador
+    },
+    {
+      provide: 'EtiquetataRepositorio',
+      useClass: RepositorioEtiquetaAdaptador
     }],
     controllers: [UsuarioController]
   })

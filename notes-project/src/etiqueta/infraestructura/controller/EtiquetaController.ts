@@ -1,8 +1,10 @@
 import { Body, Controller, Delete, Get, HttpStatus, Post, Put, Res } from "@nestjs/common";
 import { BuscarEtiquetaIdService } from "src/etiqueta/aplicacion/BuscarEtiquetaIdService";
+import { BuscarEtiquetasPorUsuarioService } from "src/etiqueta/aplicacion/BuscarEtiquetaPorUsuarioService";
 import { BuscarEtiquetasService } from "src/etiqueta/aplicacion/BuscarEtiquetasService";
 import { CrearEtiquetaService } from "src/etiqueta/aplicacion/CrearEtiquetaService";
 import { BuscarEtiquetaIdDto } from "src/etiqueta/aplicacion/Dto/BuscarEtiquetaIdDto";
+import { BuscarEtiquetaPorUsuarioDto } from "src/etiqueta/aplicacion/Dto/BuscarEtiquetaPorUsuarioDto";
 import { CrearEtiquetaDto } from "src/etiqueta/aplicacion/Dto/CrearEtiquetaDto";
 import { EliminarEtiquetaDto } from "src/etiqueta/aplicacion/Dto/EliminarEtiquetaDto";
 import { ModificarEtiquetaDto } from "src/etiqueta/aplicacion/Dto/ModificarEtiquetaDto";
@@ -17,7 +19,8 @@ export class EtiquetaController {
                 private readonly modificarEtiqueta: ModificarEtiquetaService,
                 private readonly eliminarEtiqueta: EliminarEtiquetaService,
                 private readonly buscarEtiquetas: BuscarEtiquetasService,
-                private readonly buscarEtiqueta:BuscarEtiquetaIdService){}
+                private readonly buscarEtiqueta:BuscarEtiquetaIdService,
+                private readonly buscarEtiquetasPorUsuario:BuscarEtiquetasPorUsuarioService){}
 
     @Post('/create')
     async create(@Res() response, @Body() body: CrearEtiquetaDto){
@@ -77,4 +80,16 @@ export class EtiquetaController {
             return response.status(HttpStatus.NOT_FOUND).json(result.getLeft().message);
         }
     }
+
+    @Get('/findByUser')
+    async findByUser(@Res() response, @Body() body: BuscarEtiquetaPorUsuarioDto){
+        let result = await this.buscarEtiquetasPorUsuario.execute(body);
+        if(result.isRight()){
+            return response.status(HttpStatus.OK).json(result.getRight());
+        }
+        else{
+            return response.status(HttpStatus.NOT_FOUND).json(result.getLeft().message);
+        }
+    }
+
 }

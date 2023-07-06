@@ -5,6 +5,7 @@ import { Repository } from "typeorm";
 import { EtiquetaEntity } from "../Entity/EtiquetaEntity";
 import { Etiqueta } from "src/etiqueta/dominio/etiqueta";
 import { Either } from "src/utilidad/Either";
+import { UsuarioEntity } from "src/usuario/infraestructura/Entity/UsuarioEntity";
 
 
 export class RepositorioEtiquetaAdaptador implements EtiquetaRepositorio {
@@ -12,14 +13,18 @@ export class RepositorioEtiquetaAdaptador implements EtiquetaRepositorio {
     constructor(
         @InjectRepository(EtiquetaEntity)
         private readonly repositorio: Repository<EtiquetaEntity>,
+        @InjectRepository(UsuarioEntity)
+        private readonly repositorioUsuario: Repository<UsuarioEntity>,
     ){}
 
 
     async guardarEriqueta(etiqueta: Etiqueta): Promise<Either<Error, Etiqueta>> {
+        const user = await this.repositorioUsuario.findOneBy({id:etiqueta.getUsuario()});
         const etiquetaEnt : EtiquetaEntity = {
             id: etiqueta.getID(),
             nombre: etiqueta.getNombre(),
-            nota:[]
+            nota:[],
+            usuario:user
         };
         const result = await this.repositorio.save(etiquetaEnt);
         if(result){
@@ -31,11 +36,14 @@ export class RepositorioEtiquetaAdaptador implements EtiquetaRepositorio {
     }
 
     async modificarEtiqueta(etiqueta: Etiqueta): Promise<Either<Error, Etiqueta>> {
+
+        const user = await this.repositorioUsuario.findOneBy({id:etiqueta.getUsuario()});
         
         const etiquetaEnt : EtiquetaEntity = {
             id: etiqueta.getID(),
             nombre: etiqueta.getNombre(),
-            nota:[]
+            nota:[],
+            usuario:user
         };
         const result = await this.repositorio.save(etiquetaEnt);
         if(result){
@@ -61,7 +69,7 @@ export class RepositorioEtiquetaAdaptador implements EtiquetaRepositorio {
         const result: EtiquetaEntity[] = await this.repositorio.find();
         if(result){
             const etiquetas: Etiqueta[] = result.map((etiqueta) =>
-                Etiqueta.create(etiqueta.nombre, etiqueta.id).getRight());
+                Etiqueta.create(etiqueta.nombre,etiqueta.id).getRight());
             return Either.makeRight<Error,Etiqueta[]>(etiquetas);
         }
         else{
@@ -80,4 +88,18 @@ export class RepositorioEtiquetaAdaptador implements EtiquetaRepositorio {
         }
 
     }
+
+
+    async buscarEtiquetasPorUsuario(idUsuario: string): Promise<Either<Error, Iterable<Etiqueta>>> {
+        const result: EtiquetaEntity[] = await this.repositorio.find({where: {usuario:{id:idUsuario}},relations: ['usuario']});
+        if(result.length!=0){
+            const carpetas: Etiqueta[] = result.map((etiqueta) =>
+                Etiqueta.create(etiqueta.nombre,etiqueta.usuario.id,etiqueta.id).getRight());
+            return Either.makeRight<Error,Etiqueta[]>(carpetas);
+        }
+        else{
+            return Either.makeLeft<Error,Etiqueta[]>(new Error('No se encontraron carpetas'));
+        }
+    }
+
 }
