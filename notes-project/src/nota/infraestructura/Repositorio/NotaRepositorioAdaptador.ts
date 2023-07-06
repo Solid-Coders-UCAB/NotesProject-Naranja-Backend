@@ -120,6 +120,31 @@ export class NotaRepositorioAdaptador implements NotaRepositorio{
         }
     }
 
+    async buscarNotasEliminadasUsuario(idUsuario: string): Promise<Either<Error, Iterable<Nota>>> {
+        
+        const result = await this.repositorio.find({where: {carpeta: {usuario: {id: idUsuario}}, estado: 'Eliminada'}, relations: ['carpeta']});
+        if(result.length > 0){
+            const notas: Nota[] = result.map((nota) =>
+                Nota.create(nota.fechaCreacion, 
+                    nota.fechaModificacion, 
+                    nota.estado, 
+                    nota.titulo, 
+                    nota.cuerpo, 
+                    nota.carpeta.id,
+                    nota.longitud, 
+                    nota.latitud, 
+                    nota.etiqueta.map(ima => {
+                        return ima.id
+                    }),
+                    nota.id).getRight());
+            return Either.makeRight<Error,Nota[]>(notas);
+        }
+        else{
+            return Either.makeLeft<Error,Nota[]>(new Error('Error de la base de datos'));
+        }
+
+    }
+
     async modificarNota(nota: Nota): Promise<Either<Error, Nota>> {
 
         let notaId = await this.repositorio.findOneBy({id:nota.getId()});

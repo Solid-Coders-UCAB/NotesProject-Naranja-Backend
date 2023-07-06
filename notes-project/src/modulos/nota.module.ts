@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { CarpetaEntity } from 'src/carpeta/infraestructura/Entity/CarpetaEntity';
 import { BuscarNotaPorIdService } from 'src/nota/aplicacion/BuscarNotaPorIdService';
 import { BuscarNotasCarpetaService } from 'src/nota/aplicacion/BuscarNotasCarpetaService';
+import { BuscarNotasEliminadasUsuarioService } from 'src/nota/aplicacion/BuscarNotasEliminadasUsuarioService';
 import { BuscarNotasService } from 'src/nota/aplicacion/BuscarNotasService';
 import { CrearNotaService } from 'src/nota/aplicacion/CrearNotaService';
 import { EliminarNotaService } from 'src/nota/aplicacion/EliminarNotaService';
@@ -13,7 +14,7 @@ import { NotaRepositorioAdaptador } from 'src/nota/infraestructura/Repositorio/N
 
 @Module({
   imports: [TypeOrmModule.forFeature([NotaEntity,CarpetaEntity])],
-  providers: [CrearNotaService,ModificarNotaService,EliminarNotaService,BuscarNotasService,BuscarNotaPorIdService,BuscarNotasCarpetaService,
+  providers: [CrearNotaService,ModificarNotaService,EliminarNotaService,BuscarNotasService,BuscarNotaPorIdService,BuscarNotasCarpetaService,BuscarNotasEliminadasUsuarioService,
   {
     provide: 'NotaRepositorio',
     useClass: NotaRepositorioAdaptador

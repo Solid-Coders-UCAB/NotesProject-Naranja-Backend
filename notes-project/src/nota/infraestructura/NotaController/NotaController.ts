@@ -8,9 +8,10 @@ import { BorraNotaDto } from "../../aplicacion/DataTransferObjects/BorrarNotaDto
 import { BuscarNotasService } from "src/nota/aplicacion/BuscarNotasService";
 import { BuscarNotaPorIdService } from "src/nota/aplicacion/BuscarNotaPorIdService";
 import { BuscarNotaIdDto } from "src/nota/aplicacion/DataTransferObjects/BuscarNotaIdDto";
-import { FilesInterceptor } from "@nestjs/platform-express";
 import { BuscarNotasCarpetaDto } from "src/nota/aplicacion/DataTransferObjects/BuscarNotasCarpetaDto";
 import { BuscarNotasCarpetaService } from "src/nota/aplicacion/BuscarNotasCarpetaService";
+import { BuscarNotasEliminadasUsuarioService } from "src/nota/aplicacion/BuscarNotasEliminadasUsuarioService";
+import { BuscarNotasEliminadasUsuarioDto } from "src/nota/aplicacion/DataTransferObjects/BuscarNotasEliminadasUsuarioDto";
 
 @Controller('nota')
 export class NotaController {
@@ -20,7 +21,8 @@ export class NotaController {
         private readonly eliminarNota: EliminarNotaService,
         private readonly buscarNotas: BuscarNotasService,
         private readonly buscarNotaId: BuscarNotaPorIdService,
-        private readonly buscarNotasCarpeta: BuscarNotasCarpetaService) {}
+        private readonly buscarNotasCarpeta: BuscarNotasCarpetaService,
+        private readonly buscarEliminadas: BuscarNotasEliminadasUsuarioService) {}
 
     @Get('/findAll')
     async findAll(@Res() response){
@@ -47,6 +49,17 @@ export class NotaController {
     @Get('/findByFolder')
     async findByFolder(@Res() response, @Body() body: BuscarNotasCarpetaDto){
         let result = await this.buscarNotasCarpeta.execute(body);
+        if(result.isRight()){
+            return response.status(HttpStatus.OK).json(result.getRight());
+        }
+        else{
+            return response.status(HttpStatus.NOT_FOUND).json(result.getLeft().message);
+        }
+    }
+
+    @Get('/findDeleted')
+    async findDeleted(@Res() response, @Body() body: BuscarNotasEliminadasUsuarioDto){
+        let result = await this.buscarEliminadas.execute(body);
         if(result.isRight()){
             return response.status(HttpStatus.OK).json(result.getRight());
         }

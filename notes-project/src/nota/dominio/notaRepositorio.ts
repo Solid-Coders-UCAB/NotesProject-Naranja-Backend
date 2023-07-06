@@ -10,6 +10,6 @@ export interface NotaRepositorio{
     eliminarNota(id:string): Promise<Either<Error,string>>;
     buscarNota(id:string): Promise<Either<Error,Nota>>;
     buscarNotasPorCarpeta(idCarpeta:string): Promise<Either<Error,Iterable<Nota>>>;
-    //buscarNotasEliminadasUsuario(idUsuario:string): Promise<Either<Error,Iterable<Nota>>>;
+    buscarNotasEliminadasUsuario(idUsuario:string): Promise<Either<Error,Iterable<Nota>>>;
 
 }
