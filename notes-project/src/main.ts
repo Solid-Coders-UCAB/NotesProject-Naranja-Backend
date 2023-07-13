@@ -8,6 +8,6 @@ async function bootstrap() {
   app.use(expressJson({limit: '50mb'}));
   app.use(expressUrlEncoded({limit: '50mb', extended: true}));
 
-  await app.listen(3000);
+  await app.listen(process.env.PORT || 3000);
 }
 bootstrap();
