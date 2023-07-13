@@ -105,4 +105,14 @@ export class UsuarioRepositorioAdaptador implements UsuarioRepositorio{
     
     }
 
+    async eliminarUsuario(id: string): Promise<Either<Error, string>> {
+        const result = await this.repositorio.delete(id);
+        if(result.affected>0){
+            return Either.makeRight<Error,string>('Usuario eliminado');
+        }
+        else{
+            return Either.makeLeft<Error,string>(new Error('Error de la base de datos'));
+        }
+    }
+
 }

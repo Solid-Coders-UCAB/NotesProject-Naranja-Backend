@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpStatus, Post, Put, Res } from "@nestjs/common";
+import { Body, Controller, Delete, Get, HttpStatus, Post, Put, Res } from "@nestjs/common";
 import { CrearCarpetaService } from "src/carpeta/aplicacion/CrearCarpetaService";
 import { CrearCarpetaDto } from "src/carpeta/aplicacion/DataTransferObjects/CrearCarpetaDto";
 import { CarpetaRepositorioAdaptador } from "src/carpeta/infraestructura/Repositorio/CarpetaRepositorioAdaptador";
@@ -12,6 +12,8 @@ import { RegistrarUsuarioDto } from "src/usuario/aplicacion/DataTransferObject/R
 import { ModificarUsuarioService } from "src/usuario/aplicacion/ModificarUsuarioService";
 import { RegistrarUsuarioService } from "src/usuario/aplicacion/RegistrarUsuarioService";
 import { UsuarioRepositorioAdaptador } from "../Repositorio/UsuarioRepositorioAdaptador";
+import { EliminarUsuarioService } from "src/usuario/aplicacion/EliminarUsuarioService";
+import { EliminarUsuarioDto } from "src/usuario/aplicacion/DataTransferObject/EliminarUsuarioDto";
 
 @Controller('usuario')
 export class UsuarioController {
@@ -22,6 +24,7 @@ export class UsuarioController {
                 private buscarUsuarios: BuscarUsuariosService,
                 private buscarUsuarioId: BuscarUsuarioPorIdService,
                 private buscarUsuarioCorreoClave: BuscarUsuarioCorreoClaveService,
+                private eliminarUsuario: EliminarUsuarioService,
                 private readonly carpetaRepositorio: CarpetaRepositorioAdaptador,
                 private readonly usuarioRepositorio: UsuarioRepositorioAdaptador,){
                     this.crearCarpeta = new CrearCarpetaService(this.carpetaRepositorio);
@@ -30,7 +33,7 @@ export class UsuarioController {
                     this.buscarUsuarios = new BuscarUsuariosService(this.usuarioRepositorio);
                     this.buscarUsuarioId = new BuscarUsuarioPorIdService(this.usuarioRepositorio);
                     this.buscarUsuarioCorreoClave = new BuscarUsuarioCorreoClaveService(this.usuarioRepositorio);
-
+                    this.eliminarUsuario = new EliminarUsuarioService(this.usuarioRepositorio);
                 }
 
     @Post('/create')
@@ -88,6 +91,17 @@ export class UsuarioController {
     @Put('/modificate')
     async modificate(@Res() response, @Body() body: ModificarUsuarioDto){
         let result = await this.modificarUsuario.execute(body);
+        if(result.isRight()){
+            return response.status(HttpStatus.OK).json(result.getRight());
+        }
+        else{
+            return response.status(HttpStatus.NOT_FOUND).json(result.getLeft().message);
+        }
+    }
+
+    @Delete('/delete')
+    async delete(@Res() response, @Body() body: EliminarUsuarioDto){
+        let result = await this.eliminarUsuario.execute(body);
         if(result.isRight()){
             return response.status(HttpStatus.OK).json(result.getRight());
         }

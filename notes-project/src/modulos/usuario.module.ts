@@ -9,6 +9,7 @@ import { NotaEntity } from "src/nota/infraestructura/Entity/NotaEntity";
 import { BuscarUsuarioCorreoClaveService } from "src/usuario/aplicacion/BuscarUsuarioCorreoClaveService";
 import { BuscarUsuarioPorIdService } from "src/usuario/aplicacion/BuscarUsuarioPorIdService";
 import { BuscarUsuariosService } from "src/usuario/aplicacion/BuscarUsuariosService";
+import { EliminarUsuarioService } from "src/usuario/aplicacion/EliminarUsuarioService";
 import { ModificarUsuarioService } from "src/usuario/aplicacion/ModificarUsuarioService";
 import { RegistrarUsuarioService } from "src/usuario/aplicacion/RegistrarUsuarioService";
 import { UsuarioController } from "src/usuario/infraestructura/Controller/UsuarioController";
@@ -18,7 +19,7 @@ import { UsuarioRepositorioAdaptador } from "src/usuario/infraestructura/Reposit
 @Module({
     imports: [TypeOrmModule.forFeature([UsuarioEntity,CarpetaEntity,NotaEntity,EtiquetaEntity])],
     providers: [RegistrarUsuarioService,CrearCarpetaService,ModificarUsuarioService,BuscarUsuariosService,BuscarUsuarioPorIdService,BuscarUsuarioCorreoClaveService,CarpetaRepositorioAdaptador,
-                UsuarioRepositorioAdaptador,RepositorioEtiquetaAdaptador,
+                UsuarioRepositorioAdaptador,RepositorioEtiquetaAdaptador,EliminarUsuarioService,
     {
       provide: 'UsuarioRepositorio',
       useClass: UsuarioRepositorioAdaptador
