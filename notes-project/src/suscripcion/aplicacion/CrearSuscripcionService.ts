@@ -13,7 +13,7 @@ export class CrearSuscripcionService implements IApplicationService<CrearSuscrip
     }
 
     async execute(service: CrearSuscripcionDto): Promise<Either<Error,Suscripcion>>{
-        let suscripcion = Suscripcion.create(service.fechaInicio,service.fechaFin,service.estado);
+        let suscripcion = Suscripcion.create(service.fechaInicio,service.fechaFin,service.estado,service.idUsuario);
 
         if(suscripcion.isRight()){
             return await this.usuarioRepositorio.crearSuscripcion(suscripcion.getRight());

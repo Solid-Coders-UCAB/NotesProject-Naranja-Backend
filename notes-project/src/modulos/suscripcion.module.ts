@@ -20,7 +20,7 @@ import { RepositorioSuscripcionAdaptador } from "src/suscripcion/infraestructura
 import { UsuarioEntity } from "src/usuario/infraestructura/Entity/UsuarioEntity";
 
 @Module({
-    imports: [TypeOrmModule.forFeature([SuscripcionEntity])],
+    imports: [TypeOrmModule.forFeature([SuscripcionEntity,UsuarioEntity])],
     providers: [CrearSuscripcionService,ModificarSuscripcionService,EliminarSuscripcionService,BuscarSuscripcionesService,BuscarSuscripcionPorId,RepositorioSuscripcionAdaptador,
     {
       provide: 'SuscripcionRepositorio',

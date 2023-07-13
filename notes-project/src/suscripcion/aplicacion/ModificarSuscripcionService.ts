@@ -14,7 +14,7 @@ export class ModificarSuscripcionService implements IApplicationService<Modifica
     }
 
     async execute(service: ModificarSuscripcionDto): Promise<Either<Error,Suscripcion>>{
-        let suscripcion = Suscripcion.create(service.fechaInicio,service.fechaFin,service.estado,service.idSuscripcion);
+        let suscripcion = Suscripcion.create(service.fechaInicio,service.fechaFin,service.estado,service.idUsuario,service.idSuscripcion);
 
         if(suscripcion.isRight()){
             return await this.usuarioRepositorio.crearSuscripcion(suscripcion.getRight());

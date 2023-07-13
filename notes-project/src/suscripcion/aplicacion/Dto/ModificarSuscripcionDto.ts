@@ -3,4 +3,5 @@ export class ModificarSuscripcionDto {
     fechaInicio: Date;
     fechaFin: Date;
     estado: string;
+    idUsuario:string;
 }

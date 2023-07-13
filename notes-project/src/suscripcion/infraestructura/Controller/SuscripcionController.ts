@@ -41,7 +41,7 @@ export class SuscripcionController {
 
     @Post('/create')
     async create(@Res() response, @Body() body: CrearSuscripcionDto){
-        console.log(body)
+        console.log("controller",body)
         const result = await this.crearEtiqueta.execute(body);
         if(result.isRight()){
             return response.status(HttpStatus.OK).json(result.getRight());
