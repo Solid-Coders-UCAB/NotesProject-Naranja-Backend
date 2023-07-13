@@ -12,17 +12,27 @@ import { BuscarNotasCarpetaDto } from "src/nota/aplicacion/DataTransferObjects/B
 import { BuscarNotasCarpetaService } from "src/nota/aplicacion/BuscarNotasCarpetaService";
 import { BuscarNotasEliminadasUsuarioService } from "src/nota/aplicacion/BuscarNotasEliminadasUsuarioService";
 import { BuscarNotasEliminadasUsuarioDto } from "src/nota/aplicacion/DataTransferObjects/BuscarNotasEliminadasUsuarioDto";
+import { NotaRepositorioAdaptador } from "../Repositorio/NotaRepositorioAdaptador";
 
 @Controller('nota')
 export class NotaController {
 
-    constructor(private readonly crearNotaService: CrearNotaService,
-        private readonly modificarNota: ModificarNotaService,
-        private readonly eliminarNota: EliminarNotaService,
-        private readonly buscarNotas: BuscarNotasService,
-        private readonly buscarNotaId: BuscarNotaPorIdService,
-        private readonly buscarNotasCarpeta: BuscarNotasCarpetaService,
-        private readonly buscarEliminadas: BuscarNotasEliminadasUsuarioService) {}
+    constructor(private crearNotaService: CrearNotaService,
+                private modificarNota: ModificarNotaService,
+                private eliminarNota: EliminarNotaService,
+                private buscarNotas: BuscarNotasService,
+                private buscarNotaId: BuscarNotaPorIdService,
+                private buscarNotasCarpeta: BuscarNotasCarpetaService,
+                private buscarEliminadas: BuscarNotasEliminadasUsuarioService,
+                private readonly notaRepositorio: NotaRepositorioAdaptador) {
+                    this.crearNotaService = new CrearNotaService(this.notaRepositorio);
+                    this.modificarNota = new ModificarNotaService(this.notaRepositorio);
+                    this.eliminarNota = new EliminarNotaService(this.notaRepositorio);
+                    this.buscarNotas = new BuscarNotasService(this.notaRepositorio);
+                    this.buscarNotaId = new BuscarNotaPorIdService(this.notaRepositorio);
+                    this.buscarNotasCarpeta = new BuscarNotasCarpetaService(this.notaRepositorio);
+                    this.buscarEliminadas = new BuscarNotasEliminadasUsuarioService(this.notaRepositorio);
+                }
 
     @Get('/findAll')
     async findAll(@Res() response){

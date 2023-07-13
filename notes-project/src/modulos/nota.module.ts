@@ -14,7 +14,7 @@ import { NotaRepositorioAdaptador } from 'src/nota/infraestructura/Repositorio/N
 
 @Module({
   imports: [TypeOrmModule.forFeature([NotaEntity,CarpetaEntity])],
-  providers: [CrearNotaService,ModificarNotaService,EliminarNotaService,BuscarNotasService,BuscarNotaPorIdService,BuscarNotasCarpetaService,BuscarNotasEliminadasUsuarioService,
+  providers: [CrearNotaService,ModificarNotaService,EliminarNotaService,BuscarNotasService,BuscarNotaPorIdService,BuscarNotasCarpetaService,BuscarNotasEliminadasUsuarioService,NotaRepositorioAdaptador,
   {
     provide: 'NotaRepositorio',
     useClass: NotaRepositorioAdaptador

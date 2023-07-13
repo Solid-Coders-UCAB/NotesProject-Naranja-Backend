@@ -16,6 +16,7 @@ import { UsuarioEntity } from "src/usuario/infraestructura/Entity/UsuarioEntity"
 @Module({
     imports: [TypeOrmModule.forFeature([CarpetaEntity,UsuarioEntity,NotaEntity])],
     providers: [CrearCarpetaService,ModificarCarpetaService,EliminarCarpetaService,BuscarCarpetasService,BuscarCarpetaPorIdService,BuscarCarpetasPorUsuarioService,
+              CarpetaRepositorioAdaptador,
     {
       provide: 'CarpetaRepositorio',
       useClass: CarpetaRepositorioAdaptador

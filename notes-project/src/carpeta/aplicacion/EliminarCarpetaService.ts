@@ -1,4 +1,3 @@
-import { Inject } from "@nestjs/common";
 import { IApplicationService } from "src/interfaces/aplicacion/IApplicationService";
 import { CarpetaRepositorio } from "../dominio/CarpetaRepositorio";
 import { Either } from "src/utilidad/Either";
@@ -8,7 +7,7 @@ export class EliminarCarpetaService implements IApplicationService<BorrarCarpeta
 
     private readonly carpetaRepositorio: CarpetaRepositorio
 
-    constructor(@Inject('CarpetaRepositorio') notaRepo: CarpetaRepositorio) {
+    constructor(notaRepo: CarpetaRepositorio) {
         this.carpetaRepositorio = notaRepo;
     }
 

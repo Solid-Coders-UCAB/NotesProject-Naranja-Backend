@@ -10,16 +10,25 @@ import { CrearCarpetaDto } from "src/carpeta/aplicacion/DataTransferObjects/Crea
 import { ModificarCarpetaDto } from "src/carpeta/aplicacion/DataTransferObjects/ModificarCarpetaDto";
 import { EliminarCarpetaService } from "src/carpeta/aplicacion/EliminarCarpetaService";
 import { ModificarCarpetaService } from "src/carpeta/aplicacion/ModificarCarpetaService";
+import { CarpetaRepositorioAdaptador } from "../Repositorio/CarpetaRepositorioAdaptador";
 
 @Controller('carpeta')
 export class CarpetaController {
 
-    constructor(private readonly crearCarpeta: CrearCarpetaService,
-                private readonly buscarCarpetas: BuscarCarpetasService,
-                private readonly buscarCarpeta: BuscarCarpetaPorIdService,
-                private readonly modificarCarpeta: ModificarCarpetaService,
-                private readonly eliminarCarpeta: EliminarCarpetaService,
-                private readonly buscarCarpetasUsuario: BuscarCarpetasPorUsuarioService){}
+    constructor(private crearCarpeta: CrearCarpetaService,
+                private buscarCarpetas: BuscarCarpetasService,
+                private buscarCarpeta: BuscarCarpetaPorIdService,
+                private modificarCarpeta: ModificarCarpetaService,
+                private eliminarCarpeta: EliminarCarpetaService,
+                private buscarCarpetasUsuario: BuscarCarpetasPorUsuarioService,
+                private readonly carpetaRepositorio: CarpetaRepositorioAdaptador){
+                    this.crearCarpeta = new CrearCarpetaService(this.carpetaRepositorio);
+                    this.buscarCarpetas = new BuscarCarpetasService(this.carpetaRepositorio);
+                    this.buscarCarpeta = new BuscarCarpetaPorIdService(this.carpetaRepositorio);
+                    this.modificarCarpeta = new ModificarCarpetaService(this.carpetaRepositorio);
+                    this.eliminarCarpeta = new EliminarCarpetaService(this.carpetaRepositorio);
+                    this.buscarCarpetasUsuario = new BuscarCarpetasPorUsuarioService(this.carpetaRepositorio);
+                }
 
     @Post('/create')
     async create(@Res() response, @Body() body: CrearCarpetaDto){

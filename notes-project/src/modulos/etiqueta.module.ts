@@ -13,7 +13,7 @@ import { UsuarioEntity } from "src/usuario/infraestructura/Entity/UsuarioEntity"
 
 @Module({
     imports: [TypeOrmModule.forFeature([EtiquetaEntity,UsuarioEntity])],
-    providers: [CrearEtiquetaService,ModificarEtiquetaService,EliminarEtiquetaService,BuscarEtiquetasService,BuscarEtiquetaIdService,BuscarEtiquetasPorUsuarioService,
+    providers: [CrearEtiquetaService,ModificarEtiquetaService,EliminarEtiquetaService,BuscarEtiquetasService,BuscarEtiquetaIdService,BuscarEtiquetasPorUsuarioService,RepositorioEtiquetaAdaptador,
     {
       provide: 'EtiquetaRepositorio',
       useClass: RepositorioEtiquetaAdaptador

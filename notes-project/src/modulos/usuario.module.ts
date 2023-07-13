@@ -17,7 +17,8 @@ import { UsuarioRepositorioAdaptador } from "src/usuario/infraestructura/Reposit
 
 @Module({
     imports: [TypeOrmModule.forFeature([UsuarioEntity,CarpetaEntity,NotaEntity,EtiquetaEntity])],
-    providers: [RegistrarUsuarioService,CrearCarpetaService,ModificarUsuarioService,BuscarUsuariosService,BuscarUsuarioPorIdService,BuscarUsuarioCorreoClaveService,
+    providers: [RegistrarUsuarioService,CrearCarpetaService,ModificarUsuarioService,BuscarUsuariosService,BuscarUsuarioPorIdService,BuscarUsuarioCorreoClaveService,CarpetaRepositorioAdaptador,
+                UsuarioRepositorioAdaptador,RepositorioEtiquetaAdaptador,
     {
       provide: 'UsuarioRepositorio',
       useClass: UsuarioRepositorioAdaptador

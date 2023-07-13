@@ -2,14 +2,13 @@ import { IApplicationService } from "src/interfaces/aplicacion/IApplicationServi
 import { BuscarNotasEliminadasUsuarioDto } from "./DataTransferObjects/BuscarNotasEliminadasUsuarioDto";
 import { Nota } from "../dominio/Nota";
 import { NotaRepositorio } from "../dominio/NotaRepositorio";
-import { Inject } from "@nestjs/common";
 import { Either } from "src/utilidad/Either";
 
 export class BuscarNotasEliminadasUsuarioService implements IApplicationService<BuscarNotasEliminadasUsuarioDto,Iterable<Nota>>{
 
     private readonly notaRepositorio: NotaRepositorio;
 
-    constructor(@Inject('NotaRepositorio') notaRepo: NotaRepositorio){
+    constructor(notaRepo: NotaRepositorio){
         this.notaRepositorio = notaRepo;
     }
 

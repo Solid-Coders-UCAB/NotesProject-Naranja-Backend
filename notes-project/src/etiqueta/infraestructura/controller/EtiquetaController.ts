@@ -10,17 +10,26 @@ import { EliminarEtiquetaDto } from "src/etiqueta/aplicacion/Dto/EliminarEtiquet
 import { ModificarEtiquetaDto } from "src/etiqueta/aplicacion/Dto/ModificarEtiquetaDto";
 import { EliminarEtiquetaService } from "src/etiqueta/aplicacion/EliminarEtiquetaService";
 import { ModificarEtiquetaService } from "src/etiqueta/aplicacion/ModificarEtiquetaService";
+import { RepositorioEtiquetaAdaptador } from "../repositorio/RepositorioEtiquetaAdaptador";
 
 
 @Controller('etiqueta')
 export class EtiquetaController {
 
-    constructor(private readonly crearEtiqueta: CrearEtiquetaService,
-                private readonly modificarEtiqueta: ModificarEtiquetaService,
-                private readonly eliminarEtiqueta: EliminarEtiquetaService,
-                private readonly buscarEtiquetas: BuscarEtiquetasService,
-                private readonly buscarEtiqueta:BuscarEtiquetaIdService,
-                private readonly buscarEtiquetasPorUsuario:BuscarEtiquetasPorUsuarioService){}
+    constructor(private crearEtiqueta: CrearEtiquetaService,
+                private modificarEtiqueta: ModificarEtiquetaService,
+                private eliminarEtiqueta: EliminarEtiquetaService,
+                private buscarEtiquetas: BuscarEtiquetasService,
+                private buscarEtiqueta:BuscarEtiquetaIdService,
+                private buscarEtiquetasPorUsuario:BuscarEtiquetasPorUsuarioService,
+                private readonly etiquetaRepositorio: RepositorioEtiquetaAdaptador){
+                    this.crearEtiqueta = new CrearEtiquetaService(this.etiquetaRepositorio);
+                    this.modificarEtiqueta = new ModificarEtiquetaService(this.etiquetaRepositorio);
+                    this.eliminarEtiqueta = new EliminarEtiquetaService(this.etiquetaRepositorio);
+                    this.buscarEtiquetas = new BuscarEtiquetasService(this.etiquetaRepositorio);
+                    this.buscarEtiqueta = new BuscarEtiquetaIdService(this.etiquetaRepositorio);
+                    this.buscarEtiquetasPorUsuario = new BuscarEtiquetasPorUsuarioService(this.etiquetaRepositorio);
+                }
 
     @Post('/create')
     async create(@Res() response, @Body() body: CrearEtiquetaDto){

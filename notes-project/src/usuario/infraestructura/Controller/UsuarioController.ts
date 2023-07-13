@@ -1,6 +1,7 @@
 import { Body, Controller, Get, HttpStatus, Post, Put, Res } from "@nestjs/common";
 import { CrearCarpetaService } from "src/carpeta/aplicacion/CrearCarpetaService";
 import { CrearCarpetaDto } from "src/carpeta/aplicacion/DataTransferObjects/CrearCarpetaDto";
+import { CarpetaRepositorioAdaptador } from "src/carpeta/infraestructura/Repositorio/CarpetaRepositorioAdaptador";
 import { BuscarUsuarioCorreoClaveService } from "src/usuario/aplicacion/BuscarUsuarioCorreoClaveService";
 import { BuscarUsuarioPorIdService } from "src/usuario/aplicacion/BuscarUsuarioPorIdService";
 import { BuscarUsuariosService } from "src/usuario/aplicacion/BuscarUsuariosService";
@@ -10,16 +11,27 @@ import { ModificarUsuarioDto } from "src/usuario/aplicacion/DataTransferObject/M
 import { RegistrarUsuarioDto } from "src/usuario/aplicacion/DataTransferObject/RegistrarUsuarioDto";
 import { ModificarUsuarioService } from "src/usuario/aplicacion/ModificarUsuarioService";
 import { RegistrarUsuarioService } from "src/usuario/aplicacion/RegistrarUsuarioService";
+import { UsuarioRepositorioAdaptador } from "../Repositorio/UsuarioRepositorioAdaptador";
 
 @Controller('usuario')
 export class UsuarioController {
 
-    constructor(private readonly registrarUsuario: RegistrarUsuarioService,
-                private readonly crearCarpeta: CrearCarpetaService,
-                private readonly modificarUsuario: ModificarUsuarioService,
-                private readonly buscarUsuarios: BuscarUsuariosService,
-                private readonly buscarUsuarioId: BuscarUsuarioPorIdService,
-                private readonly buscarUsuarioCorreoClave: BuscarUsuarioCorreoClaveService){}
+    constructor(private registrarUsuario: RegistrarUsuarioService,
+                private crearCarpeta: CrearCarpetaService,
+                private modificarUsuario: ModificarUsuarioService,
+                private buscarUsuarios: BuscarUsuariosService,
+                private buscarUsuarioId: BuscarUsuarioPorIdService,
+                private buscarUsuarioCorreoClave: BuscarUsuarioCorreoClaveService,
+                private readonly carpetaRepositorio: CarpetaRepositorioAdaptador,
+                private readonly usuarioRepositorio: UsuarioRepositorioAdaptador,){
+                    this.crearCarpeta = new CrearCarpetaService(this.carpetaRepositorio);
+                    this.registrarUsuario = new RegistrarUsuarioService(this.usuarioRepositorio);
+                    this.modificarUsuario = new ModificarUsuarioService(this.usuarioRepositorio);
+                    this.buscarUsuarios = new BuscarUsuariosService(this.usuarioRepositorio);
+                    this.buscarUsuarioId = new BuscarUsuarioPorIdService(this.usuarioRepositorio);
+                    this.buscarUsuarioCorreoClave = new BuscarUsuarioCorreoClaveService(this.usuarioRepositorio);
+
+                }
 
     @Post('/create')
     async create(@Res() response, @Body() body: RegistrarUsuarioDto){

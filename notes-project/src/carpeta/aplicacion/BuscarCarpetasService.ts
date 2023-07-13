@@ -1,14 +1,13 @@
 import { IApplicationService } from "src/interfaces/aplicacion/IApplicationService";
 import { Carpeta } from "../dominio/Carpeta";
 import { CarpetaRepositorio } from "../dominio/CarpetaRepositorio";
-import { Inject } from "@nestjs/common";
 import { Either } from "src/utilidad/Either";
 
 export class BuscarCarpetasService implements IApplicationService<string,Iterable<Carpeta>>{
 
     private readonly carpetaRepositorio: CarpetaRepositorio;
 
-    constructor(@Inject('CarpetaRepositorio') carpetaRepo: CarpetaRepositorio) {
+    constructor(carpetaRepo: CarpetaRepositorio) {
         this.carpetaRepositorio = carpetaRepo;
     }
 

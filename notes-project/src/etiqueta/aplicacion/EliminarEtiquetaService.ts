@@ -1,4 +1,3 @@
-import { Inject } from "@nestjs/common";
 import { IApplicationService } from "src/interfaces/aplicacion/IApplicationService";
 import { Either } from "src/utilidad/Either";
 import { EliminarEtiquetaDto } from "./Dto/EliminarEtiquetaDto";
@@ -8,7 +7,7 @@ export class EliminarEtiquetaService implements IApplicationService<EliminarEtiq
 
     private readonly carpetaRepositorio: EtiquetaRepositorio
 
-    constructor(@Inject('EtiquetaRepositorio') notaRepo: EtiquetaRepositorio) {
+    constructor(notaRepo: EtiquetaRepositorio) {
         this.carpetaRepositorio = notaRepo;
     }
 

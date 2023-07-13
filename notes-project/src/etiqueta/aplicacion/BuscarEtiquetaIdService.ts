@@ -1,6 +1,5 @@
 import { IApplicationService } from "src/interfaces/aplicacion/IApplicationService";
 import { Either } from "src/utilidad/Either";
-import { Inject } from "@nestjs/common";
 import { BuscarEtiquetaIdDto } from "./Dto/BuscarEtiquetaIdDto";
 import { EtiquetaRepositorio } from "../dominio/EtiquetaRepositorio";
 import { Etiqueta } from "../dominio/etiqueta";
@@ -9,7 +8,7 @@ export class BuscarEtiquetaIdService implements IApplicationService<BuscarEtique
 
     private readonly carpetaRepositorio: EtiquetaRepositorio;
 
-    constructor(@Inject('EtiquetaRepositorio') carpetaRepo: EtiquetaRepositorio) {
+    constructor(carpetaRepo: EtiquetaRepositorio) {
         this.carpetaRepositorio = carpetaRepo;
     }
     

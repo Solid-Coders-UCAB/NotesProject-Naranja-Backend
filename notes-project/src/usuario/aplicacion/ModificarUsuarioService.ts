@@ -1,4 +1,3 @@
-import { Inject } from "@nestjs/common";
 import { IApplicationService } from "src/interfaces/aplicacion/IApplicationService";
 import { Either } from "src/utilidad/Either";
 import { Usuario } from "../dominio/Usuario";
@@ -9,7 +8,7 @@ export class ModificarUsuarioService implements IApplicationService<ModificarUsu
     
     private readonly usuarioRepositorio: UsuarioRepositorio;
 
-    constructor(@Inject('UsuarioRepositorio') usuarioRepo: UsuarioRepositorio){
+    constructor(usuarioRepo: UsuarioRepositorio){
         this.usuarioRepositorio = usuarioRepo;
     }
 

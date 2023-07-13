@@ -1,5 +1,4 @@
 import { IApplicationService } from "src/interfaces/aplicacion/IApplicationService";
-import { Inject } from "@nestjs/common";
 import { Either } from "src/utilidad/Either";
 import { BuscarEtiquetaPorUsuarioDto } from "./Dto/BuscarEtiquetaPorUsuarioDto";
 import { Etiqueta } from "../dominio/etiqueta";
@@ -9,7 +8,7 @@ export class BuscarEtiquetasPorUsuarioService implements IApplicationService<Bus
 
     private readonly carpetaRepositorio: EtiquetaRepositorio;
 
-    constructor(@Inject('EtiquetaRepositorio') etiquetaRepo: EtiquetaRepositorio) {
+    constructor( etiquetaRepo: EtiquetaRepositorio) {
         this.carpetaRepositorio = etiquetaRepo;
     }
 

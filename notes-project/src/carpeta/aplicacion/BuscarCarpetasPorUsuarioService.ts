@@ -1,7 +1,6 @@
 import { IApplicationService } from "src/interfaces/aplicacion/IApplicationService";
 import { BuscarCarpetasUsuarioDto } from "./DataTransferObjects/BuscarCarpetasUsuarioDto";
 import { Carpeta } from "../dominio/Carpeta";
-import { Inject } from "@nestjs/common";
 import { CarpetaRepositorio } from "../dominio/CarpetaRepositorio";
 import { Either } from "src/utilidad/Either";
 
@@ -9,7 +8,7 @@ export class BuscarCarpetasPorUsuarioService implements IApplicationService<Busc
 
     private readonly carpetaRepositorio: CarpetaRepositorio;
 
-    constructor(@Inject('CarpetaRepositorio') carpetaRepo: CarpetaRepositorio) {
+    constructor(carpetaRepo: CarpetaRepositorio) {
         this.carpetaRepositorio = carpetaRepo;
     }
 

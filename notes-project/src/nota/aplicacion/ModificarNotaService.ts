@@ -3,14 +3,12 @@ import { ModificarNotaDto } from "./DataTransferObjects/ModificarNotaDto";
 import { Nota } from "../dominio/Nota";
 import { Either } from "src/utilidad/Either";
 import { NotaRepositorio } from "../dominio/NotaRepositorio";
-import { Inject } from "@nestjs/common";
-import e from "express";
 
 export class ModificarNotaService implements IApplicationService<ModificarNotaDto,Nota>{
     
     private readonly notaRepositorio: NotaRepositorio
 
-    constructor(@Inject('NotaRepositorio') notaRepo: NotaRepositorio) {
+    constructor(notaRepo: NotaRepositorio) {
         this.notaRepositorio = notaRepo;
     }
 
