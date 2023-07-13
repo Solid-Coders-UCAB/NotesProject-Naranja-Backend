@@ -1,6 +1,8 @@
 import { CarpetaEntity } from "src/carpeta/infraestructura/Entity/CarpetaEntity"
 import { EtiquetaEntity } from "src/etiqueta/infraestructura/Entity/EtiquetaEntity"
-import { Entity, PrimaryColumn, Column, OneToMany } from "typeorm"
+import { Suscripcion } from "src/suscripcion/dominio/suscripcion"
+import { SuscripcionEntity } from "src/suscripcion/infraestructura/Entity/SuscripcionEntity"
+import { Entity, PrimaryColumn, Column, OneToMany, OneToOne, JoinColumn } from "typeorm"
 
 @Entity()
 export class UsuarioEntity {

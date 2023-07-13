@@ -6,6 +6,7 @@ import { NotaModule } from "src/modulos/nota.module";
 import { CarpetaModule } from './carpeta.module';
 import { EtiquetaModule } from './etiqueta.module';
 import { UsuarioModule } from './usuario.module';
+import { SuscripcionModule } from './suscripcion.module';
 
 @Module({
   imports: [
@@ -14,7 +15,8 @@ import { UsuarioModule } from './usuario.module';
     NotaModule,
     CarpetaModule,
     EtiquetaModule,
-    UsuarioModule
+    UsuarioModule,
+    SuscripcionModule
   ],
   controllers: [],
   providers: [],

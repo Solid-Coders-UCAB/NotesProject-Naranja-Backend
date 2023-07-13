@@ -1,0 +1,101 @@
+import { Nota } from "src/nota/dominio/Nota";
+import { NotaRepositorio } from "src/nota/dominio/NotaRepositorio";
+import { Either } from "src/utilidad/Either";
+import { Not, Repository } from "typeorm";
+import { NotaEntity } from "src/nota/infraestructura/Entity/NotaEntity";
+import { Injectable } from "@nestjs/common";
+import { InjectRepository } from '@nestjs/typeorm';
+import { CarpetaEntity } from "src/carpeta/infraestructura/Entity/CarpetaEntity";
+import { EtiquetaEntity } from "src/etiqueta/infraestructura/Entity/EtiquetaEntity";
+import { Etiqueta } from "src/etiqueta/dominio/etiqueta";
+import { RepositorioSuscripcion } from "src/suscripcion/dominio/RepositorioSuscripcion";
+import { SuscripcionEntity } from "../Entity/SuscripcionEntity";
+import { Suscripcion } from "src/suscripcion/dominio/suscripcion";
+
+@Injectable()
+export class RepositorioSuscripcionAdaptador implements RepositorioSuscripcion{
+
+    constructor(
+        @InjectRepository(SuscripcionEntity)
+        private readonly repositorio: Repository<SuscripcionEntity>,
+    ){}
+
+    async crearSuscripcion(nota: Suscripcion): Promise<Either<Error,Suscripcion>> {
+        
+        const suscrip : SuscripcionEntity = {
+            id: nota.getId(),
+            estado: nota.getEstado(),
+            fechaInicio: nota.getFechaInicio(),
+            fechaFin: nota.getFechFin()
+        };
+
+        const result = await this.repositorio.save(suscrip);
+        if(result){
+            return Either.makeRight<Error,Suscripcion>(nota);
+        }
+        else{
+            return Either.makeLeft<Error,Suscripcion>(new Error('Error de la base de datos'));
+        }       
+    }
+
+        async buscarSuscripciones(): Promise<Either<Error,Iterable<Suscripcion>>> {          
+            const result: SuscripcionEntity[] = await this.repositorio.find();
+            if(result.length!=0){
+                const suscrip: Suscripcion[] = result.map((nota) =>
+                    Suscripcion.create(nota.fechaInicio, 
+                        nota.fechaFin, 
+                        nota.estado,
+                        nota.id).getRight());
+                return Either.makeRight<Error,Suscripcion[]>(suscrip);
+            }
+            else{
+                return Either.makeLeft<Error,Suscripcion[]>(new Error('Error de la base de datos'));
+            }
+        }
+
+    async buscarSuscripcion(id:string): Promise<Either<Error,Suscripcion>> {
+        const result: SuscripcionEntity = await this.repositorio.findOneBy({id:id});
+        if(result){
+            const suscripcion: Suscripcion = Suscripcion.create(result.fechaInicio,result.fechaFin,result.estado, result.id).getRight();
+            return Either.makeRight<Error,Suscripcion>(suscripcion);
+        }
+        else{
+            return Either.makeLeft<Error,Suscripcion>(new Error('Error de la base de datos'));
+        }
+    }
+
+    async modificarSuscripcion(nota: Suscripcion): Promise<Either<Error, Suscripcion>> {
+
+        let notaId = await this.repositorio.findOneBy({id:nota.getId()});  
+
+        const note :SuscripcionEntity = {
+            id: notaId.id = nota.getId(),
+            estado: notaId.estado =nota.getEstado(),
+            fechaInicio: notaId.fechaInicio = nota.getFechaInicio(),
+            fechaFin: notaId.fechaFin = nota.getFechFin()
+        }; 
+        
+        console.log("repo1",note)
+        const result = await this.repositorio.save(note);
+        if(result){
+            return Either.makeRight<Error,Suscripcion>(nota);
+        }
+        else{
+            return Either.makeLeft<Error,Suscripcion>(new Error('Error de la base de datos'));
+        }
+    }
+
+    async eliminarSuscripcion(id:string): Promise<Either<Error,string>> {
+
+        const result = await this.repositorio.delete(id);
+        if(result.affected != 0){
+            return Either.makeRight<Error,string>(id);
+        }
+        else{
+            return Either.makeLeft<Error,string>(new Error('Error de la base de datos'));
+        }
+    }
+
+
+
+}
