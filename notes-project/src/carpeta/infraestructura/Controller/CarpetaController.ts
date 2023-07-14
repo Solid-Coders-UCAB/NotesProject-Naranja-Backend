@@ -41,7 +41,7 @@ export class CarpetaController {
         }     
     }
 
-    @Get('/findAll')
+    @Post('/findAll')
     async findAll(@Res() response){
         let result = await this.buscarCarpetas.execute('Buscar todas las carpetas');
         if(result.isRight()){
@@ -52,7 +52,7 @@ export class CarpetaController {
         }
     }
 
-    @Get('/findById')
+    @Post('/findById')
     async findById(@Res() response, @Body() body: BuscarCarpetaIdDto){
         let result = await this.buscarCarpeta.execute(body);
         if(result.isRight()){
@@ -63,7 +63,7 @@ export class CarpetaController {
         }
     }
 
-    @Get('/findByUser')
+    @Post('/findByUser')
     async findByUser(@Res() response, @Body() body: BuscarCarpetasUsuarioDto){
         let result = await this.buscarCarpetasUsuario.execute(body);
         if(result.isRight()){
