@@ -147,7 +147,7 @@ export class NotaRepositorioAdaptador implements NotaRepositorio{
 
     async buscarNotasUsuario(idUsuario: string): Promise<Either<Error, Iterable<Nota>>> {
         
-        const result = await this.repositorio.find({where: {carpeta: {usuario: {id: idUsuario}}}, relations: ['carpeta']});
+        const result = await this.repositorio.find({where: {carpeta: {usuario: {id: idUsuario}}, estado:Not('Eliminada')}, relations: ['carpeta']});
         if(result.length > 0){
             const notas: Nota[] = result.map((nota) =>
                 Nota.create(nota.fechaCreacion, 
