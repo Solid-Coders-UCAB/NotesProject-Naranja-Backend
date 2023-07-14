@@ -55,7 +55,7 @@ export class UsuarioController {
         }
     }
 
-    @Get('/findAll')
+    @Post('/findAll')
     async findAll(@Res() response){
         let result = await this.buscarUsuarios.execute('BuscarUsuariosService');
         if(result.isRight()){
@@ -66,7 +66,7 @@ export class UsuarioController {
         }
     }
 
-    @Get('/findById')
+    @Post('/findById')
     async findById(@Res() response, @Body() body: BuscarUsuarioIdDto){
         let result = await this.buscarUsuarioId.execute(body);
         if(result.isRight()){
@@ -77,7 +77,7 @@ export class UsuarioController {
         }
     }
 
-    @Get('/findByEmailPassword')
+    @Post('/findByEmailPassword')
     async findByEmailPassword(@Res() response, @Body() body: BuscarUsuarioCorreoClaveDto){
         let result = await this.buscarUsuarioCorreoClave.execute(body);
         if(result.isRight()){

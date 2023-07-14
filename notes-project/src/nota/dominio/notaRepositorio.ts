@@ -11,5 +11,6 @@ export interface NotaRepositorio{
     buscarNota(id:string): Promise<Either<Error,Nota>>;
     buscarNotasPorCarpeta(idCarpeta:string): Promise<Either<Error,Iterable<Nota>>>;
     buscarNotasEliminadasUsuario(idUsuario:string): Promise<Either<Error,Iterable<Nota>>>;
+    buscarNotasUsuario(idUsuario:string): Promise<Either<Error,Iterable<Nota>>>;
 
 }
