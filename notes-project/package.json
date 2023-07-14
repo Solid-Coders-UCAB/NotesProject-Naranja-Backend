@@ -21,7 +21,7 @@
     "migration:create": "ts-node node_modules/.bin/typeorm migration:create -n",
     "migration:revert": "ts-node node_modules/.bin/typeorm migration:revert",
     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
-    "start:prod": "node dist/main.js"
+    "start:prod": "node dist/main"
   },
   "dependencies": {
     "@nestjs/common": "^9.4.3",
