@@ -3,4 +3,5 @@ export class RegistrarUsuarioDto{
     public correo: string;
     public clave: string;
     public fechaNacimiento: Date;
+    public suscripcion: boolean;
 }

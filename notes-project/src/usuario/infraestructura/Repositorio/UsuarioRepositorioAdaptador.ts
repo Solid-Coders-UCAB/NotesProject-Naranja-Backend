@@ -29,7 +29,8 @@ export class UsuarioRepositorioAdaptador implements UsuarioRepositorio{
             clave: usuario.getClave(),
             fechaNacimiento: usuario.getFechaNacimiento(),
             carpeta: [],
-            etiqueta:[]
+            etiqueta:[],
+            suscripcion:usuario.getSuscripcion()
         };
 
         const result = await this.repositorio.save(usuarioEnt);
@@ -48,7 +49,7 @@ export class UsuarioRepositorioAdaptador implements UsuarioRepositorio{
         const result: UsuarioEntity[] = await this.repositorio.find();
         if(result.length!=0){
             const usuarios: Usuario[] = result.map((usuario) =>
-                Usuario.create(usuario.nombre, usuario.correo,usuario.clave,usuario.fechaNacimiento,usuario.id).getRight());
+                Usuario.create(usuario.nombre, usuario.correo,usuario.clave,usuario.fechaNacimiento,usuario.suscripcion,usuario.id).getRight());
             return Either.makeRight<Error,Usuario[]>(usuarios);
         }
         else{
@@ -59,7 +60,7 @@ export class UsuarioRepositorioAdaptador implements UsuarioRepositorio{
     async buscarUsuarioPorId(id: string): Promise<Either<Error, Usuario>> {
         const result: UsuarioEntity = await this.repositorio.findOneBy({id:id});
         if(result){
-            const usuario: Usuario = Usuario.create(result.nombre, result.correo,result.clave,result.fechaNacimiento,result.id).getRight();
+            const usuario: Usuario = Usuario.create(result.nombre, result.correo,result.clave,result.fechaNacimiento,result.suscripcion,result.id).getRight();
             return Either.makeRight<Error,Usuario>(usuario);
         }
         else{
@@ -70,7 +71,7 @@ export class UsuarioRepositorioAdaptador implements UsuarioRepositorio{
     async buscarUsuarioPorCorreoClave(correo: string, clave: string): Promise<Either<Error, Usuario>> {
         const result: UsuarioEntity = await this.repositorio.findOneBy({correo:correo,clave:clave});
         if(result){
-            const usuario: Usuario = Usuario.create(result.nombre, result.correo,result.clave,result.fechaNacimiento,result.id).getRight();
+            const usuario: Usuario = Usuario.create(result.nombre, result.correo,result.clave,result.fechaNacimiento,result.suscripcion,result.id).getRight();
             return Either.makeRight<Error,Usuario>(usuario);
         }
         else{
@@ -90,7 +91,8 @@ export class UsuarioRepositorioAdaptador implements UsuarioRepositorio{
                 clave: usuario.getClave(),
                 fechaNacimiento: usuario.getFechaNacimiento(),
                 carpeta: carpetas,
-                etiqueta:etiquetas
+                etiqueta:etiquetas,
+                suscripcion:usuario.getSuscripcion()
             };
     
             const result = await this.repositorio.save(usuarioEnt);

@@ -20,13 +20,18 @@ import { EliminarSuscripcionDto } from "src/suscripcion/aplicacion/Dto/EliminarS
 import { BuscarSuscripcionesService } from "src/suscripcion/aplicacion/BuscarSuscripcionesService";
 import { BuscarSuscripcionPorId } from "src/suscripcion/aplicacion/BuscarSuscripcionService";
 import { BuscarSuscripcionDto } from "src/suscripcion/aplicacion/Dto/BuscarSuscripcionesDto";
+import { InjectRepository } from "@nestjs/typeorm";
+import { UsuarioEntity } from "src/usuario/infraestructura/Entity/UsuarioEntity";
+import { Repository } from "typeorm";
 
 
 
 @Controller('suscripcion')
 export class SuscripcionController {
 
-    constructor(private crearEtiqueta: CrearSuscripcionService,
+    constructor(@InjectRepository(UsuarioEntity)
+                private readonly repositorioUsuario: Repository<UsuarioEntity>,
+                private crearEtiqueta: CrearSuscripcionService,
                 private modificarSuscripcion: ModificarSuscripcionService,
                 private eliminarSuscripcion: EliminarSuscripcionService,
                 private buscarSuscripciones: BuscarSuscripcionesService,
@@ -43,7 +48,11 @@ export class SuscripcionController {
     async create(@Res() response, @Body() body: CrearSuscripcionDto){
         console.log("controller",body)
         const result = await this.crearEtiqueta.execute(body);
-        if(result.isRight()){
+        if(result.isRight()){  
+            const usuario = await this.repositorioUsuario.findOneBy({id:body.idUsuario});
+            //console.log("controller usuario",usuario)
+            usuario.suscripcion = true;
+            await this.repositorioUsuario.save(usuario)
             return response.status(HttpStatus.OK).json(result.getRight());
         }
         else{
@@ -67,6 +76,10 @@ export class SuscripcionController {
     async delete(@Res() response, @Body() body: EliminarSuscripcionDto){
         const result = await this.eliminarSuscripcion.execute(body);
         if(result.isRight()){
+            const usuario = await this.repositorioUsuario.findOneBy({id:body.idUsuario});
+            //console.log("controller usuario",usuario)
+            usuario.suscripcion = false;
+            await this.repositorioUsuario.save(usuario)
             return response.status(HttpStatus.OK).json(result.getRight());
         }
         else{

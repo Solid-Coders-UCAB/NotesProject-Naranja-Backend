@@ -20,6 +20,9 @@ export class UsuarioEntity {
     @Column()
     fechaNacimiento: Date
 
+    @Column()
+    suscripcion: boolean
+
     @OneToMany(() => CarpetaEntity, (carpeta) => carpeta.usuario,{cascade:['remove'],eager:true,nullable:true})
     carpeta: CarpetaEntity[];
 

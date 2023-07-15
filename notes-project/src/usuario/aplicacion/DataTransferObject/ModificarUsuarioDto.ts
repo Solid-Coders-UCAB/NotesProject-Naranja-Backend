@@ -4,4 +4,5 @@ export class ModificarUsuarioDto{
     correo: string;
     clave: string;
     fechaNacimiento: Date;
+    suscripcion: boolean;
 }

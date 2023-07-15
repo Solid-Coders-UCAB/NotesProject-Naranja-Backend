@@ -11,17 +11,22 @@ export class Usuario{
     private correo: CorreoUsuario;
     private clave: ClaveUsuario;
     private fechaNacimiento: FechaNacimiento;
-
-    private constructor(nombre: NombreUsuario, correo: CorreoUsuario, clave: ClaveUsuario, fechaNacimiento: FechaNacimiento,id?: IdUsuario){
+    private suscripcion: boolean;
+    private constructor(nombre: NombreUsuario, correo: CorreoUsuario, clave: ClaveUsuario, fechaNacimiento: FechaNacimiento,suscripcion:boolean,id?: IdUsuario){
         this.id = id;
         this.nombre = nombre;
         this.correo = correo;
         this.clave = clave;
         this.fechaNacimiento = fechaNacimiento;
+        this.suscripcion = suscripcion;
     }
 
     public getId(): string{
         return this.id.getIDUsuario();
+    }
+
+    public getSuscripcion(): boolean{
+        return this.suscripcion;
     }
 
     public getNombre(): string{
@@ -40,7 +45,7 @@ export class Usuario{
         return this.fechaNacimiento.getFechaNacimiento();
     }
 
-    static create(nombre: string, correo: string, clave: string, fechaNacimiento: Date,id?: string): Either<Error,Usuario>{
+    static create(nombre: string, correo: string, clave: string, fechaNacimiento: Date,suscripcion:boolean,id?: string): Either<Error,Usuario>{
         const nombreUsuario = NombreUsuario.create(nombre);
         if(nombreUsuario.isLeft()){
             return Either.makeLeft<Error,Usuario>(nombreUsuario.getLeft());
@@ -61,7 +66,7 @@ export class Usuario{
                         return Either.makeLeft<Error,Usuario>(fechaNacimientoUsuario.getLeft());
                     }
                     else{
-                        return Either.makeRight<Error,Usuario>(new Usuario(nombreUsuario.getRight(),correoUsuario.getRight(),claveUsuario.getRight(),fechaNacimientoUsuario.getRight(),IdUsuario.create(id)));
+                        return Either.makeRight<Error,Usuario>(new Usuario(nombreUsuario.getRight(),correoUsuario.getRight(),claveUsuario.getRight(),fechaNacimientoUsuario.getRight(),suscripcion,IdUsuario.create(id)));
                     }
                 }
             }
