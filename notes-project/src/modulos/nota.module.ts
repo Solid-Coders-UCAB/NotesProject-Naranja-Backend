@@ -5,6 +5,7 @@ import { BuscarNotaPorIdService } from 'src/nota/aplicacion/BuscarNotaPorIdServi
 import { BuscarNotasCarpetaService } from 'src/nota/aplicacion/BuscarNotasCarpetaService';
 import { BuscarNotasEliminadasUsuarioService } from 'src/nota/aplicacion/BuscarNotasEliminadasUsuarioService';
 import { BuscarNotasService } from 'src/nota/aplicacion/BuscarNotasService';
+import { BuscarNotasUsuarioService } from 'src/nota/aplicacion/BuscarNotasUsuarioService';
 import { CrearNotaService } from 'src/nota/aplicacion/CrearNotaService';
 import { EliminarNotaService } from 'src/nota/aplicacion/EliminarNotaService';
 import { ModificarNotaService } from 'src/nota/aplicacion/ModificarNotaService';
@@ -14,7 +15,7 @@ import { NotaRepositorioAdaptador } from 'src/nota/infraestructura/Repositorio/N
 
 @Module({
   imports: [TypeOrmModule.forFeature([NotaEntity,CarpetaEntity])],
-  providers: [CrearNotaService,ModificarNotaService,EliminarNotaService,BuscarNotasService,BuscarNotaPorIdService,BuscarNotasCarpetaService,BuscarNotasEliminadasUsuarioService,NotaRepositorioAdaptador,
+  providers: [CrearNotaService,ModificarNotaService,EliminarNotaService,BuscarNotasService,BuscarNotaPorIdService,BuscarNotasCarpetaService,BuscarNotasEliminadasUsuarioService,BuscarNotasUsuarioService,NotaRepositorioAdaptador,
   {
     provide: 'NotaRepositorio',
     useClass: NotaRepositorioAdaptador
