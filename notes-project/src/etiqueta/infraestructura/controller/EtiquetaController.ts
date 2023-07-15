@@ -66,7 +66,7 @@ export class EtiquetaController {
     }
 
 
-    @Get('/findAll')
+    @Post('/findAll')
     async findAll(@Res() response){
         let result = await this.buscarEtiquetas.execute('Buscar todas las carpetas');
         if(result.isRight()){
@@ -79,7 +79,7 @@ export class EtiquetaController {
     
 
 
-    @Get('/findById')
+    @Post('/findById')
     async findById(@Res() response, @Body() body: BuscarEtiquetaIdDto){
         let result = await this.buscarEtiqueta.execute(body);
         if(result.isRight()){
@@ -90,7 +90,7 @@ export class EtiquetaController {
         }
     }
 
-    @Get('/findByUser')
+    @Post('/findByUser')
     async findByUser(@Res() response, @Body() body: BuscarEtiquetaPorUsuarioDto){
         let result = await this.buscarEtiquetasPorUsuario.execute(body);
         if(result.isRight()){
