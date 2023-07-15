@@ -128,37 +128,41 @@ export class Nota{
             return Either.makeLeft<Error,Nota>(auxiliarFechaCreacion.getLeft());
         }
         else{
-            let auxiliarFechaModificacion = FechaModificacionNota.create(fechaModificacion);
-            if(auxiliarFechaModificacion.isLeft()){
-                return Either.makeLeft<Error,Nota>(auxiliarFechaModificacion.getLeft());
+            if(!idCarpeta || idCarpeta.length == 0){
+                return Either.makeLeft<Error,Nota>(new Error("El id de la carpeta no puede estar vacio"));
             }
             else{
-                let auxiliarTitulo = TituloNota.create(titulo);
-                if(auxiliarTitulo.isLeft()){
-                    return Either.makeLeft<Error,Nota>(auxiliarTitulo.getLeft());
+                let auxiliarFechaModificacion = FechaModificacionNota.create(fechaModificacion);
+                if(auxiliarFechaModificacion.isLeft()){
+                    return Either.makeLeft<Error,Nota>(auxiliarFechaModificacion.getLeft());
                 }
                 else{
-                    let auxiliarCuerpo = CuerpoNota.create(cuerpo);
-                    if(auxiliarCuerpo.isLeft()){
-                        return Either.makeLeft<Error,Nota>(auxiliarCuerpo.getLeft());
+                    let auxiliarTitulo = TituloNota.create(titulo);
+                    if(auxiliarTitulo.isLeft()){
+                        return Either.makeLeft<Error,Nota>(auxiliarTitulo.getLeft());
                     }
                     else{
-                        let auxiliarGeolocalizacion: Optional<Geolocalizacion>;
-                        if(latitud && longitud){
-                            let auxiliarGeolocalizacion2 = Geolocalizacion.create(longitud,latitud);
-                            if(auxiliarGeolocalizacion2.isLeft()){
-                                return Either.makeLeft<Error,Nota>(auxiliarGeolocalizacion2.getLeft());
-                            }
-                            else{
-                                auxiliarGeolocalizacion = new Optional<Geolocalizacion>(auxiliarGeolocalizacion2.getRight());
-                            }
+                        let auxiliarCuerpo = CuerpoNota.create(cuerpo);
+                        if(auxiliarCuerpo.isLeft()){
+                            return Either.makeLeft<Error,Nota>(auxiliarCuerpo.getLeft());
                         }
                         else{
-                            auxiliarGeolocalizacion = new Optional<Geolocalizacion>();
-                        }
-                        
-                        return Either.makeRight<Error,Nota>(new Nota(auxiliarFechaCreacion.getRight(),auxiliarFechaModificacion.getRight(),auxiliarEstado,auxiliarTitulo.getRight(),auxiliarCuerpo.getRight(),auxiliarGeolocalizacion,IdCarpeta.create(idCarpeta),etiquetass,IdNota.create(id)));
-                        
+                            let auxiliarGeolocalizacion: Optional<Geolocalizacion>;
+                            if(latitud && longitud){
+                                let auxiliarGeolocalizacion2 = Geolocalizacion.create(longitud,latitud);
+                                if(auxiliarGeolocalizacion2.isLeft()){
+                                    return Either.makeLeft<Error,Nota>(auxiliarGeolocalizacion2.getLeft());
+                                }
+                                else{
+                                    auxiliarGeolocalizacion = new Optional<Geolocalizacion>(auxiliarGeolocalizacion2.getRight());
+                                }
+                            }
+                            else{
+                                auxiliarGeolocalizacion = new Optional<Geolocalizacion>();
+                            }
+                            
+                            return Either.makeRight<Error,Nota>(new Nota(auxiliarFechaCreacion.getRight(),auxiliarFechaModificacion.getRight(),auxiliarEstado,auxiliarTitulo.getRight(),auxiliarCuerpo.getRight(),auxiliarGeolocalizacion,IdCarpeta.create(idCarpeta),etiquetass,IdNota.create(id)));
+                        }  
                     }
                 }
             }
