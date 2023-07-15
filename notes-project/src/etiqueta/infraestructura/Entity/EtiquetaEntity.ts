@@ -20,7 +20,7 @@ export class EtiquetaEntity {
     @JoinTable()
     nota: NotaEntity[];
 
-    @ManyToOne(() => UsuarioEntity,(usuario) => usuario.etiqueta, { onDelete: 'CASCADE', nullable: true, onUpdate:'CASCADE' }	)
+    @ManyToOne(() => UsuarioEntity,(usuario) => usuario.etiqueta, { onDelete: 'CASCADE', nullable: false, onUpdate:'CASCADE' }	)
     usuario: UsuarioEntity;
 
 }

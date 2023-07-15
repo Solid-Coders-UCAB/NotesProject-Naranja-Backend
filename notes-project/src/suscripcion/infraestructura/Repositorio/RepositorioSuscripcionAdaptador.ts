@@ -25,28 +25,34 @@ export class RepositorioSuscripcionAdaptador implements RepositorioSuscripcion{
     ){}
 
     async crearSuscripcion(nota: Suscripcion): Promise<Either<Error,Suscripcion>> {
-        
-        console.log("repo",nota)
-        console.log("repo usuario tarido",nota.getUuario())
-        const usuario = await this.repositorioUsuario.findOneBy({id:nota.getUuario()});
-        console.log("repo usuario",usuario)
-        
-        const suscrip : SuscripcionEntity = {
-            id: nota.getId(),
-            estado: nota.getEstado(),
-            fechaInicio: nota.getFechaInicio(),
-            fechaFin: nota.getFechFin(),
-            usuario: usuario
-        };
-        console.log("repo suscripcion",suscrip)
 
-        const result = await this.repositorio.save(suscrip);
-        if(result){
-            return Either.makeRight<Error,Suscripcion>(nota);
+        try{
+        
+            console.log("repo",nota)
+            console.log("repo usuario tarido",nota.getUuario())
+            const usuario = await this.repositorioUsuario.findOneBy({id:nota.getUuario()});
+            console.log("repo usuario",usuario)
+            
+            const suscrip : SuscripcionEntity = {
+                id: nota.getId(),
+                estado: nota.getEstado(),
+                fechaInicio: nota.getFechaInicio(),
+                fechaFin: nota.getFechFin(),
+                usuario: usuario
+            };
+            console.log("repo suscripcion",suscrip)
+
+            const result = await this.repositorio.save(suscrip);
+            if(result){
+                return Either.makeRight<Error,Suscripcion>(nota);
+            }
+            else{
+                return Either.makeLeft<Error,Suscripcion>(new Error('Error al guardar suscripcion'));
+            }   
         }
-        else{
-            return Either.makeLeft<Error,Suscripcion>(new Error('Error de la base de datos'));
-        }       
+        catch(error){
+            return Either.makeLeft<Error,Suscripcion>(new Error('Error al guardar suscripcion'));
+        }    
     }
 
         async buscarSuscripciones(): Promise<Either<Error,Iterable<Suscripcion>>> {          
@@ -60,7 +66,7 @@ export class RepositorioSuscripcionAdaptador implements RepositorioSuscripcion{
                 return Either.makeRight<Error,Suscripcion[]>(suscrip);
             }
             else{
-                return Either.makeLeft<Error,Suscripcion[]>(new Error('Error de la base de datos'));
+                return Either.makeLeft<Error,Suscripcion[]>(new Error('No se encontraron suscripciones'));
             }
         }
 
@@ -71,31 +77,37 @@ export class RepositorioSuscripcionAdaptador implements RepositorioSuscripcion{
             return Either.makeRight<Error,Suscripcion>(suscripcion);
         }
         else{
-            return Either.makeLeft<Error,Suscripcion>(new Error('Error de la base de datos'));
+            return Either.makeLeft<Error,Suscripcion>(new Error('No se encontraron suscripciones'));
         }
     }
 
     async modificarSuscripcion(nota: Suscripcion): Promise<Either<Error, Suscripcion>> {
 
-        let notaId = await this.repositorio.findOneBy({id:nota.getId()});  
-        const usuario = await this.repositorioUsuario.findOneBy({id:nota.getUuario()});
-        
+        try{
 
-        const note :SuscripcionEntity = {
-            id: notaId.id = nota.getId(),
-            estado: notaId.estado =nota.getEstado(),
-            fechaInicio: notaId.fechaInicio = nota.getFechaInicio(),
-            fechaFin: notaId.fechaFin = nota.getFechFin(),
-            usuario:usuario
-        }; 
-        
-        console.log("repo1",note)
-        const result = await this.repositorio.save(note);
-        if(result){
-            return Either.makeRight<Error,Suscripcion>(nota);
+            let notaId = await this.repositorio.findOneBy({id:nota.getId()});  
+            const usuario = await this.repositorioUsuario.findOneBy({id:nota.getUuario()});
+            
+
+            const note :SuscripcionEntity = {
+                id: notaId.id = nota.getId(),
+                estado: notaId.estado =nota.getEstado(),
+                fechaInicio: notaId.fechaInicio = nota.getFechaInicio(),
+                fechaFin: notaId.fechaFin = nota.getFechFin(),
+                usuario:usuario
+            }; 
+            
+            console.log("repo1",note)
+            const result = await this.repositorio.save(note);
+            if(result){
+                return Either.makeRight<Error,Suscripcion>(nota);
+            }
+            else{
+                return Either.makeLeft<Error,Suscripcion>(new Error('Error al modificar suscripcion'));
+            }
         }
-        else{
-            return Either.makeLeft<Error,Suscripcion>(new Error('Error de la base de datos'));
+        catch(error){
+            return Either.makeLeft<Error,Suscripcion>(new Error('Error al modificar suscripcion'));
         }
     }
 

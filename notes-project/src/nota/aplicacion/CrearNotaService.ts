@@ -7,6 +7,7 @@ import { Nota } from "src/nota/dominio/Nota";
 export class CrearNotaService implements IApplicationService<CrearNotaDto,Nota>{
 
     private readonly notaRepositorio: NotaRepositorio
+    
 
     constructor(notaRepo: NotaRepositorio) {
         this.notaRepositorio = notaRepo;

@@ -19,39 +19,50 @@ export class RepositorioEtiquetaAdaptador implements EtiquetaRepositorio {
 
 
     async guardarEriqueta(etiqueta: Etiqueta): Promise<Either<Error, Etiqueta>> {
-        const user = await this.repositorioUsuario.findOneBy({id:etiqueta.getUsuario()});
-        const etiquetaEnt : EtiquetaEntity = {
-            id: etiqueta.getID(),
-            nombre: etiqueta.getNombre(),
-            nota:[],
-            usuario:user
-        };
-        const result = await this.repositorio.save(etiquetaEnt);
-        if(result){
-            return Either.makeRight<Error,Etiqueta>(etiqueta);
+        try{
+            const user = await this.repositorioUsuario.findOneBy({id:etiqueta.getUsuario()});
+            const etiquetaEnt : EtiquetaEntity = {
+                id: etiqueta.getID(),
+                nombre: etiqueta.getNombre(),
+                nota:[],
+                usuario:user
+            };
+            const result = await this.repositorio.save(etiquetaEnt);
+            if(result){
+                return Either.makeRight<Error,Etiqueta>(etiqueta);
+            }
+            else{
+                return Either.makeLeft<Error,Etiqueta>(new Error('Error al crear etiqueta'));
+            }   
         }
-        else{
-            return Either.makeLeft<Error,Etiqueta>(new Error('Error de la base de datos'));
-        }   
+        catch(error){
+            return Either.makeLeft<Error,Etiqueta>(new Error('Error al crear etiqueta'));
+        }
     }
 
     async modificarEtiqueta(etiqueta: Etiqueta): Promise<Either<Error, Etiqueta>> {
 
-        const user = await this.repositorioUsuario.findOneBy({id:etiqueta.getUsuario()});
-        
-        const etiquetaEnt : EtiquetaEntity = {
-            id: etiqueta.getID(),
-            nombre: etiqueta.getNombre(),
-            nota:[],
-            usuario:user
-        };
-        const result = await this.repositorio.save(etiquetaEnt);
-        if(result){
-            return Either.makeRight<Error,Etiqueta>(etiqueta);
+        try{
+
+            const user = await this.repositorioUsuario.findOneBy({id:etiqueta.getUsuario()});
+            
+            const etiquetaEnt : EtiquetaEntity = {
+                id: etiqueta.getID(),
+                nombre: etiqueta.getNombre(),
+                nota:[],
+                usuario:user
+            };
+            const result = await this.repositorio.save(etiquetaEnt);
+            if(result){
+                return Either.makeRight<Error,Etiqueta>(etiqueta);
+            }
+            else{
+                return Either.makeLeft<Error,Etiqueta>(new Error('Error al modificar etiqueta'));
+            }   
         }
-        else{
-            return Either.makeLeft<Error,Etiqueta>(new Error('Error de la base de datos'));
-        }   
+        catch(error){
+            return Either.makeLeft<Error,Etiqueta>(new Error('Error al modificar etiqueta'));
+        }
     }
 
     async eliminarEtiqueta(id:string): Promise<Either<Error,string>> {
@@ -73,7 +84,7 @@ export class RepositorioEtiquetaAdaptador implements EtiquetaRepositorio {
             return Either.makeRight<Error,Etiqueta[]>(etiquetas);
         }
         else{
-            return Either.makeLeft<Error,Etiqueta[]>(new Error('Error de la base de datos'));
+            return Either.makeLeft<Error,Etiqueta[]>(new Error('No se encontraron etiquetas'));
         }
     }
 
@@ -84,7 +95,7 @@ export class RepositorioEtiquetaAdaptador implements EtiquetaRepositorio {
             return Either.makeRight<Error,Etiqueta>(etiqueta);
         }
         else{
-            return Either.makeLeft<Error,Etiqueta>(new Error('Error de la base de datos'));
+            return Either.makeLeft<Error,Etiqueta>(new Error('No se encontraron etiquetas'));
         }
 
     }
@@ -98,7 +109,7 @@ export class RepositorioEtiquetaAdaptador implements EtiquetaRepositorio {
             return Either.makeRight<Error,Etiqueta[]>(carpetas);
         }
         else{
-            return Either.makeLeft<Error,Etiqueta[]>(new Error('No se encontraron carpetas'));
+            return Either.makeLeft<Error,Etiqueta[]>(new Error('No se encontraron etiquetas'));
         }
     }
 

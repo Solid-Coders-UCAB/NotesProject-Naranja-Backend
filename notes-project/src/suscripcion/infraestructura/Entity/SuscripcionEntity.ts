@@ -18,7 +18,7 @@ export class SuscripcionEntity {
     @Column()
     estado: string
 
-    @OneToOne(() => UsuarioEntity,{ onDelete: 'CASCADE', nullable: true, onUpdate:'CASCADE' })
+    @OneToOne(() => UsuarioEntity,{ onDelete: 'CASCADE', nullable: false, onUpdate:'CASCADE' })
     @JoinColumn()
     usuario: UsuarioEntity;
 }

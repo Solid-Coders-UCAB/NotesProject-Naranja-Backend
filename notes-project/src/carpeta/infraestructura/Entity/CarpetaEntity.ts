@@ -17,7 +17,7 @@ export class CarpetaEntity {
     @OneToMany(() => NotaEntity, (nota) => nota.carpeta,{cascade:['remove','insert','update'],eager:true,nullable:true})
     nota: NotaEntity[];
 
-    @ManyToOne(() => UsuarioEntity,(usuario) => usuario.carpeta, { onDelete: 'CASCADE', nullable: true, onUpdate:'CASCADE' }	)
+    @ManyToOne(() => UsuarioEntity,(usuario) => usuario.carpeta, { onDelete: 'CASCADE', nullable: false, onUpdate:'CASCADE' }	)
     usuario: UsuarioEntity;
 
 }

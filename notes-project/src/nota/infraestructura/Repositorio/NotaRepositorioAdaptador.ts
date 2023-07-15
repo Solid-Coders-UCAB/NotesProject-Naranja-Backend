@@ -22,35 +22,41 @@ export class NotaRepositorioAdaptador implements NotaRepositorio{
 
     async crearNota(nota: Nota): Promise<Either<Error,Nota>> {
 
-        const carp = await this.repositorioCarpeta.findOneBy({id:nota.getIdCarpeta()});
+        try{
+
+            const carp = await this.repositorioCarpeta.findOneBy({id:nota.getIdCarpeta()});
 
 
-               let etiq = nota.getEtiquetas().map(ima => {
-                const im = new EtiquetaEntity();
-                im.id = ima;
-                return im;
-            }) 
-        
-        const note : NotaEntity = {
-            id: nota.getId(),
-            titulo: nota.getTitulo(),
-            cuerpo: nota.getCuerpo(),
-            fechaCreacion: nota.getFechaCreacion(),
-            fechaModificacion: nota.getFechaModificacion(),
-            latitud: nota.getLatitud(),
-            longitud: nota.getLongitud(),
-            estado: nota.getEstado(),
-            carpeta: carp,
-            etiqueta:etiq
-        };
+                let etiq = nota.getEtiquetas().map(ima => {
+                    const im = new EtiquetaEntity();
+                    im.id = ima;
+                    return im;
+                }) 
+            
+            const note : NotaEntity = {
+                id: nota.getId(),
+                titulo: nota.getTitulo(),
+                cuerpo: nota.getCuerpo(),
+                fechaCreacion: nota.getFechaCreacion(),
+                fechaModificacion: nota.getFechaModificacion(),
+                latitud: nota.getLatitud(),
+                longitud: nota.getLongitud(),
+                estado: nota.getEstado(),
+                carpeta: carp,
+                etiqueta:etiq
+            };
 
-        const result = await this.repositorio.save(note);
-        if(result){
-            return Either.makeRight<Error,Nota>(nota);
+            const result = await this.repositorio.save(note);
+            if(result){
+                return Either.makeRight<Error,Nota>(nota);
+            }
+            else{
+                return Either.makeLeft<Error,Nota>(new Error('Error al crear nota'));
+            }  
         }
-        else{
-            return Either.makeLeft<Error,Nota>(new Error('Error de la base de datos'));
-        }       
+        catch(error){
+            return Either.makeLeft<Error,Nota>(new Error('Error al crear nota'));
+        }     
     }
 
     async buscarNotas(): Promise<Either<Error,Iterable<Nota>>> {          
@@ -72,7 +78,7 @@ export class NotaRepositorioAdaptador implements NotaRepositorio{
             return Either.makeRight<Error,Nota[]>(notas);
         }
         else{
-            return Either.makeLeft<Error,Nota[]>(new Error('Error de la base de datos'));
+            return Either.makeLeft<Error,Nota[]>(new Error('No se encontraron notas'));
         }
     }
 
@@ -87,7 +93,7 @@ export class NotaRepositorioAdaptador implements NotaRepositorio{
             return Either.makeRight<Error,Nota>(nota.getRight());
         }
         else{
-            return Either.makeLeft<Error,Nota>(new Error('Error de la base de datos'));
+            return Either.makeLeft<Error,Nota>(new Error('No se encontraron notas'));
         }
     }
 
@@ -116,7 +122,7 @@ export class NotaRepositorioAdaptador implements NotaRepositorio{
             return Either.makeRight<Error,Nota[]>(notas);
         }
         else{
-            return Either.makeLeft<Error,Nota[]>(new Error('Error de la base de datos'));
+            return Either.makeLeft<Error,Nota[]>(new Error('No se encontraron notas'));
         }
     }
 
@@ -140,45 +146,51 @@ export class NotaRepositorioAdaptador implements NotaRepositorio{
             return Either.makeRight<Error,Nota[]>(notas);
         }
         else{
-            return Either.makeLeft<Error,Nota[]>(new Error('Error de la base de datos'));
+            return Either.makeLeft<Error,Nota[]>(new Error('No se encontraron notas'));
         }
 
     }
 
     async modificarNota(nota: Nota): Promise<Either<Error, Nota>> {
 
-        let notaId = await this.repositorio.findOneBy({id:nota.getId()});
-        const carp = await this.repositorioCarpeta.findOneBy({id:nota.getIdCarpeta()});
+        try{
+
+            let notaId = await this.repositorio.findOneBy({id:nota.getId()});
+            const carp = await this.repositorioCarpeta.findOneBy({id:nota.getIdCarpeta()});
 
 
-               let etiq = nota.getEtiquetas().map(ima => {
-                const im = new EtiquetaEntity();
-                im.id = ima;
-                return im;
-            })    
+                let etiq = nota.getEtiquetas().map(ima => {
+                    const im = new EtiquetaEntity();
+                    im.id = ima;
+                    return im;
+                })    
 
-            console.log("repo",etiq)
+                console.log("repo",etiq)
 
-        const note : NotaEntity = {
-            id: notaId.id = nota.getId(),
-            titulo: notaId.titulo= nota.getTitulo(),
-            cuerpo: notaId.cuerpo = nota.getCuerpo(),
-            fechaCreacion: notaId.fechaCreacion = nota.getFechaCreacion(),
-            fechaModificacion: notaId.fechaModificacion = nota.getFechaModificacion(),
-            latitud: notaId.latitud = nota.getLatitud(),
-            longitud: notaId.longitud = nota.getLongitud(),
-            estado: notaId.estado =nota.getEstado(),
-            carpeta: carp,
-            etiqueta:etiq
-        }; 
-        
-        console.log("repo1",note)
-        const result = await this.repositorio.save(note);
-        if(result){
-            return Either.makeRight<Error,Nota>(nota);
+            const note : NotaEntity = {
+                id: notaId.id = nota.getId(),
+                titulo: notaId.titulo= nota.getTitulo(),
+                cuerpo: notaId.cuerpo = nota.getCuerpo(),
+                fechaCreacion: notaId.fechaCreacion = nota.getFechaCreacion(),
+                fechaModificacion: notaId.fechaModificacion = nota.getFechaModificacion(),
+                latitud: notaId.latitud = nota.getLatitud(),
+                longitud: notaId.longitud = nota.getLongitud(),
+                estado: notaId.estado =nota.getEstado(),
+                carpeta: carp,
+                etiqueta:etiq
+            }; 
+            
+            console.log("repo1",note)
+            const result = await this.repositorio.save(note);
+            if(result){
+                return Either.makeRight<Error,Nota>(nota);
+            }
+            else{
+                return Either.makeLeft<Error,Nota>(new Error('Error al modificar nota'));
+            }
         }
-        else{
-            return Either.makeLeft<Error,Nota>(new Error('Error de la base de datos'));
+        catch(error){
+            return Either.makeLeft<Error,Nota>(new Error('Error al modificar nota'));
         }
     }
 
@@ -215,7 +227,7 @@ export class NotaRepositorioAdaptador implements NotaRepositorio{
             return Either.makeRight<Error,Nota[]>(notas);
         }
         else{
-            return Either.makeLeft<Error,Nota[]>(new Error('Error de la base de datos'));
+            return Either.makeLeft<Error,Nota[]>(new Error('No se encontraron notas'));
         }
     }
 

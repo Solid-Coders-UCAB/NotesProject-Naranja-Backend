@@ -29,7 +29,7 @@ export class NotaEntity {
     @Column()
     estado: string
 
-    @ManyToOne(() => CarpetaEntity,(carpeta) => carpeta.nota, { onDelete: 'CASCADE', nullable: true, onUpdate:'CASCADE' }	)
+    @ManyToOne(() => CarpetaEntity,(carpeta) => carpeta.nota, { onDelete: 'CASCADE', nullable: false, onUpdate:'CASCADE' }	)
     carpeta: CarpetaEntity;
 
 

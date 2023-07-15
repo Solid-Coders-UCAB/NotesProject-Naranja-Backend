@@ -24,21 +24,27 @@ export class CarpetaRepositorioAdaptador implements CarpetaRepositorio{
 
     async crearCarpeta(carpeta: Carpeta): Promise<Either<Error, Carpeta>> {
 
-        const user = await this.repositorioUsuario.findOneBy({id:carpeta.getIdUsuario()});
+        try{
 
-        const carpetaEnt : CarpetaEntity = {
-            id: carpeta.getId(),
-            nombre: carpeta.getNombre(),
-            predeterminada: carpeta.getPredeterminada(),
-            nota: [],
-            usuario: user 
-        };
-        const result = await this.repositorio.save(carpetaEnt);
-        if(result){
-            return Either.makeRight<Error,Carpeta>(carpeta);
+            const user = await this.repositorioUsuario.findOneBy({id:carpeta.getIdUsuario()});
+
+            const carpetaEnt : CarpetaEntity = {
+                id: carpeta.getId(),
+                nombre: carpeta.getNombre(),
+                predeterminada: carpeta.getPredeterminada(),
+                nota: [],
+                usuario: user 
+            };
+            const result = await this.repositorio.save(carpetaEnt);
+            if(result){
+                return Either.makeRight<Error,Carpeta>(carpeta);
+            }
+            else{
+                return Either.makeLeft<Error,Carpeta>(new Error('Error al crear carpeta'));
+            }
         }
-        else{
-            return Either.makeLeft<Error,Carpeta>(new Error('Error de la base de datos'));
+        catch(error){
+            return Either.makeLeft<Error,Carpeta>(new Error('Error al crear carpeta'));
         }
     }
 
@@ -50,7 +56,7 @@ export class CarpetaRepositorioAdaptador implements CarpetaRepositorio{
             return Either.makeRight<Error,Carpeta[]>(carpetas);
         }
         else{
-            return Either.makeLeft<Error,Carpeta[]>(new Error('Error de la base de datos'));
+            return Either.makeLeft<Error,Carpeta[]>(new Error('No se encontraron carpetas'));
         }
     }
 
@@ -61,7 +67,7 @@ export class CarpetaRepositorioAdaptador implements CarpetaRepositorio{
             return Either.makeRight<Error,Carpeta>(carpeta);
         }
         else{
-            return Either.makeLeft<Error,Carpeta>(new Error('Error de la base de datos'));
+            return Either.makeLeft<Error,Carpeta>(new Error('No se encontraron carpetas'));
         }
     }
 
@@ -79,23 +85,29 @@ export class CarpetaRepositorioAdaptador implements CarpetaRepositorio{
 
     async modificarCarpeta(carpeta: Carpeta): Promise<Either<Error, Carpeta>> {
 
-        const user = await this.repositorioUsuario.findOneBy({id:carpeta.getIdUsuario()});
+        try{
 
-        const notas = await this.repositorioNota.find({where: {carpeta:{id: carpeta.getId()}}});
+            const user = await this.repositorioUsuario.findOneBy({id:carpeta.getIdUsuario()});
 
-        const carpetaEnt : CarpetaEntity = {
-            id: carpeta.getId(),
-            nombre: carpeta.getNombre(),
-            predeterminada: carpeta.getPredeterminada(),
-            nota: notas,
-            usuario: user
-        };
-        const result = await this.repositorio.save(carpetaEnt);
-        if(result){
-            return Either.makeRight<Error,Carpeta>(carpeta);
+            const notas = await this.repositorioNota.find({where: {carpeta:{id: carpeta.getId()}}});
+
+            const carpetaEnt : CarpetaEntity = {
+                id: carpeta.getId(),
+                nombre: carpeta.getNombre(),
+                predeterminada: carpeta.getPredeterminada(),
+                nota: notas,
+                usuario: user
+            };
+            const result = await this.repositorio.save(carpetaEnt);
+            if(result){
+                return Either.makeRight<Error,Carpeta>(carpeta);
+            }
+            else{
+                return Either.makeLeft<Error,Carpeta>(new Error('Error al modificar carpeta'));
+            }
         }
-        else{
-            return Either.makeLeft<Error,Carpeta>(new Error('Error de la base de datos'));
+        catch(error){
+            return Either.makeLeft<Error,Carpeta>(new Error('Error al modificar carpeta'));
         }
     }
 
