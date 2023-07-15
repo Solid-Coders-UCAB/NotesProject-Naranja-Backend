@@ -13,7 +13,7 @@ export class RegistrarUsuarioService implements IApplicationService<RegistrarUsu
     }
 
     async execute(service: RegistrarUsuarioDto): Promise<Either<Error,Usuario>>{
-        let usuario = Usuario.create(service.nombre,service.correo,service.clave,service.fechaNacimiento);
+        let usuario = Usuario.create(service.nombre,service.correo,service.clave,service.fechaNacimiento,service.suscripcion);
 
         if(usuario.isRight()){
             return await this.usuarioRepositorio.registrarUsuario(usuario.getRight());

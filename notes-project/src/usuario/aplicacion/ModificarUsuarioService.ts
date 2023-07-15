@@ -13,7 +13,7 @@ export class ModificarUsuarioService implements IApplicationService<ModificarUsu
     }
 
     async execute(service: ModificarUsuarioDto): Promise<Either<Error,Usuario>>{
-        let usuario = Usuario.create(service.nombre,service.correo,service.clave,service.fechaNacimiento,service.idUsuario);
+        let usuario = Usuario.create(service.nombre,service.correo,service.clave,service.fechaNacimiento,service.suscripcion,service.idUsuario);
 
         if(usuario.isRight()){
             return await this.usuarioRepositorio.modificarUsuario(usuario.getRight());
