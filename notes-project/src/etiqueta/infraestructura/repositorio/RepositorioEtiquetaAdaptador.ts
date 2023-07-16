@@ -77,10 +77,11 @@ export class RepositorioEtiquetaAdaptador implements EtiquetaRepositorio {
     }
 
     async buscarEtiquetas(): Promise<Either<Error, Etiqueta[]>> {
-        const result: EtiquetaEntity[] = await this.repositorio.find();
+        const result: EtiquetaEntity[] = await this.repositorio.find({relations: ['usuario'],});
+        console.log("repo",result.map)
         if(result){
             const etiquetas: Etiqueta[] = result.map((etiqueta) =>
-                Etiqueta.create(etiqueta.nombre,etiqueta.id).getRight());
+                Etiqueta.create(etiqueta.nombre,etiqueta.usuario.id,etiqueta.id).getRight());
             return Either.makeRight<Error,Etiqueta[]>(etiquetas);
         }
         else{
@@ -89,9 +90,10 @@ export class RepositorioEtiquetaAdaptador implements EtiquetaRepositorio {
     }
 
     async buscarEtiqueta(id: string): Promise<Either<Error, Etiqueta>> {
-        const result: EtiquetaEntity = await this.repositorio.findOneBy({id:id});
+        const result = (await this.repositorio.find({where: {id:id},relations: ['usuario']})).at(0);
+        console.log("repo",result)
         if(result){
-            const etiqueta: Etiqueta = Etiqueta.create(result.nombre, result.id).getRight();
+            const etiqueta: Etiqueta = Etiqueta.create(result.nombre,result.usuario.id, result.id).getRight();
             return Either.makeRight<Error,Etiqueta>(etiqueta);
         }
         else{
@@ -103,6 +105,7 @@ export class RepositorioEtiquetaAdaptador implements EtiquetaRepositorio {
 
     async buscarEtiquetasPorUsuario(idUsuario: string): Promise<Either<Error, Iterable<Etiqueta>>> {
         const result: EtiquetaEntity[] = await this.repositorio.find({where: {usuario:{id:idUsuario}},relations: ['usuario']});
+        console.log("repo",result)
         if(result.length!=0){
             const carpetas: Etiqueta[] = result.map((etiqueta) =>
                 Etiqueta.create(etiqueta.nombre,etiqueta.usuario.id,etiqueta.id).getRight());
