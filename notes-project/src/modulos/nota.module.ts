@@ -10,11 +10,12 @@ import { CrearNotaService } from 'src/nota/aplicacion/CrearNotaService';
 import { EliminarNotaService } from 'src/nota/aplicacion/EliminarNotaService';
 import { ModificarNotaService } from 'src/nota/aplicacion/ModificarNotaService';
 import { NotaEntity } from 'src/nota/infraestructura/Entity/NotaEntity';
+import { TareaEntity } from 'src/nota/infraestructura/Entity/TareaEntity';
 import { NotaController } from 'src/nota/infraestructura/NotaController/NotaController';
 import { NotaRepositorioAdaptador } from 'src/nota/infraestructura/Repositorio/NotaRepositorioAdaptador';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([NotaEntity,CarpetaEntity])],
+  imports: [TypeOrmModule.forFeature([NotaEntity,CarpetaEntity,TareaEntity])],
   providers: [CrearNotaService,ModificarNotaService,EliminarNotaService,BuscarNotasService,BuscarNotaPorIdService,BuscarNotasCarpetaService,BuscarNotasEliminadasUsuarioService,BuscarNotasUsuarioService,NotaRepositorioAdaptador,
   {
     provide: 'NotaRepositorio',

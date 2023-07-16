@@ -23,9 +23,23 @@ export class ModificarNotaService implements IApplicationService<ModificarNotaDt
                                   service.etiquetas,service.idNota);
         
         if(nota.isRight()){
+
+            if(service.tareas){
+                if(service.tareas.length > 0){
+                    for(let tar of service.tareas){
+                        let tarea = Nota.createTarea(tar.nombreTarea, tar.completada, nota.getRight().getId());
+                        if(tarea.isRight()){
+                            nota.getRight().agregarTarea(tarea.getRight());
+                        }
+                        else{
+                            return Either.makeLeft<Error,Nota>(tarea.getLeft());
+                        }
+                    }
+                }
+            }
+
             const notaC = await this.notaRepositorio.modificarNota(nota.getRight());
             
-            //await this.notaRepositorio.guardarImagen(nota.getRight().getId(),imag);
             return notaC;
             
         }
