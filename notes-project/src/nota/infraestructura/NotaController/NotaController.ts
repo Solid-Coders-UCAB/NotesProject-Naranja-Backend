@@ -15,6 +15,12 @@ import { BuscarNotasEliminadasUsuarioDto } from "src/nota/aplicacion/DataTransfe
 import { NotaRepositorioAdaptador } from "../Repositorio/NotaRepositorioAdaptador";
 import { BuscarNotasUsuarioDto } from "src/nota/aplicacion/DataTransferObjects/BuscarNotasUsuarioDto";
 import { BuscarNotasUsuarioService } from "src/nota/aplicacion/BuscarNotasUsuarioService";
+import { BuscarNotasPorPalabraClaveService } from "src/nota/aplicacion/BuscarNotasPorPalabraClaveService";
+import { BuscarNotasPalabraClaveDto } from "src/nota/aplicacion/DataTransferObjects/BuscarNotasPalabraClaveDto";
+import { BuscarNotasPorEtiquetaService } from "src/nota/aplicacion/BuscarNotasPorEtiquetaService";
+import { BuscarNotasEtiquetaDto } from "src/nota/aplicacion/DataTransferObjects/BuscarNotasEtiquetaDto";
+import { BuscarNotasGeolocalizacionDto } from "src/nota/aplicacion/DataTransferObjects/BuscarNotasGeolocalizacionDto";
+import { BuscarNotasPorGeolocalizacionService } from "src/nota/aplicacion/BuscarNotasPorGeolocalizacionService";
 
 @Controller('nota')
 export class NotaController {
@@ -27,6 +33,9 @@ export class NotaController {
         private buscarNotasCarpeta: BuscarNotasCarpetaService,
         private buscarEliminadas: BuscarNotasEliminadasUsuarioService,
         private buscarNotasUsuario: BuscarNotasUsuarioService,
+        private buscarPalabraClave: BuscarNotasPorPalabraClaveService,
+        private buscarEtiqueta: BuscarNotasPorEtiquetaService,
+        private buscarGeolocalizacion: BuscarNotasPorGeolocalizacionService,
         private readonly notaRepositorio: NotaRepositorioAdaptador) {
             this.crearNotaService = new CrearNotaService(this.notaRepositorio);
             this.modificarNota = new ModificarNotaService(this.notaRepositorio);
@@ -36,6 +45,9 @@ export class NotaController {
             this.buscarNotasCarpeta = new BuscarNotasCarpetaService(this.notaRepositorio);
             this.buscarEliminadas = new BuscarNotasEliminadasUsuarioService(this.notaRepositorio);
             this.buscarNotasUsuario = new BuscarNotasUsuarioService(this.notaRepositorio);
+            this.buscarPalabraClave = new BuscarNotasPorPalabraClaveService(this.notaRepositorio);
+            this.buscarEtiqueta = new BuscarNotasPorEtiquetaService(this.notaRepositorio);
+            this.buscarGeolocalizacion = new BuscarNotasPorGeolocalizacionService(this.notaRepositorio);
         }
 
     @Post('/findAll')
@@ -146,6 +158,39 @@ export class NotaController {
     @Post('/findByUser')
     async findByUser(@Res() response, @Body() body: BuscarNotasUsuarioDto){
         let result = await this.buscarNotasUsuario.execute(body);
+        if(result.isRight()){
+            return response.status(HttpStatus.OK).json(result.getRight());
+        }
+        else{
+            return response.status(HttpStatus.NOT_FOUND).json(result.getLeft().message);
+        }
+    }
+
+    @Post('/findByKeyword')
+    async findByKeyword(@Res() response, @Body() body: BuscarNotasPalabraClaveDto){
+        let result = await this.buscarPalabraClave.execute(body);
+        if(result.isRight()){
+            return response.status(HttpStatus.OK).json(result.getRight());
+        }
+        else{
+            return response.status(HttpStatus.NOT_FOUND).json(result.getLeft().message);
+        }
+    }
+
+    @Post('/findByTag')
+    async findByTag(@Res() response, @Body() body: BuscarNotasEtiquetaDto){
+        let result = await this.buscarEtiqueta.execute(body);
+        if(result.isRight()){
+            return response.status(HttpStatus.OK).json(result.getRight());
+        }
+        else{
+            return response.status(HttpStatus.NOT_FOUND).json(result.getLeft().message);
+        }
+    }
+
+    @Post('/findByLocation')
+    async findByLocation(@Res() response, @Body() body: BuscarNotasGeolocalizacionDto){
+        let result = await this.buscarGeolocalizacion.execute(body);
         if(result.isRight()){
             return response.status(HttpStatus.OK).json(result.getRight());
         }

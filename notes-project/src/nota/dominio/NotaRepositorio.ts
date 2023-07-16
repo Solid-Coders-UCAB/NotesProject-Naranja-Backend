@@ -13,5 +13,8 @@ export interface NotaRepositorio{
     buscarNotasPorCarpeta(idCarpeta:string): Promise<Either<Error,Iterable<Nota>>>;
     buscarNotasEliminadasUsuario(idUsuario:string): Promise<Either<Error,Iterable<Nota>>>;
     buscarNotasUsuario(idUsuario:string): Promise<Either<Error,Iterable<Nota>>>;
+    buscarNotasPorPalabraClave(palabraClave:string,idUsuario: string): Promise<Either<Error,Iterable<Nota>>>;
+    buscarNotasPorEtiqueta(idEtiqueta:string,idUsuario: string): Promise<Either<Error,Iterable<Nota>>>;
+    buscarNotasPorGeolocalizacion(latitud:number,longitud:number,idUsuario: string): Promise<Either<Error,Iterable<Nota>>>;
 
 }

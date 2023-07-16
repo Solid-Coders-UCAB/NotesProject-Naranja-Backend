@@ -158,7 +158,7 @@ export class Nota{
                     else{
                         let auxiliarGeolocalizacion: Optional<Geolocalizacion>;
                         if(latitud && longitud){
-                            let auxiliarGeolocalizacion2 = Geolocalizacion.create(longitud,latitud);
+                            let auxiliarGeolocalizacion2 = Geolocalizacion.create(latitud,longitud);
                             if(auxiliarGeolocalizacion2.isLeft()){
                                 return Either.makeLeft<Error,Nota>(auxiliarGeolocalizacion2.getLeft());
                             }

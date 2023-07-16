@@ -10,6 +10,7 @@ import { EtiquetaEntity } from "src/etiqueta/infraestructura/Entity/EtiquetaEnti
 import { Etiqueta } from "src/etiqueta/dominio/etiqueta";
 import { TareaEntity } from "../Entity/TareaEntity";
 import { Tarea } from "src/nota/dominio/Tarea";
+import { UsuarioEntity } from "src/usuario/infraestructura/Entity/UsuarioEntity";
 
 @Injectable()
 export class NotaRepositorioAdaptador implements NotaRepositorio{
@@ -322,5 +323,135 @@ export class NotaRepositorioAdaptador implements NotaRepositorio{
         }
     }
 
+    async buscarNotasPorPalabraClave(palabraClave: string,idUsuario: string): Promise<Either<Error, Iterable<Nota>>> {
+
+        const result = await this.repositorio
+        .createQueryBuilder('nota')
+        .leftJoinAndSelect('nota.etiqueta', 'etiqueta')
+        .leftJoinAndSelect('nota.tarea', 'tarea')
+        .leftJoinAndSelect('nota.carpeta', 'carpeta')
+        .where('carpeta.usuario.id = :idUsuario', { idUsuario })
+        .andWhere('(nota.titulo ILIKE :palabraClave OR nota.cuerpo ILIKE :palabraClave OR etiqueta.nombre ILIKE :palabraClave OR tarea.nombre ILIKE :palabraClave)')
+        .andWhere('nota.estado != :eliminada', { eliminada: 'Eliminada' })
+        .setParameter('palabraClave', `%${palabraClave}%`)
+        .getMany();
+
+        console.log(result);
+
+        if(result.length > 0){
+            let notas: Nota[] = [];
+            for(let nota of result){
+                let aux = (await this.repositorio.find({where: {id: nota.id},relations: ['carpeta']})).at(0);
+                let n = Nota.create(aux.fechaCreacion,
+                    aux.fechaModificacion,
+                    aux.estado,
+                    aux.titulo,
+                    aux.cuerpo,
+                    aux.carpeta.id,
+                    aux.longitud,
+                    aux.latitud,
+                    aux.etiqueta.map(ima => {
+                        return ima.id
+                    }
+                    ),
+                    aux.id).getRight();
+                if(aux.tarea){
+                    if(aux.tarea.length > 0){
+                        for(let tar of aux.tarea){
+                            let t = Tarea.create(tar.nombre,tar.completada,tar.id,aux.id).getRight();
+                            n.agregarTarea(t);
+                        }
+                    }
+                }
+                notas.push(n);
+            }
+            return Either.makeRight<Error,Nota[]>(notas);
+        }
+        else{
+            return Either.makeLeft<Error,Nota[]>(new Error('No se encontraron notas'));
+        }
+    }
+
+    async buscarNotasPorEtiqueta(idEtiqueta: string,idUsuario: string): Promise<Either<Error, Iterable<Nota>>> {
+            
+        const result = await this.repositorio
+        .createQueryBuilder('nota')
+        .leftJoinAndSelect('nota.etiqueta', 'etiqueta')
+        .leftJoinAndSelect('nota.tarea', 'tarea')
+        .leftJoinAndSelect('nota.carpeta', 'carpeta')
+        .where('carpeta.usuario.id = :idUsuario', { idUsuario })
+        .andWhere('etiqueta.id = :idEtiqueta', { idEtiqueta })
+        .andWhere('nota.estado != :eliminada', { eliminada: 'Eliminada' })
+        .getMany();
+
+        if(result.length > 0){
+            let notas: Nota[] = [];
+            for(let nota of result){
+                let aux = (await this.repositorio.find({where: {id: nota.id},relations: ['carpeta']})).at(0);
+                let n = Nota.create(aux.fechaCreacion,
+                    aux.fechaModificacion,
+                    aux.estado,
+                    aux.titulo,
+                    aux.cuerpo,
+                    aux.carpeta.id,
+                    aux.longitud,
+                    aux.latitud,
+                    aux.etiqueta.map(ima => {
+                        return ima.id
+                    }
+                    ),
+                    aux.id).getRight();
+                if(aux.tarea){
+                    if(aux.tarea.length > 0){
+                        for(let tar of aux.tarea){
+                            let t = Tarea.create(tar.nombre,tar.completada,tar.id,aux.id).getRight();
+                            n.agregarTarea(t);
+                        }
+                    }
+                }
+                notas.push(n);
+            }
+            return Either.makeRight<Error,Nota[]>(notas);
+        }
+        else{
+            return Either.makeLeft<Error,Nota[]>(new Error('No se encontraron notas'));
+        }
+    }
+
+    async buscarNotasPorGeolocalizacion(latitud: number, longitud: number,idUsuario: string): Promise<Either<Error, Iterable<Nota>>> {
+
+        const result = await this.repositorio.find({where: {carpeta: {usuario: {id: idUsuario}}, estado:Not('Eliminada'),latitud:latitud,longitud:longitud}, relations: ['carpeta']});
+        if(result.length > 0){
+            let notas: Nota[] = [];
+            for(let nota of result){
+                let n = Nota.create(nota.fechaCreacion,
+                    nota.fechaModificacion,
+                    nota.estado,
+                    nota.titulo,
+                    nota.cuerpo,
+                    nota.carpeta.id,
+                    nota.longitud,
+                    nota.latitud,
+                    nota.etiqueta.map(ima => {
+                        return ima.id
+                    }
+                    ),
+                    nota.id).getRight();
+                if(nota.tarea){
+                    if(nota.tarea.length > 0){
+                        for(let tar of nota.tarea){
+                            let t = Tarea.create(tar.nombre,tar.completada,tar.id,nota.id).getRight();
+                            n.agregarTarea(t);
+                        }
+                    }
+                }
+                notas.push(n);
+            }
+            return Either.makeRight<Error,Nota[]>(notas);
+        }
+        else{
+            return Either.makeLeft<Error,Nota[]>(new Error('No se encontraron notas'));
+        }
+    }
 
 }
