@@ -1,6 +1,5 @@
 import { IApplicationService } from "src/interfaces/aplicacion/IApplicationService";
 import { Either } from "src/utilidad/Either";
-import { CrearSuscripcionDto } from "./Dto/CrearSuscipcionDto";
 import { RepositorioSuscripcion } from "../dominio/RepositorioSuscripcion";
 import { Suscripcion } from "../dominio/suscripcion";
 import { ModificarSuscripcionDto } from "./Dto/ModificarSuscripcionDto";

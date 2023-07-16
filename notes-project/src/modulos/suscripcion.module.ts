@@ -1,15 +1,7 @@
 import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { BuscarEtiquetaIdService } from "src/etiqueta/aplicacion/BuscarEtiquetaIdService";
-import { BuscarEtiquetasPorUsuarioService } from "src/etiqueta/aplicacion/BuscarEtiquetaPorUsuarioService";
-import { BuscarEtiquetasService } from "src/etiqueta/aplicacion/BuscarEtiquetasService";
-import { CrearEtiquetaService } from "src/etiqueta/aplicacion/CrearEtiquetaService";
-import { EliminarEtiquetaService } from "src/etiqueta/aplicacion/EliminarEtiquetaService";
-import { ModificarEtiquetaService } from "src/etiqueta/aplicacion/ModificarEtiquetaService";
-import { EtiquetaEntity } from "src/etiqueta/infraestructura/Entity/EtiquetaEntity";
-import { EtiquetaController } from "src/etiqueta/infraestructura/controller/EtiquetaController";
-import { RepositorioEtiquetaAdaptador } from "src/etiqueta/infraestructura/repositorio/RepositorioEtiquetaAdaptador";
 import { BuscarSuscripcionPorId } from "src/suscripcion/aplicacion/BuscarSuscripcionService";
+import { BuscarSuscripcionUsuarioService } from "src/suscripcion/aplicacion/BuscarSuscripcionUsuarioService";
 import { BuscarSuscripcionesService } from "src/suscripcion/aplicacion/BuscarSuscripcionesService";
 import { CrearSuscripcionService } from "src/suscripcion/aplicacion/CrearSuscripcionService";
 import { EliminarSuscripcionService } from "src/suscripcion/aplicacion/EliminarSuscripcionService";
@@ -21,7 +13,7 @@ import { UsuarioEntity } from "src/usuario/infraestructura/Entity/UsuarioEntity"
 
 @Module({
     imports: [TypeOrmModule.forFeature([SuscripcionEntity,UsuarioEntity])],
-    providers: [CrearSuscripcionService,ModificarSuscripcionService,EliminarSuscripcionService,BuscarSuscripcionesService,BuscarSuscripcionPorId,RepositorioSuscripcionAdaptador,
+    providers: [CrearSuscripcionService,ModificarSuscripcionService,EliminarSuscripcionService,BuscarSuscripcionesService,BuscarSuscripcionPorId,BuscarSuscripcionUsuarioService,RepositorioSuscripcionAdaptador,
     {
       provide: 'SuscripcionRepositorio',
       useClass: RepositorioSuscripcionAdaptador

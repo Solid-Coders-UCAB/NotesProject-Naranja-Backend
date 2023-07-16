@@ -1,4 +1,3 @@
-import { NombreCarpeta } from "src/carpeta/dominio/ValueObject/NombreCarpeta";
 import { idEtiqueta } from "./ValueObject/idEtiqueta";
 import { Either } from "src/utilidad/Either";
 import { NombreEtiqueta } from "./ValueObject/nombreEtiqueta";

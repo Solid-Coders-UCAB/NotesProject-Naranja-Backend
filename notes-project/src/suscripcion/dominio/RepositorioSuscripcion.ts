@@ -8,4 +8,5 @@ export interface RepositorioSuscripcion{
     modificarSuscripcion(nota: Suscripcion): Promise<Either<Error,Suscripcion>>;
     eliminarSuscripcion(id:string): Promise<Either<Error,string>>;
     buscarSuscripcion(id:string): Promise<Either<Error,Suscripcion>>;
+    buscarSuscripcionPorUsuario(idUsuario: string): Promise<Either<Error, Iterable<Suscripcion>>>;
 }

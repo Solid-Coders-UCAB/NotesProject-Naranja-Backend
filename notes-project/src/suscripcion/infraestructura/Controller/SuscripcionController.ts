@@ -8,10 +8,12 @@ import { EliminarSuscripcionService } from "src/suscripcion/aplicacion/EliminarS
 import { EliminarSuscripcionDto } from "src/suscripcion/aplicacion/Dto/EliminarSuscripcionDto";
 import { BuscarSuscripcionesService } from "src/suscripcion/aplicacion/BuscarSuscripcionesService";
 import { BuscarSuscripcionPorId } from "src/suscripcion/aplicacion/BuscarSuscripcionService";
-import { BuscarSuscripcionDto } from "src/suscripcion/aplicacion/Dto/BuscarSuscripcionesDto";
 import { InjectRepository } from "@nestjs/typeorm";
 import { UsuarioEntity } from "src/usuario/infraestructura/Entity/UsuarioEntity";
 import { Repository } from "typeorm";
+import { BuscarSuscripcionUsuarioDto } from "src/suscripcion/aplicacion/Dto/BuscarSuscripcionusuarioDto";
+import { BuscarSuscripcionUsuarioService } from "src/suscripcion/aplicacion/BuscarSuscripcionUsuarioService";
+import { BuscarSuscripcionDto } from "src/suscripcion/aplicacion/Dto/BuscarSuscripcionesDto";
 
 
 
@@ -25,12 +27,14 @@ export class SuscripcionController {
                 private eliminarSuscripcion: EliminarSuscripcionService,
                 private buscarSuscripciones: BuscarSuscripcionesService,
                 private bucarSuscripcion: BuscarSuscripcionPorId,
+                private buscarSuscripcionPorUsuario: BuscarSuscripcionUsuarioService,
                 private readonly suscripcionRepositorio: RepositorioSuscripcionAdaptador){
                     this.crearEtiqueta = new CrearSuscripcionService(this.suscripcionRepositorio);
                     this.modificarSuscripcion = new ModificarSuscripcionService(this.suscripcionRepositorio)
                     this.eliminarSuscripcion = new EliminarSuscripcionService(this.suscripcionRepositorio)
                     this.buscarSuscripciones = new BuscarSuscripcionesService(this.suscripcionRepositorio)
                     this.bucarSuscripcion = new BuscarSuscripcionPorId(this.suscripcionRepositorio)
+                    this.buscarSuscripcionPorUsuario = new BuscarSuscripcionUsuarioService(this.suscripcionRepositorio)
                 }
 
     @Post('/create')
@@ -101,15 +105,15 @@ export class SuscripcionController {
         }
     }
 
-    // @Get('/findByUser')
-    // async findByUser(@Res() response, @Body() body: BuscarEtiquetaPorUsuarioDto){
-    //     let result = await this.buscarEtiquetasPorUsuario.execute(body);
-    //     if(result.isRight()){
-    //         return response.status(HttpStatus.OK).json(result.getRight());
-    //     }
-    //     else{
-    //         return response.status(HttpStatus.NOT_FOUND).json(result.getLeft().message);
-    //     }
-    // }
+    @Post('/findByUser')
+    async findByUser(@Res() response, @Body() body: BuscarSuscripcionUsuarioDto){
+        let result = await this.buscarSuscripcionPorUsuario.execute(body);
+        if(result.isRight()){
+            return response.status(HttpStatus.OK).json(result.getRight());
+        }
+        else{
+            return response.status(HttpStatus.NOT_FOUND).json(result.getLeft().message);
+        }
+    }
 
 }

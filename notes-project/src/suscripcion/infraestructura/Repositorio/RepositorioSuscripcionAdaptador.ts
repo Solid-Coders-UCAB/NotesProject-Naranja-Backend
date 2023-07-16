@@ -1,13 +1,7 @@
-import { Nota } from "src/nota/dominio/Nota";
-import { NotaRepositorio } from "src/nota/dominio/NotaRepositorio";
 import { Either } from "src/utilidad/Either";
 import { Not, Repository } from "typeorm";
-import { NotaEntity } from "src/nota/infraestructura/Entity/NotaEntity";
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from '@nestjs/typeorm';
-import { CarpetaEntity } from "src/carpeta/infraestructura/Entity/CarpetaEntity";
-import { EtiquetaEntity } from "src/etiqueta/infraestructura/Entity/EtiquetaEntity";
-import { Etiqueta } from "src/etiqueta/dominio/etiqueta";
 import { RepositorioSuscripcion } from "src/suscripcion/dominio/RepositorioSuscripcion";
 import { SuscripcionEntity } from "../Entity/SuscripcionEntity";
 import { Suscripcion } from "src/suscripcion/dominio/suscripcion";
@@ -56,12 +50,13 @@ export class RepositorioSuscripcionAdaptador implements RepositorioSuscripcion{
     }
 
         async buscarSuscripciones(): Promise<Either<Error,Iterable<Suscripcion>>> {          
-            const result: SuscripcionEntity[] = await this.repositorio.find();
+            const result: SuscripcionEntity[] = await this.repositorio.find({relations: ['usuario'],});
             if(result.length!=0){
                 const suscrip: Suscripcion[] = result.map((nota) =>
                     Suscripcion.create(nota.fechaInicio, 
                         nota.fechaFin, 
                         nota.estado,
+                        nota.usuario.id,
                         nota.id).getRight());
                 return Either.makeRight<Error,Suscripcion[]>(suscrip);
             }
@@ -71,9 +66,9 @@ export class RepositorioSuscripcionAdaptador implements RepositorioSuscripcion{
         }
 
     async buscarSuscripcion(id:string): Promise<Either<Error,Suscripcion>> {
-        const result: SuscripcionEntity = await this.repositorio.findOneBy({id:id});
+        const result = (await this.repositorio.find({where: {id:id},relations: ['usuario']})).at(0);
         if(result){
-            const suscripcion: Suscripcion = Suscripcion.create(result.fechaInicio,result.fechaFin,result.estado, result.id).getRight();
+            const suscripcion: Suscripcion = Suscripcion.create(result.fechaInicio,result.fechaFin,result.estado,result.usuario.id ,result.id).getRight();
             return Either.makeRight<Error,Suscripcion>(suscripcion);
         }
         else{
@@ -120,8 +115,21 @@ export class RepositorioSuscripcionAdaptador implements RepositorioSuscripcion{
         else{
             return Either.makeLeft<Error,string>(new Error('Error de la base de datos'));
         }
+
+        
     }
 
+    async buscarSuscripcionPorUsuario(idUsuario: string): Promise<Either<Error, Iterable<Suscripcion>>> {
+        const result: SuscripcionEntity[] = await this.repositorio.find({where: {usuario:{id:idUsuario}},relations: ['usuario']});
+        if(result.length!=0){
+            const carpetas: Suscripcion[] = result.map((carpeta) =>
+                Suscripcion.create(carpeta.fechaInicio,carpeta.fechaFin,carpeta.estado,carpeta.usuario.id,carpeta.id).getRight());
+            return Either.makeRight<Error,Suscripcion[]>(carpetas);
+        }
+        else{
+            return Either.makeLeft<Error,Suscripcion[]>(new Error('No se encontraron carpetas'));
+        }
+    }
 
 
 }

@@ -1,5 +1,4 @@
 import { InjectRepository } from "@nestjs/typeorm";
-import { CarpetaEntity } from "src/carpeta/infraestructura/Entity/CarpetaEntity";
 import { EtiquetaRepositorio } from "src/etiqueta/dominio/EtiquetaRepositorio";
 import { Repository } from "typeorm";
 import { EtiquetaEntity } from "../Entity/EtiquetaEntity";

@@ -1,5 +1,4 @@
 import { Either } from "src/utilidad/Either";
-import { Optional } from "src/utilidad/Optional";
 import { IdSuscripcion } from "./Value Objects/IdSuscripcion";
 import { EstadoSuscripcion } from "./Value Objects/estadoSuscripcion";
 import { FechaInicioSuscripcion } from "./Value Objects/fechaIncioSuscripcion";
