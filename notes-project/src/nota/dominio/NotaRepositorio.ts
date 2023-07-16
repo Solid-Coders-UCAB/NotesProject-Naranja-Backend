@@ -1,6 +1,7 @@
 import { Etiqueta } from "src/etiqueta/dominio/etiqueta";
 import { Nota } from "./Nota";
 import { Either} from "src/utilidad/Either"
+import { Tarea } from "./Tarea";
 
 export interface NotaRepositorio{
 
@@ -12,6 +13,5 @@ export interface NotaRepositorio{
     buscarNotasPorCarpeta(idCarpeta:string): Promise<Either<Error,Iterable<Nota>>>;
     buscarNotasEliminadasUsuario(idUsuario:string): Promise<Either<Error,Iterable<Nota>>>;
     buscarNotasUsuario(idUsuario:string): Promise<Either<Error,Iterable<Nota>>>;
-
 
 }

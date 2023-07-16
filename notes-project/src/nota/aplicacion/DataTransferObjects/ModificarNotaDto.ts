@@ -1,4 +1,5 @@
 import { EstadoNota } from "src/nota/dominio/ValueObject/EstadoNota";
+import { CrearTareaDto } from "./CrearTareaDto";
 
 
 export class ModificarNotaDto {
@@ -12,5 +13,5 @@ export class ModificarNotaDto {
     latitud?: number;
     idCarpeta: string;
     etiquetas?:string[];
-
+    tareas?: CrearTareaDto[];
 }

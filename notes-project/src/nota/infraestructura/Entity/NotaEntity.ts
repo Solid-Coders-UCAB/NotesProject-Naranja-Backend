@@ -1,6 +1,7 @@
 import { CarpetaEntity } from "src/carpeta/infraestructura/Entity/CarpetaEntity"
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryColumn} from "typeorm"
 import { EtiquetaEntity } from "src/etiqueta/infraestructura/Entity/EtiquetaEntity"
+import { TareaEntity } from "./TareaEntity"
 
 @Entity()
 export class NotaEntity {
@@ -40,4 +41,7 @@ export class NotaEntity {
         inverseJoinColumn: { name: 'etiqueta_id', referencedColumnName: 'id' }, // Columna de clave foránea para la tabla de destino
       })
     etiqueta: EtiquetaEntity[];
+
+    @OneToMany(() => TareaEntity, (tarea) => tarea.nota,{cascade:['remove','insert','update'],eager:true,nullable:true})
+    tarea: TareaEntity[];
 }

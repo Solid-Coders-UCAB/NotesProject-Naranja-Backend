@@ -9,6 +9,7 @@ import { Either } from "src/utilidad/Either";
 import { IdCarpeta } from "src/carpeta/dominio/ValueObject/IdCarpeta";
 import { Optional } from "src/utilidad/Optional";
 import { idEtiqueta } from "src/etiqueta/dominio/ValueObject/idEtiqueta";
+import { Tarea } from "./Tarea";
 
 export class Nota{
 
@@ -20,7 +21,8 @@ export class Nota{
     private estado: EstadoNota;
     private geolocalizacion: Optional<Geolocalizacion>;
     private idCarpeta: IdCarpeta;
-    private etiquetas :idEtiqueta[]
+    private etiquetas: idEtiqueta[];
+    private tareas: Tarea[];
 
     private constructor(fechaCreacion: FechaCreacionNota, fechaModificacion: FechaModificacionNota, estado: EstadoNota, titulo: TituloNota, cuerpo: CuerpoNota,geolocalizacion: Optional<Geolocalizacion>, idCarpeta: IdCarpeta, etiquetas?:idEtiqueta[],id?: IdNota){
         this.id = id;
@@ -32,7 +34,7 @@ export class Nota{
         this.geolocalizacion = geolocalizacion;
         this.idCarpeta = idCarpeta;
         this.etiquetas=etiquetas
-        
+        this.tareas = [];
     }
 
     public getId(): string{
@@ -87,6 +89,17 @@ export class Nota{
         return this.etiquetas.map((etiqueta) => etiqueta.getIDEtiqueta())
     }
 
+    public getTareas(): Tarea[]{
+        return this.tareas;
+    }
+
+    public agregarTarea(tarea: Tarea){
+        this.tareas.push(tarea);
+    }
+
+    static createTarea(nombre: string, completada: boolean, idNota: string,id?: string): Either<Error,Tarea> {
+       return Tarea.create(nombre,completada,idNota,id);
+    }
 
     static create(fechaCreacion: Date, fechaModificacion: Date, estado: string, titulo: string, cuerpo: string, idCarpeta: string, longitud?: number, latitud?: number, etiqueta?:string[],id?: string ): Either<Error,Nota>{
         

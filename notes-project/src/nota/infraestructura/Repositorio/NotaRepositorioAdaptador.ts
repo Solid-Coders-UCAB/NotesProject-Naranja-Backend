@@ -8,6 +8,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CarpetaEntity } from "src/carpeta/infraestructura/Entity/CarpetaEntity";
 import { EtiquetaEntity } from "src/etiqueta/infraestructura/Entity/EtiquetaEntity";
 import { Etiqueta } from "src/etiqueta/dominio/etiqueta";
+import { TareaEntity } from "../Entity/TareaEntity";
+import { Tarea } from "src/nota/dominio/Tarea";
 
 @Injectable()
 export class NotaRepositorioAdaptador implements NotaRepositorio{
@@ -16,7 +18,9 @@ export class NotaRepositorioAdaptador implements NotaRepositorio{
         @InjectRepository(NotaEntity)
         private readonly repositorio: Repository<NotaEntity>,
         @InjectRepository(CarpetaEntity)
-        private readonly repositorioCarpeta: Repository<CarpetaEntity>
+        private readonly repositorioCarpeta: Repository<CarpetaEntity>,
+        @InjectRepository(TareaEntity)
+        private readonly repositorioTarea: Repository<TareaEntity>,
         
     ){}
 
@@ -26,12 +30,11 @@ export class NotaRepositorioAdaptador implements NotaRepositorio{
 
             const carp = await this.repositorioCarpeta.findOneBy({id:nota.getIdCarpeta()});
 
-
-                let etiq = nota.getEtiquetas().map(ima => {
-                    const im = new EtiquetaEntity();
-                    im.id = ima;
-                    return im;
-                }) 
+            let etiq = nota.getEtiquetas().map(ima => {
+                const im = new EtiquetaEntity();
+                im.id = ima;
+                return im;
+            }) 
             
             const note : NotaEntity = {
                 id: nota.getId(),
@@ -43,11 +46,26 @@ export class NotaRepositorioAdaptador implements NotaRepositorio{
                 longitud: nota.getLongitud(),
                 estado: nota.getEstado(),
                 carpeta: carp,
-                etiqueta:etiq
+                etiqueta:etiq,
+                tarea: []
             };
 
             const result = await this.repositorio.save(note);
             if(result){
+                if(nota.getTareas().length > 0){
+                    for(let tar of nota.getTareas()){
+                        let t: TareaEntity = {
+                            id: tar.getId(),
+                            nombre: tar.getNombre(),
+                            completada: tar.getCompletada(),
+                            nota: result
+                        }
+                        const result2 = await this.repositorioTarea.save(t);
+                        if(!result2){
+                            return Either.makeLeft<Error,Nota>(new Error('Error al crear nota'));
+                        }
+                    }
+                }
                 return Either.makeRight<Error,Nota>(nota);
             }
             else{
@@ -62,19 +80,31 @@ export class NotaRepositorioAdaptador implements NotaRepositorio{
     async buscarNotas(): Promise<Either<Error,Iterable<Nota>>> {          
         const result: NotaEntity[] = await this.repositorio.find({relations: ['carpeta'],});
         if(result.length!=0){
-            const notas: Nota[] = result.map((nota) =>
-                Nota.create(nota.fechaCreacion, 
-                    nota.fechaModificacion, 
-                    nota.estado, 
-                    nota.titulo, 
-                    nota.cuerpo, 
+            let notas: Nota[] = [];
+            for(let nota of result){
+                let n = Nota.create(nota.fechaCreacion,
+                    nota.fechaModificacion,
+                    nota.estado,
+                    nota.titulo,
+                    nota.cuerpo,
                     nota.carpeta.id,
-                    nota.longitud, 
+                    nota.longitud,
                     nota.latitud,
                     nota.etiqueta.map(ima => {
                         return ima.id
-                    }),
-                    nota.id).getRight());
+                    }
+                    ),
+                    nota.id).getRight();
+                if(nota.tarea){
+                    if(nota.tarea.length > 0){
+                        for(let tar of nota.tarea){
+                            let t = Tarea.create(tar.nombre,tar.completada,tar.id,nota.id).getRight();
+                            n.agregarTarea(t);
+                        }
+                    }
+                }
+                notas.push(n);
+            }
             return Either.makeRight<Error,Nota[]>(notas);
         }
         else{
@@ -90,6 +120,16 @@ export class NotaRepositorioAdaptador implements NotaRepositorio{
                 result.cuerpo,  result.carpeta.id,result.longitud, result.latitud,result.etiqueta.map(ima => {
                     return ima.id
                 }),result.id);
+            
+            if(result.tarea){
+                if(result.tarea.length > 0){
+                    for(let tar of result.tarea){
+                        let t = Tarea.create(tar.nombre,tar.completada,tar.id,nota.getRight().getId()).getRight();
+                        nota.getRight().agregarTarea(t);
+                    }
+                }
+            }
+
             return Either.makeRight<Error,Nota>(nota.getRight());
         }
         else{
@@ -106,19 +146,31 @@ export class NotaRepositorioAdaptador implements NotaRepositorio{
                                                                     estado:Not('Eliminada')}});
         console.log(idCarpeta);
         if(result.length != 0){
-            const notas: Nota[] = result.map((nota) =>
-                Nota.create(nota.fechaCreacion, 
-                    nota.fechaModificacion, 
-                    nota.estado, 
-                    nota.titulo, 
-                    nota.cuerpo, 
+            let notas: Nota[] = [];
+            for(let nota of result){
+                let n = Nota.create(nota.fechaCreacion,
+                    nota.fechaModificacion,
+                    nota.estado,
+                    nota.titulo,
+                    nota.cuerpo,
                     nota.carpeta.id,
-                    nota.longitud, 
-                    nota.latitud, 
+                    nota.longitud,
+                    nota.latitud,
                     nota.etiqueta.map(ima => {
                         return ima.id
-                    }),
-                    nota.id).getRight());
+                    }
+                    ),
+                    nota.id).getRight();
+                if(nota.tarea){
+                    if(nota.tarea.length > 0){
+                        for(let tar of nota.tarea){
+                            let t = Tarea.create(tar.nombre,tar.completada,tar.id,nota.id).getRight();
+                            n.agregarTarea(t);
+                        }
+                    }
+                }
+                notas.push(n);
+            }
             return Either.makeRight<Error,Nota[]>(notas);
         }
         else{
@@ -130,19 +182,31 @@ export class NotaRepositorioAdaptador implements NotaRepositorio{
         
         const result = await this.repositorio.find({where: {carpeta: {usuario: {id: idUsuario}}, estado: 'Eliminada'}, relations: ['carpeta']});
         if(result.length > 0){
-            const notas: Nota[] = result.map((nota) =>
-                Nota.create(nota.fechaCreacion, 
-                    nota.fechaModificacion, 
-                    nota.estado, 
-                    nota.titulo, 
-                    nota.cuerpo, 
+            let notas: Nota[] = [];
+            for(let nota of result){
+                let n = Nota.create(nota.fechaCreacion,
+                    nota.fechaModificacion,
+                    nota.estado,
+                    nota.titulo,
+                    nota.cuerpo,
                     nota.carpeta.id,
-                    nota.longitud, 
-                    nota.latitud, 
+                    nota.longitud,
+                    nota.latitud,
                     nota.etiqueta.map(ima => {
                         return ima.id
-                    }),
-                    nota.id).getRight());
+                    }
+                    ),
+                    nota.id).getRight();
+                if(nota.tarea){
+                    if(nota.tarea.length > 0){
+                        for(let tar of nota.tarea){
+                            let t = Tarea.create(tar.nombre,tar.completada,tar.id,nota.id).getRight();
+                            n.agregarTarea(t);
+                        }
+                    }
+                }
+                notas.push(n);
+            }
             return Either.makeRight<Error,Nota[]>(notas);
         }
         else{
@@ -154,6 +218,8 @@ export class NotaRepositorioAdaptador implements NotaRepositorio{
     async modificarNota(nota: Nota): Promise<Either<Error, Nota>> {
 
         try{
+
+            await this.repositorioTarea.delete({nota: {id: nota.getId()}});
 
             let notaId = await this.repositorio.findOneBy({id:nota.getId()});
             const carp = await this.repositorioCarpeta.findOneBy({id:nota.getIdCarpeta()});
@@ -177,12 +243,27 @@ export class NotaRepositorioAdaptador implements NotaRepositorio{
                 longitud: notaId.longitud = nota.getLongitud(),
                 estado: notaId.estado =nota.getEstado(),
                 carpeta: carp,
-                etiqueta:etiq
+                etiqueta:etiq,
+                tarea: []
             }; 
             
             console.log("repo1",note)
             const result = await this.repositorio.save(note);
             if(result){
+                if(nota.getTareas().length > 0){
+                    for(let tar of nota.getTareas()){
+                        let t: TareaEntity = {
+                            id: tar.getId(),
+                            nombre: tar.getNombre(),
+                            completada: tar.getCompletada(),
+                            nota: result
+                        }
+                        const result2 = await this.repositorioTarea.save(t);
+                        if(!result2){
+                            return Either.makeLeft<Error,Nota>(new Error('Error al crear nota'));
+                        }
+                    }
+                }
                 return Either.makeRight<Error,Nota>(nota);
             }
             else{
@@ -205,25 +286,35 @@ export class NotaRepositorioAdaptador implements NotaRepositorio{
         }
     }
 
-
-
     async buscarNotasUsuario(idUsuario: string): Promise<Either<Error, Iterable<Nota>>> {
 
         const result = await this.repositorio.find({where: {carpeta: {usuario: {id: idUsuario}}, estado:Not('Eliminada')}, relations: ['carpeta']});
         if(result.length > 0){
-            const notas: Nota[] = result.map((nota) =>
-                Nota.create(nota.fechaCreacion, 
-                    nota.fechaModificacion, 
-                    nota.estado, 
-                    nota.titulo, 
-                    nota.cuerpo, 
+            let notas: Nota[] = [];
+            for(let nota of result){
+                let n = Nota.create(nota.fechaCreacion,
+                    nota.fechaModificacion,
+                    nota.estado,
+                    nota.titulo,
+                    nota.cuerpo,
                     nota.carpeta.id,
-                    nota.longitud, 
-                    nota.latitud, 
+                    nota.longitud,
+                    nota.latitud,
                     nota.etiqueta.map(ima => {
                         return ima.id
-                    }),
-                    nota.id).getRight());
+                    }
+                    ),
+                    nota.id).getRight();
+                if(nota.tarea){
+                    if(nota.tarea.length > 0){
+                        for(let tar of nota.tarea){
+                            let t = Tarea.create(tar.nombre,tar.completada,tar.id,nota.id).getRight();
+                            n.agregarTarea(t);
+                        }
+                    }
+                }
+                notas.push(n);
+            }
             return Either.makeRight<Error,Nota[]>(notas);
         }
         else{
