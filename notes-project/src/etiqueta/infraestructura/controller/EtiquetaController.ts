@@ -11,6 +11,8 @@ import { ModificarEtiquetaDto } from "src/etiqueta/aplicacion/Dto/ModificarEtiqu
 import { EliminarEtiquetaService } from "src/etiqueta/aplicacion/EliminarEtiquetaService";
 import { ModificarEtiquetaService } from "src/etiqueta/aplicacion/ModificarEtiquetaService";
 import { RepositorioEtiquetaAdaptador } from "../repositorio/RepositorioEtiquetaAdaptador";
+import { LoggerImplementation } from "src/core/infraestructura/LoggerImplementation";
+import { LoggerDecorator } from "src/core/aplicacion/LoggerDecorator";
 
 
 @Controller('etiqueta')
@@ -22,7 +24,8 @@ export class EtiquetaController {
                 private buscarEtiquetas: BuscarEtiquetasService,
                 private buscarEtiqueta:BuscarEtiquetaIdService,
                 private buscarEtiquetasPorUsuario:BuscarEtiquetasPorUsuarioService,
-                private readonly etiquetaRepositorio: RepositorioEtiquetaAdaptador){
+                private readonly etiquetaRepositorio: RepositorioEtiquetaAdaptador,
+                private readonly logRepositorio: LoggerImplementation){
                     this.crearEtiqueta = new CrearEtiquetaService(this.etiquetaRepositorio);
                     this.modificarEtiqueta = new ModificarEtiquetaService(this.etiquetaRepositorio);
                     this.eliminarEtiqueta = new EliminarEtiquetaService(this.etiquetaRepositorio);
@@ -33,7 +36,7 @@ export class EtiquetaController {
 
     @Post('/create')
     async create(@Res() response, @Body() body: CrearEtiquetaDto){
-        const result = await this.crearEtiqueta.execute(body);
+        const result = await new LoggerDecorator(this.logRepositorio,this.crearEtiqueta,'Se llamo a crear etiqueta').execute(body);
         if(result.isRight()){
             return response.status(HttpStatus.OK).json(result.getRight());
         }
@@ -45,7 +48,7 @@ export class EtiquetaController {
 
     @Put('/modificate')
     async modificate(@Res() response, @Body() body: ModificarEtiquetaDto){
-        const result = await this.modificarEtiqueta.execute(body);
+        const result = await new LoggerDecorator(this.logRepositorio,this.modificarEtiqueta,'Se llamo a modificar etiqueta').execute(body);
         if(result.isRight()){
             return response.status(HttpStatus.OK).json(result.getRight());
         }
@@ -56,7 +59,7 @@ export class EtiquetaController {
 
     @Delete('/delete')
     async delete(@Res() response, @Body() body: EliminarEtiquetaDto){
-        const result = await this.eliminarEtiqueta.execute(body);
+        const result = await new LoggerDecorator(this.logRepositorio,this.eliminarEtiqueta,'Se llamo a eliminar etiqueta').execute(body);
         if(result.isRight()){
             return response.status(HttpStatus.OK).json(result.getRight());
         }
@@ -68,7 +71,7 @@ export class EtiquetaController {
 
     @Post('/findAll')
     async findAll(@Res() response){
-        let result = await this.buscarEtiquetas.execute('Buscar todas las carpetas');
+        const result = await new LoggerDecorator(this.logRepositorio,this.buscarEtiquetas,'Se llamo a buscar etiquetas').execute('buscar etiquetas');
         if(result.isRight()){
             return response.status(HttpStatus.OK).json(result.getRight());
         }
@@ -81,7 +84,7 @@ export class EtiquetaController {
 
     @Post('/findById')
     async findById(@Res() response, @Body() body: BuscarEtiquetaIdDto){
-        let result = await this.buscarEtiqueta.execute(body);
+        const result = await new LoggerDecorator(this.logRepositorio,this.buscarEtiqueta,'Se llamo a buscar etiqueta por id').execute(body);
         if(result.isRight()){
             return response.status(HttpStatus.OK).json(result.getRight());
         }
@@ -92,7 +95,7 @@ export class EtiquetaController {
 
     @Post('/findByUser')
     async findByUser(@Res() response, @Body() body: BuscarEtiquetaPorUsuarioDto){
-        let result = await this.buscarEtiquetasPorUsuario.execute(body);
+        const result = await new LoggerDecorator(this.logRepositorio,this.buscarEtiquetasPorUsuario,'Se llamo a buscar etiquetas por usuario').execute(body);
         if(result.isRight()){
             return response.status(HttpStatus.OK).json(result.getRight());
         }

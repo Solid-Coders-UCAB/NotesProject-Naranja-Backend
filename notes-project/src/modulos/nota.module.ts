@@ -1,6 +1,9 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CarpetaEntity } from 'src/carpeta/infraestructura/Entity/CarpetaEntity';
+import { LoggerDecorator } from 'src/core/aplicacion/LoggerDecorator';
+import { LogEntity } from 'src/core/infraestructura/LogEntity';
+import { LoggerImplementation } from 'src/core/infraestructura/LoggerImplementation';
 import { BuscarNotaPorIdService } from 'src/nota/aplicacion/BuscarNotaPorIdService';
 import { BuscarNotasCarpetaService } from 'src/nota/aplicacion/BuscarNotasCarpetaService';
 import { BuscarNotasEliminadasUsuarioService } from 'src/nota/aplicacion/BuscarNotasEliminadasUsuarioService';
@@ -19,10 +22,11 @@ import { NotaRepositorioAdaptador } from 'src/nota/infraestructura/Repositorio/N
 import { UsuarioEntity } from 'src/usuario/infraestructura/Entity/UsuarioEntity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([NotaEntity,CarpetaEntity,TareaEntity])],
+  imports: [TypeOrmModule.forFeature([NotaEntity,CarpetaEntity,TareaEntity,LogEntity])],
   providers: [CrearNotaService,ModificarNotaService,EliminarNotaService,BuscarNotasService,BuscarNotaPorIdService,
     BuscarNotasCarpetaService,BuscarNotasEliminadasUsuarioService,BuscarNotasUsuarioService,NotaRepositorioAdaptador,
     BuscarNotasPorPalabraClaveService,BuscarNotasPorEtiquetaService,BuscarNotasPorGeolocalizacionService,
+    LoggerDecorator,LoggerImplementation,
   {
     provide: 'NotaRepositorio',
     useClass: NotaRepositorioAdaptador

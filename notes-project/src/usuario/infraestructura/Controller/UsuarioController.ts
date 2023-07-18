@@ -14,6 +14,8 @@ import { RegistrarUsuarioService } from "src/usuario/aplicacion/RegistrarUsuario
 import { UsuarioRepositorioAdaptador } from "../Repositorio/UsuarioRepositorioAdaptador";
 import { EliminarUsuarioService } from "src/usuario/aplicacion/EliminarUsuarioService";
 import { EliminarUsuarioDto } from "src/usuario/aplicacion/DataTransferObject/EliminarUsuarioDto";
+import { LoggerImplementation } from "src/core/infraestructura/LoggerImplementation";
+import { LoggerDecorator } from "src/core/aplicacion/LoggerDecorator";
 
 @Controller('usuario')
 export class UsuarioController {
@@ -26,7 +28,8 @@ export class UsuarioController {
                 private buscarUsuarioCorreoClave: BuscarUsuarioCorreoClaveService,
                 private eliminarUsuario: EliminarUsuarioService,
                 private readonly carpetaRepositorio: CarpetaRepositorioAdaptador,
-                private readonly usuarioRepositorio: UsuarioRepositorioAdaptador,){
+                private readonly usuarioRepositorio: UsuarioRepositorioAdaptador,
+                private readonly logRepositorio: LoggerImplementation){
                     this.crearCarpeta = new CrearCarpetaService(this.carpetaRepositorio);
                     this.registrarUsuario = new RegistrarUsuarioService(this.usuarioRepositorio);
                     this.modificarUsuario = new ModificarUsuarioService(this.usuarioRepositorio);
@@ -38,7 +41,7 @@ export class UsuarioController {
 
     @Post('/create')
     async create(@Res() response, @Body() body: RegistrarUsuarioDto){
-        let result = await this.registrarUsuario.execute(body);
+        const result = await new LoggerDecorator(this.logRepositorio,this.registrarUsuario,'Se llamo a registrar usuario').execute(body);
         if(result.isRight()){
 
             const carp: CrearCarpetaDto ={
@@ -57,7 +60,7 @@ export class UsuarioController {
 
     @Post('/findAll')
     async findAll(@Res() response){
-        let result = await this.buscarUsuarios.execute('BuscarUsuariosService');
+        const result = await new LoggerDecorator(this.logRepositorio,this.buscarUsuarios,'Se llamo a buscar usuarios').execute('buscar usuarios');
         if(result.isRight()){
             return response.status(HttpStatus.OK).json(result.getRight());
         }
@@ -68,7 +71,7 @@ export class UsuarioController {
 
     @Post('/findById')
     async findById(@Res() response, @Body() body: BuscarUsuarioIdDto){
-        let result = await this.buscarUsuarioId.execute(body);
+        const result = await new LoggerDecorator(this.logRepositorio,this.buscarUsuarioId,'Se llamo a buscar usuario por id').execute(body);
         if(result.isRight()){
             return response.status(HttpStatus.OK).json(result.getRight());
         }
@@ -79,7 +82,7 @@ export class UsuarioController {
 
     @Post('/findByEmailPassword')
     async findByEmailPassword(@Res() response, @Body() body: BuscarUsuarioCorreoClaveDto){
-        let result = await this.buscarUsuarioCorreoClave.execute(body);
+        const result = await new LoggerDecorator(this.logRepositorio,this.buscarUsuarioCorreoClave,'Se llamo a buscar usuario por correo y clave').execute(body);
         if(result.isRight()){
             return response.status(HttpStatus.OK).json(result.getRight());
         }
@@ -90,7 +93,7 @@ export class UsuarioController {
 
     @Put('/modificate')
     async modificate(@Res() response, @Body() body: ModificarUsuarioDto){
-        let result = await this.modificarUsuario.execute(body);
+        const result = await new LoggerDecorator(this.logRepositorio,this.modificarUsuario,'Se llamo a modificar usuario').execute(body);
         if(result.isRight()){
             return response.status(HttpStatus.OK).json(result.getRight());
         }
@@ -101,7 +104,7 @@ export class UsuarioController {
 
     @Delete('/delete')
     async delete(@Res() response, @Body() body: EliminarUsuarioDto){
-        let result = await this.eliminarUsuario.execute(body);
+        const result = await new LoggerDecorator(this.logRepositorio,this.eliminarUsuario,'Se llamo a eliminar usuario').execute(body);
         if(result.isRight()){
             return response.status(HttpStatus.OK).json(result.getRight());
         }

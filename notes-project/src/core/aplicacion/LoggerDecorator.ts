@@ -18,10 +18,10 @@ export class LoggerDecorator<TService,T> extends AppServiceDecorator<TService,T>
         const result = await super.execute(service);
         let log: Either<Error,string>;
         if(result.isRight()){
-            log = await this.logger.log(this.mensaje);
+            log = await this.logger.log(this.mensaje,'CORRECTO: Se ejecuto el servicio correctamente' /*+ JSON.stringify(result.getRight())*/,new Date());
         }
         else{
-            log = await this.logger.log(result.getLeft().message);
+            log = await this.logger.log(this.mensaje,'ERROR: ' + result.getLeft().message,new Date());
         }
         return result;
     }

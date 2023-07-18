@@ -21,6 +21,8 @@ import { BuscarNotasPorEtiquetaService } from "src/nota/aplicacion/BuscarNotasPo
 import { BuscarNotasEtiquetaDto } from "src/nota/aplicacion/DataTransferObjects/BuscarNotasEtiquetaDto";
 import { BuscarNotasGeolocalizacionDto } from "src/nota/aplicacion/DataTransferObjects/BuscarNotasGeolocalizacionDto";
 import { BuscarNotasPorGeolocalizacionService } from "src/nota/aplicacion/BuscarNotasPorGeolocalizacionService";
+import { LoggerImplementation } from "src/core/infraestructura/LoggerImplementation";
+import { LoggerDecorator } from "src/core/aplicacion/LoggerDecorator";
 
 @Controller('nota')
 export class NotaController {
@@ -36,7 +38,8 @@ export class NotaController {
         private buscarPalabraClave: BuscarNotasPorPalabraClaveService,
         private buscarEtiqueta: BuscarNotasPorEtiquetaService,
         private buscarGeolocalizacion: BuscarNotasPorGeolocalizacionService,
-        private readonly notaRepositorio: NotaRepositorioAdaptador) {
+        private readonly notaRepositorio: NotaRepositorioAdaptador,
+        private readonly logRepositorio: LoggerImplementation) {
             this.crearNotaService = new CrearNotaService(this.notaRepositorio);
             this.modificarNota = new ModificarNotaService(this.notaRepositorio);
             this.eliminarNota = new EliminarNotaService(this.notaRepositorio);
@@ -52,7 +55,7 @@ export class NotaController {
 
     @Post('/findAll')
     async findAll(@Res() response){
-        let result = await this.buscarNotas.execute('Buscar todas las notas');
+        const result = await new LoggerDecorator(this.logRepositorio,this.buscarNotas,'Se llamo a buscar notas').execute('buscar notas');
         if(result.isRight()){
             return response.status(HttpStatus.OK).json(result.getRight());
         }
@@ -63,7 +66,7 @@ export class NotaController {
 
     @Post('/findById')
     async findById(@Res() response, @Body() body: BuscarNotaIdDto){
-        let result = await this.buscarNotaId.execute(body);
+        const result = await new LoggerDecorator(this.logRepositorio,this.buscarNotaId,'Se llamo a buscar nota por id').execute(body);
         if(result.isRight()){
             return response.status(HttpStatus.OK).json(result.getRight());
         }
@@ -74,7 +77,7 @@ export class NotaController {
 
     @Post('/findByFolder')
     async findByFolder(@Res() response, @Body() body: BuscarNotasCarpetaDto){
-        let result = await this.buscarNotasCarpeta.execute(body);
+        const result = await new LoggerDecorator(this.logRepositorio,this.buscarNotasCarpeta,'Se llamo a buscar notas por carpeta').execute(body);
         if(result.isRight()){
             return response.status(HttpStatus.OK).json(result.getRight());
         }
@@ -85,7 +88,7 @@ export class NotaController {
 
     @Post('/findDeleted')
     async findDeleted(@Res() response, @Body() body: BuscarNotasEliminadasUsuarioDto){
-        let result = await this.buscarEliminadas.execute(body);
+        const result = await new LoggerDecorator(this.logRepositorio,this.buscarEliminadas,'Se llamo a buscar notas eliminadas por usuario').execute(body);
         if(result.isRight()){
             return response.status(HttpStatus.OK).json(result.getRight());
         }
@@ -107,7 +110,7 @@ export class NotaController {
             
             console.log("controller etiq",etiq)
 
-        const result = await this.modificarNota.execute(body);
+        const result = await new LoggerDecorator(this.logRepositorio,this.modificarNota,'Se llamo a modificar nota').execute(body);
 
         if(result.isRight()){
             return response.status(HttpStatus.OK).json(result.getRight());
@@ -133,7 +136,7 @@ export class NotaController {
 
         console.log(body);
     
-  const result = await this.crearNotaService.execute(body);
+        const result = await new LoggerDecorator(this.logRepositorio,this.crearNotaService,'Se llamo a crear nota').execute(body);
         if(result.isRight()){
             return response.status(HttpStatus.OK).json(result.getRight());
         }
@@ -144,7 +147,7 @@ export class NotaController {
 
     @Delete('/delete')
     async delete (@Res() response, @Body() body: BorraNotaDto){
-        const result = await this.eliminarNota.execute(body);
+        const result = await new LoggerDecorator(this.logRepositorio,this.eliminarNota,'Se llamo a eliminar nota').execute(body);
         if(result.isRight()){
             return response.status(HttpStatus.OK).json(result.getRight());
         }
@@ -157,7 +160,7 @@ export class NotaController {
 
     @Post('/findByUser')
     async findByUser(@Res() response, @Body() body: BuscarNotasUsuarioDto){
-        let result = await this.buscarNotasUsuario.execute(body);
+        const result = await new LoggerDecorator(this.logRepositorio,this.buscarNotasUsuario,'Se llamo a buscar notas por usuario').execute(body);
         if(result.isRight()){
             return response.status(HttpStatus.OK).json(result.getRight());
         }
@@ -168,7 +171,7 @@ export class NotaController {
 
     @Post('/findByKeyword')
     async findByKeyword(@Res() response, @Body() body: BuscarNotasPalabraClaveDto){
-        let result = await this.buscarPalabraClave.execute(body);
+        const result = await new LoggerDecorator(this.logRepositorio,this.buscarPalabraClave,'Se llamo a buscar notas por palabra clave').execute(body);
         if(result.isRight()){
             return response.status(HttpStatus.OK).json(result.getRight());
         }
@@ -179,7 +182,7 @@ export class NotaController {
 
     @Post('/findByTag')
     async findByTag(@Res() response, @Body() body: BuscarNotasEtiquetaDto){
-        let result = await this.buscarEtiqueta.execute(body);
+        const result = await new LoggerDecorator(this.logRepositorio,this.buscarEtiqueta,'Se llamo a buscar notas por etiqueta').execute(body);
         if(result.isRight()){
             return response.status(HttpStatus.OK).json(result.getRight());
         }
@@ -190,7 +193,7 @@ export class NotaController {
 
     @Post('/findByLocation')
     async findByLocation(@Res() response, @Body() body: BuscarNotasGeolocalizacionDto){
-        let result = await this.buscarGeolocalizacion.execute(body);
+        const result = await new LoggerDecorator(this.logRepositorio,this.buscarGeolocalizacion,'Se llamo a buscar notas por geolocalizacion').execute(body);
         if(result.isRight()){
             return response.status(HttpStatus.OK).json(result.getRight());
         }

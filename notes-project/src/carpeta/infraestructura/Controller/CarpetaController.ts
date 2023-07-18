@@ -11,6 +11,8 @@ import { ModificarCarpetaDto } from "src/carpeta/aplicacion/DataTransferObjects/
 import { EliminarCarpetaService } from "src/carpeta/aplicacion/EliminarCarpetaService";
 import { ModificarCarpetaService } from "src/carpeta/aplicacion/ModificarCarpetaService";
 import { CarpetaRepositorioAdaptador } from "../Repositorio/CarpetaRepositorioAdaptador";
+import { LoggerImplementation } from "src/core/infraestructura/LoggerImplementation";
+import { LoggerDecorator } from "src/core/aplicacion/LoggerDecorator";
 
 @Controller('carpeta')
 export class CarpetaController {
@@ -21,7 +23,8 @@ export class CarpetaController {
                 private modificarCarpeta: ModificarCarpetaService,
                 private eliminarCarpeta: EliminarCarpetaService,
                 private buscarCarpetasUsuario: BuscarCarpetasPorUsuarioService,
-                private readonly carpetaRepositorio: CarpetaRepositorioAdaptador){
+                private readonly carpetaRepositorio: CarpetaRepositorioAdaptador,
+                private readonly logRepositorio: LoggerImplementation){
                     this.crearCarpeta = new CrearCarpetaService(this.carpetaRepositorio);
                     this.buscarCarpetas = new BuscarCarpetasService(this.carpetaRepositorio);
                     this.buscarCarpeta = new BuscarCarpetaPorIdService(this.carpetaRepositorio);
@@ -32,7 +35,7 @@ export class CarpetaController {
 
     @Post('/create')
     async create(@Res() response, @Body() body: CrearCarpetaDto){
-        const result = await this.crearCarpeta.execute(body);
+        const result = await new LoggerDecorator(this.logRepositorio,this.crearCarpeta,'Se llamo a crear carpeta').execute(body);
         if(result.isRight()){
             return response.status(HttpStatus.OK).json(result.getRight());
         }
@@ -43,7 +46,7 @@ export class CarpetaController {
 
     @Post('/findAll')
     async findAll(@Res() response){
-        let result = await this.buscarCarpetas.execute('Buscar todas las carpetas');
+        const result = await new LoggerDecorator(this.logRepositorio,this.buscarCarpetas,'Se llamo a buscar carpetas').execute('buscar carpetas');
         if(result.isRight()){
             return response.status(HttpStatus.OK).json(result.getRight());
         }
@@ -54,7 +57,7 @@ export class CarpetaController {
 
     @Post('/findById')
     async findById(@Res() response, @Body() body: BuscarCarpetaIdDto){
-        let result = await this.buscarCarpeta.execute(body);
+        const result = await new LoggerDecorator(this.logRepositorio,this.buscarCarpeta,'Se llamo a buscar carpeta por id').execute(body);
         if(result.isRight()){
             return response.status(HttpStatus.OK).json(result.getRight());
         }
@@ -65,7 +68,7 @@ export class CarpetaController {
 
     @Post('/findByUser')
     async findByUser(@Res() response, @Body() body: BuscarCarpetasUsuarioDto){
-        let result = await this.buscarCarpetasUsuario.execute(body);
+        const result = await new LoggerDecorator(this.logRepositorio,this.buscarCarpetasUsuario,'Se llamo a buscar carpetas por usuario').execute(body);
         if(result.isRight()){
             return response.status(HttpStatus.OK).json(result.getRight());
         }
@@ -76,7 +79,7 @@ export class CarpetaController {
 
     @Put('/modificate')
     async update(@Res() response, @Body() body: ModificarCarpetaDto){
-        const result = await this.modificarCarpeta.execute(body);
+        const result = await new LoggerDecorator(this.logRepositorio,this.modificarCarpeta,'Se llamo a modificar carpeta').execute(body);
         if(result.isRight()){
             return response.status(HttpStatus.OK).json(result.getRight());
         }
@@ -87,7 +90,7 @@ export class CarpetaController {
 
     @Delete('/delete')
     async delete(@Res () response, @Body() body: BorrarCarpetaDto){
-        const result = await this.eliminarCarpeta.execute(body);
+        const result = await new LoggerDecorator(this.logRepositorio,this.eliminarCarpeta,'Se llamo a eliminar carpeta').execute(body);
         if(result.isRight()){
             return response.status(HttpStatus.OK).json(result.getRight());
         }
