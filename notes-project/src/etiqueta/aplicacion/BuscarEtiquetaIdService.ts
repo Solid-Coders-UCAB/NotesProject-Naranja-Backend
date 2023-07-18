@@ -1,4 +1,4 @@
-import { IApplicationService } from "src/interfaces/aplicacion/IApplicationService";
+import { IApplicationService } from "src/core/aplicacion/IApplicationService";
 import { Either } from "src/utilidad/Either";
 import { BuscarEtiquetaIdDto } from "./Dto/BuscarEtiquetaIdDto";
 import { EtiquetaRepositorio } from "../dominio/EtiquetaRepositorio";

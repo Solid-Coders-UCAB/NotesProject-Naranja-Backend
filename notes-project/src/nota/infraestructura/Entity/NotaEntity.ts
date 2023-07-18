@@ -21,10 +21,10 @@ export class NotaEntity {
     @Column()
     fechaModificacion: Date
 
-    @Column({nullable:true})
+    @Column({nullable:true, type: 'double precision'})
     latitud?: number
     
-    @Column({nullable:true})
+    @Column({nullable:true, type: 'double precision'})
     longitud?: number
     
     @Column()

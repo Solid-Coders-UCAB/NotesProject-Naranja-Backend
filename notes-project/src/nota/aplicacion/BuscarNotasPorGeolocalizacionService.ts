@@ -1,4 +1,4 @@
-import { IApplicationService } from "src/interfaces/aplicacion/IApplicationService";
+import { IApplicationService } from "src/core/aplicacion/IApplicationService";
 import { BuscarNotasGeolocalizacionDto } from "./DataTransferObjects/BuscarNotasGeolocalizacionDto";
 import { Nota } from "../dominio/Nota";
 import { Either } from "src/utilidad/Either";

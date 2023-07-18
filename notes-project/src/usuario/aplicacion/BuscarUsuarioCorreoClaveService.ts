@@ -1,4 +1,4 @@
-import { IApplicationService } from "src/interfaces/aplicacion/IApplicationService";
+import { IApplicationService } from "src/core/aplicacion/IApplicationService";
 import { BuscarUsuarioCorreoClaveDto } from "./DataTransferObject/BuscarUsuarioCorreoClaveDto";
 import { Usuario } from "../dominio/Usuario";
 import { UsuarioRepositorio } from "../dominio/UsuarioRepositorio";

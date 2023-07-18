@@ -1,4 +1,4 @@
-import { IApplicationService } from "src/interfaces/aplicacion/IApplicationService";
+import { IApplicationService } from "src/core/aplicacion/IApplicationService";
 import { BuscarUsuarioIdDto } from "./DataTransferObject/BuscarUsuarioIdDto";
 import { Usuario } from "../dominio/Usuario";
 import { Either } from "src/utilidad/Either";

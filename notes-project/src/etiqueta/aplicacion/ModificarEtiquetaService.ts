@@ -1,4 +1,4 @@
-import { IApplicationService } from "src/interfaces/aplicacion/IApplicationService";
+import { IApplicationService } from "src/core/aplicacion/IApplicationService";
 import { Either } from "src/utilidad/Either";
 import { EtiquetaRepositorio } from "../dominio/EtiquetaRepositorio";
 import { Etiqueta } from "../dominio/etiqueta";

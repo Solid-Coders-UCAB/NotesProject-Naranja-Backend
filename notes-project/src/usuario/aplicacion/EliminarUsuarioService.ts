@@ -1,4 +1,4 @@
-import { IApplicationService } from "src/interfaces/aplicacion/IApplicationService";
+import { IApplicationService } from "src/core/aplicacion/IApplicationService";
 import { EliminarUsuarioDto } from "./DataTransferObject/EliminarUsuarioDto";
 import { UsuarioRepositorio } from "../dominio/UsuarioRepositorio";
 import { Either } from "src/utilidad/Either";

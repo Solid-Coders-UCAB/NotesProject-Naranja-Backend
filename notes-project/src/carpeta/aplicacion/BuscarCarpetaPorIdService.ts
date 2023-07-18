@@ -1,4 +1,4 @@
-import { IApplicationService } from "src/interfaces/aplicacion/IApplicationService";
+import { IApplicationService } from "src/core/aplicacion/IApplicationService";
 import { BuscarCarpetaIdDto } from "./DataTransferObjects/BuscarCarpetaIdDto";
 import { Carpeta } from "../dominio/Carpeta";
 import { Either } from "src/utilidad/Either";

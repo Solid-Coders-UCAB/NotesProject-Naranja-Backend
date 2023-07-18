@@ -1,4 +1,4 @@
-import { IApplicationService } from "src/interfaces/aplicacion/IApplicationService";
+import { IApplicationService } from "src/core/aplicacion/IApplicationService";
 import { CarpetaRepositorio } from "../dominio/CarpetaRepositorio";
 import { Either } from "src/utilidad/Either";
 import { BorrarCarpetaDto } from "./DataTransferObjects/BorrarCarpetaDto";

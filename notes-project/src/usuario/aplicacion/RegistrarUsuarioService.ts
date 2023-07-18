@@ -1,4 +1,4 @@
-import { IApplicationService } from "src/interfaces/aplicacion/IApplicationService";
+import { IApplicationService } from "src/core/aplicacion/IApplicationService";
 import { RegistrarUsuarioDto } from "./DataTransferObject/RegistrarUsuarioDto";
 import { Usuario } from "../dominio/Usuario";
 import { UsuarioRepositorio } from "../dominio/UsuarioRepositorio";

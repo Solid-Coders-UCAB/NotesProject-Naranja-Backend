@@ -1,4 +1,4 @@
-import { IApplicationService } from "src/interfaces/aplicacion/IApplicationService";
+import { IApplicationService } from "src/core/aplicacion/IApplicationService";
 import { Either } from "src/utilidad/Either";
 import { Suscripcion } from "../dominio/suscripcion";
 import { RepositorioSuscripcion } from "../dominio/RepositorioSuscripcion";

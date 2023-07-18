@@ -1,4 +1,4 @@
-import { IApplicationService } from "src/interfaces/aplicacion/IApplicationService";
+import { IApplicationService } from "src/core/aplicacion/IApplicationService";
 import { BuscarNotasEliminadasUsuarioDto } from "./DataTransferObjects/BuscarNotasEliminadasUsuarioDto";
 import { Nota } from "../dominio/Nota";
 import { NotaRepositorio } from "../dominio/NotaRepositorio";

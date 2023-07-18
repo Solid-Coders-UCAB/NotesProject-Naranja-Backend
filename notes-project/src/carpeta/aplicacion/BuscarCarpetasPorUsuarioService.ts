@@ -1,4 +1,4 @@
-import { IApplicationService } from "src/interfaces/aplicacion/IApplicationService";
+import { IApplicationService } from "src/core/aplicacion/IApplicationService";
 import { BuscarCarpetasUsuarioDto } from "./DataTransferObjects/BuscarCarpetasUsuarioDto";
 import { Carpeta } from "../dominio/Carpeta";
 import { CarpetaRepositorio } from "../dominio/CarpetaRepositorio";
