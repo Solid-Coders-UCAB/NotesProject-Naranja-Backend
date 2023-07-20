@@ -26,7 +26,7 @@ export class crearNotatest {
         nota.fechaCreacion = new Date();
         nota.fechaModificacion = new Date();
         nota.estado = EstadoNota.Pendiente;
-        nota.titulo = "Nota de prueba";
+        nota.titulo = "";
         nota.cuerpo = "Cuerpo de la nota de prueba";
         nota.idCarpeta = "1";
         return nota;

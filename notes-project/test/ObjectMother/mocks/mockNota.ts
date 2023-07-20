@@ -5,7 +5,6 @@ import { crearNotatest } from "../Nota/crearNotaTest";
 
 export class mockRepositorioNota implements NotaRepositorio {
     async crearNota(nota: Nota): Promise<Either<Error, Nota>> {
-        console.log("nota",nota);
       if (nota.getTitulo() == crearNotatest.crearNotaTestValid().titulo) {
         return Either.makeRight<Error, Nota>(nota);
       } else {
