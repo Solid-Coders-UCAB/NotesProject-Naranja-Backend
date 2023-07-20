@@ -71,6 +71,13 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
+## Correr los tests
+
+```bash
+# run tests
+$ npm run test
+```
+
 ## Diagramas
 
 Los diagramas: Modelo de Dominio y Arquitectura Hexagonal se encuentran cargados en la carpeta notes-project/diagrams, sin embargo, en este apartado se puede mostrar un preview de los mismos.
@@ -111,6 +118,12 @@ También se pueden encontrar cargados en la siguiente carpeta en drive: https://
 |Desarrollo del AGREGADO Etiquetas incluyendo sus servicios de aplicación y adaptadores|https://github.com/Solid-Coders-UCAB/NotesProject-Naranja-Backend/commit/14a2874742889d1afe1f47736353ff853a65facf|
 |Desarrollo del Agregado suscripcion incluyendo sus servicios de aplicación y adaptadores asi como tambien se realizo la conexión al agregado usuario|https://github.com/Solid-Coders-UCAB/NotesProject-Naranja-Backend/commit/b29af70e82944dd9919e2ba3e972703add4b923b|
 |Se desarrollo el test base para el proyecto|https://github.com/Solid-Coders-UCAB/NotesProject-Naranja-Backend/commit/508701991a795f2e4253739bd5575b338759325c|
+
+
+## Librerías
+
+Para el desarrollo de tests unitarios:
+- [Jest](https://jestjs.io/)
 
 
 
