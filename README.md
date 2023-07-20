@@ -70,3 +70,17 @@ $ npm run start:dev
 # production mode
 $ npm run start:prod
 ```
+
+## Actividades más relevantes de los desarrolladores
+
+### César García
+
+| Actividad | Commit |
+|-----------|--------|
+|Comenzar el desarrollo del primer agregado (nota) con el servicio de aplicación CrearNota|https://github.com/Solid-Coders-UCAB/NotesProject-Naranja-Backend/commit/07b58fd0cfa85f3a04575173ae8cd7237d5e6e2c|
+| Organizar y establecer una mejor implementación de arquitectura hexagonal en el proyecto| https://github.com/Solid-Coders-UCAB/NotesProject-Naranja-Backend/commit/f2e3ffdeca2d025a815fb6531d4ff26e6d4338eb |
+| Desarrollo del agregado carpeta, junto a los servicios de aplicacion correspondientes y adaptadores | https://github.com/Solid-Coders-UCAB/NotesProject-Naranja-Backend/commit/b2e5dcf7735510adf24da5cf1ccdba995420f30d |
+| Desarrollo del agregado usuario, junto a los servicios de aplicacion correspondientes y adaptadores | https://github.com/Solid-Coders-UCAB/NotesProject-Naranja-Backend/commit/f4cf3b5a753d2f0279e9feffe50903d52c6f90e8 |
+| Desacoplar la capa de aplicacion del framework NestJS | https://github.com/Solid-Coders-UCAB/NotesProject-Naranja-Backend/commit/80e21f56801f2574f45937f0ac88f98bb42b22f8 |
+| Desarrollar la búsqueda de notas por filtros como: palabra clave, etiqueta y geolocalización | https://github.com/Solid-Coders-UCAB/NotesProject-Naranja-Backend/commit/98f2914e94635f2043aeb2aa263f869942d06142 |
+| Desarrollo del aspecto transversal del log de los servicios de aplicación | https://github.com/Solid-Coders-UCAB/NotesProject-Naranja-Backend/commit/d788a5aa0cb9f08ff5b0577245a629a21d6a0a06 |
