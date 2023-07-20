@@ -102,3 +102,15 @@ También se pueden encontrar cargados en la siguiente carpeta en drive: https://
 | Desacoplar la capa de aplicacion del framework NestJS | https://github.com/Solid-Coders-UCAB/NotesProject-Naranja-Backend/commit/80e21f56801f2574f45937f0ac88f98bb42b22f8 |
 | Desarrollar la búsqueda de notas por filtros como: palabra clave, etiqueta y geolocalización | https://github.com/Solid-Coders-UCAB/NotesProject-Naranja-Backend/commit/98f2914e94635f2043aeb2aa263f869942d06142 |
 | Desarrollo del aspecto transversal del log de los servicios de aplicación | https://github.com/Solid-Coders-UCAB/NotesProject-Naranja-Backend/commit/d788a5aa0cb9f08ff5b0577245a629a21d6a0a06 |
+
+### Omar Meléndez
+
+| Actividad | Commit |
+|-----------|--------|
+|Se subió el backen a un servicio de hosting llamdo Render, para ello se modifico el json para manejar versiones compatibles con Rende|https://github.com/Solid-Coders-UCAB/NotesProject-Naranja-Backend/commit/e0ea2582a72e258979cac5ba96823f0be339f623|
+|Desarrollo del AGREGADO Etiquetas incluyendo sus servicios de aplicación y adaptadores|https://github.com/Solid-Coders-UCAB/NotesProject-Naranja-Backend/commit/14a2874742889d1afe1f47736353ff853a65facf|
+|Desarrollo del Agregado suscripcion incluyendo sus servicios de aplicación y adaptadores asi como tambien se realizo la conexión al agregado usuario|https://github.com/Solid-Coders-UCAB/NotesProject-Naranja-Backend/commit/b29af70e82944dd9919e2ba3e972703add4b923b|
+|Se desarrollo el test base para el proyecto|https://github.com/Solid-Coders-UCAB/NotesProject-Naranja-Backend/commit/508701991a795f2e4253739bd5575b338759325c|
+
+
+
