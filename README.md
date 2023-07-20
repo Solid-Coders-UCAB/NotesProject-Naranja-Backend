@@ -71,6 +71,24 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
+## Diagramas
+
+Los diagramas: Modelo de Dominio y Arquitectura Hexagonal se encuentran cargados en la carpeta notes-project/diagrams, sin embargo, en este apartado se puede mostrar un preview de los mismos.
+
+### Modelo de Dominio
+
+![App Screenshot](./notes-project/diagrams/SolidNaranja_ModeloDominio.svg)
+
+<br/>
+
+### Arquitectura Hexagonal
+
+![App Screenshot](./notes-project/diagrams/SolidNaranja_ArqHexagonal.svg)
+
+<br/>
+
+También se pueden encontrar cargados en la siguiente carpeta en drive: https://drive.google.com/drive/folders/1jaF5LNE_6xc0vczFClcYO4DamvGgQ0-K?usp=sharing
+
 ## Actividades más relevantes de los desarrolladores
 
 ### César García
