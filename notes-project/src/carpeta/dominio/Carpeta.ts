@@ -34,6 +34,9 @@ export class Carpeta{
     }
 
     static create(nombre: string, predeterminada: boolean,idUsuario: string,id?: string): Either<Error,Carpeta>{
+        if(!idUsuario || idUsuario.length == 0){
+            return Either.makeLeft<Error,Carpeta>(new Error("No se puede crear una carpeta sin usuario"));
+        }
         const nombreCarpeta = NombreCarpeta.create(nombre);
         if(nombreCarpeta.isRight()){
             return Either.makeRight<Error,Carpeta>(new Carpeta(nombreCarpeta.getRight(),predeterminada,IdUsuario.create(idUsuario),IdCarpeta.create(id)));

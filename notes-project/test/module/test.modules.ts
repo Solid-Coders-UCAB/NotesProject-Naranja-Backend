@@ -5,6 +5,7 @@ import { CarpetaModule } from 'src/modulos/carpeta.module';
 import { SuscripcionModule } from 'src/modulos/suscripcion.module';
 import { UsuarioModule } from 'src/modulos/usuario.module';
 import { EtiquetaModule } from 'src/modulos/etiqueta.module';
+import { CrearCarpetaTest } from 'test/ObjectMother/Carpeta/CrearCarpetaTest';
 
 @Module({
   imports: [
@@ -15,8 +16,8 @@ import { EtiquetaModule } from 'src/modulos/etiqueta.module';
     forwardRef(() => EtiquetaModule),
   ], // Importa tus módulos aquí
   providers: [
-    crearNotatest,
+    crearNotatest,CrearCarpetaTest,
   ],
-  exports: [crearNotatest],
+  exports: [crearNotatest,CrearCarpetaTest],
 })
 export class TestModule {}
