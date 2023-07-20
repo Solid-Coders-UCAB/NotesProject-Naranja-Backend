@@ -105,6 +105,10 @@ export class Nota{
         
         let auxiliarEstado: EstadoNota;
 
+        if(!idCarpeta || idCarpeta.length == 0){
+            return Either.makeLeft<Error,Nota>(new Error("No se puede crear una nota sin carpeta"));
+        }
+
         switch(estado.trim().toLowerCase()){
             case "pendienteporguardar":
             auxiliarEstado = EstadoNota.Pendiente;
