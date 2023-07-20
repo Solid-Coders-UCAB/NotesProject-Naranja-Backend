@@ -3,6 +3,7 @@ import { Either } from "src/utilidad/Either";
 import { RepositorioSuscripcion } from "../dominio/RepositorioSuscripcion";
 import { Suscripcion } from "../dominio/suscripcion";
 import { ModificarSuscripcionDto } from "./Dto/ModificarSuscripcionDto";
+import { addDays } from 'date-fns';
 
 export class ModificarSuscripcionService implements IApplicationService<ModificarSuscripcionDto,Suscripcion>{
 
@@ -13,7 +14,9 @@ export class ModificarSuscripcionService implements IApplicationService<Modifica
     }
 
     async execute(service: ModificarSuscripcionDto): Promise<Either<Error,Suscripcion>>{
-        let suscripcion = Suscripcion.create(service.fechaInicio,service.fechaFin,service.estado,service.idUsuario,service.idSuscripcion);
+        const today = new Date();
+        const nextMonth = addDays(today, 30);
+        let suscripcion = Suscripcion.create(today,nextMonth,"Activa",service.idUsuario,service.idSuscripcion);
 
         if(suscripcion.isRight()){
             return await this.usuarioRepositorio.crearSuscripcion(suscripcion.getRight());
