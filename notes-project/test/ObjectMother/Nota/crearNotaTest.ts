@@ -5,6 +5,7 @@ import { EstadoNota } from "src/nota/dominio/ValueObject/EstadoNota";
 import { mockRepositorioNota } from "../mocks/mockNota";
 
 
+
 export class crearNotatest {
     public static crearNotaTestValid():CrearNotaDto {
         let nota = new CrearNotaDto();
