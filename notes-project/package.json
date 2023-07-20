@@ -26,7 +26,7 @@
   },
   "dependencies": {
     "@airhead/nest-typeorm-seeder": "^1.1.0",
-    "@faker-js/faker": "^7.6.0",
+    "@faker-js/faker": "^8.0.0",
     "@nestjs-modules/mailer": "^1.8.1",
     "@nestjs/common": "^9.0.0",
     "@nestjs/config": "^2.2.0",
@@ -85,8 +85,7 @@
       "json",
       "ts"
     ],
-    "modulePaths": [
-      "<rootDir>"],
+    "rootDir": "src",
     "testRegex": ".*\\.spec\\.ts$",
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
